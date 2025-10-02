@@ -1,9 +1,0 @@
-node_modules/
-.next/
-out/
-.env
-*.log
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
