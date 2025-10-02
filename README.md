@@ -35,6 +35,17 @@ This repository is **public only because GitHub Pages requires public repositori
 - **Forms**: React Hook Form + Yup
 - **Parallax**: React Parallax
 
+### Project Structure
+```
+modulix-solutions/
+├── components/          # Reusable React components
+├── pages/              # Next.js pages (_app.tsx, index.tsx)
+├── public/             # Static assets (favicon, etc.)
+├── styles/             # Global CSS and Tailwind config
+├── out/                # Generated static files (after build)
+└── .github/workflows/  # GitHub Actions for deployment
+```
+
 ---
 
 ## 📄 License
