@@ -12,10 +12,20 @@
     "type-check": "tsc --noEmit",
     "lint": "next lint"
   },
-  "keywords": ["discord", "gaming", "community", "marketing", "uefn", "pinefruit", "modulix"],
+  "keywords": [
+    "discord",
+    "gaming",
+    "community",
+    "marketing",
+    "uefn",
+    "pinefruit",
+    "modulix"
+  ],
   "author": "Modulix Solutions LLC",
   "license": "UNLICENSED",
   "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
+    "class-variance-authority": "^0.7.1",
     "framer-motion": "^10.16.16",
     "lucide-react": "^0.292.0",
     "next": "^14.0.4",
@@ -23,7 +33,6 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
     "react-parallax": "^3.5.1",
-    "@hookform/resolvers": "^3.3.1",
     "yup": "^1.3.2"
   },
   "devDependencies": {

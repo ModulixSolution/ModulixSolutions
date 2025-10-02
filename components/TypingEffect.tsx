@@ -35,7 +35,7 @@ export default function TypingEffect({ text, speed = 100, className = '' }: Typi
         <motion.span
           animate={{ opacity: [1, 0] }}
           transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
-          className="inline-block w-0.5 h-6 bg-neon-blue ml-1"
+          className="inline-block w-0.5 h-6 bg-cyber-blue ml-1"
         />
       )}
     </span>

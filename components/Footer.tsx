@@ -1,28 +1,39 @@
 import React from 'react';
-import { MessageCircle, Twitter } from 'lucide-react';
+import { MessageCircle, Twitter, Mail } from 'lucide-react';
 import Container from './Container';
 
 export default function Footer() {
   return (
-    <footer className="bg-deeper-blue border-t border-neon-blue/20">
-      <Container className="py-12">
-        <div className="text-center">
-          <div className="mb-4">
-            <h3 className="text-xl font-bold logo-font text-neon-blue mb-2">MODULIX</h3>
-            <p className="text-gray-400 text-sm">
-              Discord community solutions for brands
-            </p>
+    <footer className="bg-deeper-blue border-t border-cyber-blue/30">
+      <Container className="py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 items-center gap-6">
+          {/* Copyright - Far Left */}
+          <div className="text-gray-400 text-xs text-center lg:text-left">
+            © 2025 Modulix Solutions LLC
           </div>
 
-          <div className="flex justify-center space-x-6 mb-6">
+          {/* Logo - Center */}
+          <div className="flex items-center justify-center">
+            <h3 className="text-4xl font-bold logo-font text-white">MODULIX</h3>
+          </div>
+
+          {/* Socials + Email Icon - Far Right */}
+          <div className="flex items-center justify-center lg:justify-end space-x-4">
+            <a
+              href="mailto:info@modulixsolutions.com"
+              className="text-gray-400 hover:text-cyber-blue transition-colors duration-300"
+              aria-label="Email us"
+            >
+              <Mail size={20} />
+            </a>
             <a
               href="https://discord.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-neon-blue transition-colors duration-300"
+              className="text-gray-400 hover:text-cyber-blue transition-colors duration-300"
               aria-label="Join our Discord"
             >
-              <MessageCircle size={24} />
+              <MessageCircle size={20} />
             </a>
             <a
               href="https://twitter.com"
@@ -31,13 +42,8 @@ export default function Footer() {
               className="text-gray-400 hover:text-neon-purple transition-colors duration-300"
               aria-label="Follow us on Twitter"
             >
-              <Twitter size={24} />
+              <Twitter size={20} />
             </a>
-          </div>
-
-          <div className="text-gray-400 text-sm">
-            <p>© 2025 Modulix Solutions LLC. All rights reserved.</p>
-            <p className="mt-1">info@modulixsolutions.com</p>
           </div>
         </div>
       </Container>

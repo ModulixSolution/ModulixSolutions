@@ -47,7 +47,7 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-4xl font-bold logo-font text-neon-blue mb-8"
+          className="text-4xl font-bold logo-font text-cyber-blue mb-8"
         >
           MODULIX
         </motion.h1>
@@ -62,7 +62,7 @@ export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
             <motion.div
               key={index}
               variants={item}
-              className="w-4 h-4 bg-gradient-to-r from-neon-blue to-neon-purple rounded-sm opacity-60"
+              className="w-4 h-4 bg-gradient-to-r from-cyber-blue to-neon-purple rounded-sm opacity-60"
               style={{
                 clipPath: 'polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)',
               }}
