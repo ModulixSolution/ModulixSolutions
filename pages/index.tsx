@@ -827,7 +827,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-center mb-16"
+                  className="text-center mb-8"
                 >
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
                     Trusted by Industry Leaders
@@ -943,7 +943,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-center mb-16"
+                  className="text-center mb-8"
                 >
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
                     Companies Who Trust Us

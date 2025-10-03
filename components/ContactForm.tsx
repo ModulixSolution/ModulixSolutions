@@ -2,11 +2,39 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 import Button from './Button';
 
 export default function ContactForm() {
   const [result, setResult] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldValidity, setFieldValidity] = useState({
+    name: false,
+    email: false,
+    message: false
+  });
+
+  const validateField = (field: string, value: string) => {
+    switch (field) {
+      case 'name':
+        return value.length >= 2;
+      case 'email':
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+      case 'message':
+        return value.length >= 10;
+      default:
+        return false;
+    }
+  };
+
+  const handleFieldChange = (field: string, value: string) => {
+    const isValid = validateField(field, value);
+    setFieldValidity(prev => ({
+      ...prev,
+      [field]: isValid
+    }));
+  };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,14 +42,19 @@ export default function ContactForm() {
     setResult('Sending...');
 
     const formData = new FormData(event.currentTarget);
-    formData.append('access_key', '1bb2a588-01c0-4ef3-9776-ee8fd5e691f2');
-    formData.append('from_name', 'Modulix Solutions Website');
+
+    // Web3Forms expects 'access_key', not 'apikey'
+    formData.append('access_key', 'ac55144c-ed04-4d25-8b83-fe6847721ebf');
     formData.append('subject', 'New Contact Form Submission - Modulix Solutions');
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: formData
+        body: formData,
+        // Add CORS headers for debugging
+        headers: {
+          'Accept': 'application/json'
+        }
       });
 
       const data = await response.json();
@@ -29,13 +62,15 @@ export default function ContactForm() {
       if (data.success) {
         setResult('Message sent successfully! We\'ll get back to you soon.');
         event.currentTarget.reset();
+        // Clear validation states on success
+        setFieldValidity({ name: false, email: false, message: false });
       } else {
-        console.log('Error', data);
-        setResult(data.message || 'Something went wrong. Please try again.');
+        console.log('Web3Forms Error:', data);
+        setResult(data.message || 'Failed to send message. Please try again.');
       }
     } catch (error) {
-      console.log('Error', error);
-      setResult('Something went wrong. Please try again.');
+      console.log('Network Error:', error);
+      setResult('Network error. Please check your connection and try again.');
     } finally {
       setIsSubmitting(false);
       setTimeout(() => {
@@ -58,45 +93,69 @@ export default function ContactForm() {
         <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
           Name *
         </label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          required
-          className="form-input w-full"
-          placeholder="Your name"
-          disabled={isSubmitting}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            name="name"
+            id="name"
+            required
+            className="form-input w-full pr-10"
+            placeholder="Your name"
+            disabled={isSubmitting}
+            onChange={(e) => handleFieldChange('name', e.target.value)}
+          />
+          {fieldValidity.name && (
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <Check className="w-5 h-5 text-green-400" />
+            </div>
+          )}
+        </div>
       </div>
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
           Email *
         </label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          required
-          className="form-input w-full"
-          placeholder="your.email@example.com"
-          disabled={isSubmitting}
-        />
+        <div className="relative">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            required
+            className="form-input w-full pr-10"
+            placeholder="your.email@example.com"
+            disabled={isSubmitting}
+            onChange={(e) => handleFieldChange('email', e.target.value)}
+          />
+          {fieldValidity.email && (
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <Check className="w-5 h-5 text-green-400" />
+            </div>
+          )}
+        </div>
       </div>
 
       <div>
         <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
           Message *
         </label>
-        <textarea
-          name="message"
-          id="message"
-          rows={5}
-          required
-          className="form-textarea w-full"
-          placeholder="Tell us about your project..."
-          disabled={isSubmitting}
-        />
+        <div className="relative">
+          <textarea
+            name="message"
+            id="message"
+            rows={5}
+            required
+            className="form-textarea w-full pr-10"
+            placeholder="Tell us about your project..."
+            disabled={isSubmitting}
+            onChange={(e) => handleFieldChange('message', e.target.value)}
+          />
+          {fieldValidity.message && (
+            <div className="absolute bottom-3 right-3">
+              <Check className="w-5 h-5 text-green-400" />
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="text-center">
