@@ -58,7 +58,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://linkedin.com/company/modulixsolution"
+              href="https://www.linkedin.com/company/modulixsolution"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"

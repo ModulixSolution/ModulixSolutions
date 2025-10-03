@@ -175,15 +175,6 @@ export default function Home() {
       logoUrl: '/companies/vlo-logo.png',
     },
     {
-      id: 'nda-company-1',
-      name: 'AAA Studio',
-      displayName: '?',
-      link: '#',
-      accentColor: 'gray',
-      isNDA: true,
-      logoUrl: '/companies/nda-logo.png',
-    },
-    {
       id: 'solrise',
       name: 'Solrise Interactive',
       displayName: 'SOLRISE',
@@ -206,15 +197,6 @@ export default function Home() {
       link: 'https://discord.gg/getshot',
       accentColor: 'red',
       logoUrl: '/companies/getshot-logo.png',
-    },
-    {
-      id: 'nda-company-2',
-      name: 'Major Agency',
-      displayName: '?',
-      link: '#',
-      accentColor: 'gray',
-      isNDA: true,
-      logoUrl: '/companies/nda-logo.png',
     },
   ];
 
@@ -324,7 +306,7 @@ export default function Home() {
               "sameAs": [
                 "https://discord.gg/modulix",
                 "https://twitter.com/modulixsolutions",
-                "https://linkedin.com/company/modulix-solutions"
+                "https://www.linkedin.com/company/modulixsolution"
               ]
             })
           }}
@@ -1017,22 +999,14 @@ export default function Home() {
                         transition={{ delay: index * 0.1 }}
                       >
                         <Card
-                          className={`h-full cursor-pointer p-0 flex flex-col ${company.isNDA ? 'opacity-40 hover:opacity-60' : ''}`}
+                          className="h-full cursor-pointer p-0 flex flex-col"
                           glowColor={company.accentColor as 'blue' | 'purple' | 'mixed'}
                         onClick={() => {
-                          if (!company.isNDA && company.link !== '#') {
+                          if (company.link !== '#') {
                             window.open(company.link, '_blank');
                           }
                         }}
                       >
-                        {/* NDA Badge for locked companies */}
-                        {company.isNDA && (
-                          <div className="absolute top-3 right-3 z-10">
-                            <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full border border-red-500/30">
-                              NDA
-                            </span>
-                          </div>
-                        )}
 
                         {/* Company Logo Area - Larger logos to fill most of the card */}
                         <div className="flex items-center justify-center" style={{ height: '220px' }}>
@@ -1048,40 +1022,24 @@ export default function Home() {
                                 if (container) {
                                   // Hide the broken image and show fallback
                                   target.style.display = 'none';
-                                const fallback = document.createElement('div');
-                                fallback.className = `text-6xl font-bold transition-colors duration-300 ${
-                                  company.isNDA
-                                    ? "text-gray-600"
-                                    : "text-gray-400"
-                                }`;
+                                  const fallback = document.createElement('div');
+                                  fallback.className = 'text-6xl font-bold transition-colors duration-300 text-gray-400';
                                   fallback.textContent = company.displayName.charAt(0);
                                   container.appendChild(fallback);
                                 }
                               }}
                             />
                           ) : (
-                            <div className={`text-6xl font-bold transition-colors duration-300 ${
-                              company.isNDA
-                                ? "text-gray-600 group-hover:text-gray-500"
-                                : "text-gray-400 group-hover:text-white"
-                            }`}>
+                            <div className="text-6xl font-bold transition-colors duration-300 text-gray-400 group-hover:text-white">
                               {company.displayName.charAt(0)}
                             </div>
                           )}
                         </div>
 
                         {/* Company Name - Bottom section */}
-                        <div className={`flex items-center justify-center transition-all duration-300 ${
-                          company.isNDA
-                            ? "bg-gray-900/30"
-                            : "bg-gray-800/50"
-                        }`} style={{ height: '60px' }}>
-                          <p className={`transition-colors duration-300 text-base font-medium text-center ${
-                            company.isNDA
-                              ? "text-gray-600"
-                              : "text-gray-400"
-                          }`}>
-                            {company.isNDA ? `${company.name} (Coming Soon)` : company.name}
+                        <div className="flex items-center justify-center transition-all duration-300 bg-gray-800/50" style={{ height: '60px' }}>
+                          <p className="transition-colors duration-300 text-base font-medium text-center text-gray-400">
+                            {company.name}
                           </p>
                         </div>
                       </Card>
@@ -1183,7 +1141,7 @@ export default function Home() {
                           X
                         </a>
                         <a
-                          href="https://linkedin.com/company/modulixsolution"
+                          href="https://www.linkedin.com/company/modulixsolution"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
