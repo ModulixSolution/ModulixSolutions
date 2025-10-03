@@ -429,7 +429,7 @@ export default function Home() {
             </SectionWrapper>
 
             {/* About & Value Propositions Section */}
-            <SectionWrapper id="about" className="py-20 bg-deeper-blue/30">
+            <SectionWrapper id="about" className="py-20 bg-deeper-blue/60">
               <Container>
                 {/* About Us Section */}
                 <div className="mb-20">
@@ -467,149 +467,47 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                      About Modulix
-                    </h2>
+                    <div className="flex flex-col lg:flex-row items-start gap-8">
+                      {/* Text Section */}
+                      <div className="flex-1">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                          About Modulix
+                        </h2>
 
-                    <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
-                      Pioneering the future of gaming community engagement through innovative Discord solutions
-                    </p>
+                        <motion.p
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.8, delay: 0.3 }}
+                          viewport={{ once: true }}
+                          className="text-xl text-gray-300 mb-6 leading-relaxed"
+                        >
+                          At Modulix, we're the pioneers revolutionizing how major corporations connect with vibrant gaming communities. For over a decade, we've partnered with Fortune 500 giants, AAA game studios launching blockbuster titles, and innovative indie developers cultivating dedicated followings. From global brands entering the metaverse to underground creators just starting out, our expertise in Discord integrations, UEFN (Unreal Engine Fortnite Network), and UGC (User-Generated Content) games sets the standard—making outdated advertising methods feel archaic.
+                        </motion.p>
 
-                    <div className="w-24 h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mx-auto mb-8"></div>
+                        <motion.p
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.8, delay: 0.5 }}
+                          viewport={{ once: true }}
+                          className="text-lg text-gray-300 mb-6 leading-relaxed"
+                        >
+                          As confident, forward-thinking developers, we take community building to the next level. While competitors tinker with basic bots, we've engineered comprehensive ecosystems that integrate seamlessly and feel inherently organic. Our modular framework allows us to scale from targeted server enhancements to full-scale enterprise community management, always delivering that precise mix of technical innovation and genuine human connection that drives real engagement and loyalty.
+                        </motion.p>
 
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.8, delay: 0.3 }}
-                      viewport={{ once: true }}
-                      className="text-xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto"
-                    >
-                      Born from the shadows of UEFN's creative labs, Modulix Solutions is a covert collective of game developers and strategists. We bridge brands and Discord's vibrant ecosystems with seamless, native integrations—transforming servers into owned galaxies of engagement and retention.
-                    </motion.p>
-
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ duration: 0.8, delay: 0.5 }}
-                      viewport={{ once: true }}
-                      className="text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto"
-                    >
-                      Our edge? A modular playbook forged in world-building fires—scalable, insight-driven tactics that nail cultural fit and deliver impact, sidestepping the clutter of legacy ads.
-                    </motion.p>
+                        <motion.p
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.8, delay: 0.7 }}
+                          viewport={{ once: true }}
+                          className="text-lg text-gray-300 leading-relaxed"
+                        >
+                          Whether you're a corporation aiming to market products through immersive Discord experiences or leverage UEFN/UGC for viral community growth, Modulix delivers results that not only meet but exceed expectations. Join the ranks of industry leaders who've trusted us to turn communities into powerful marketing assets.
+                        </motion.p>
+                      </div>
+                    </div>
                   </motion.div>
                 </div>
 
-                {/* Value Propositions Section */}
-                <SectionContainer className="mb-16">
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center"
-                  >
-                    <h3 className="text-2xl font-bold mb-4 text-cyber-blue">
-                      Why Discord Drives Superior ROI
-                    </h3>
-                    <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-                      Beyond fleeting impressions to owned universes—where your brand lives indefinitely, builds lasting relationships, and delivers measurable results that traditional platforms can't match
-                    </p>
-                    <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-8"></div>
-                  </motion.div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="relative"
-                  >
-                    <Card className="h-full text-center" glowColor="mixed">
-                      <div className="flex justify-center mb-4">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
-                          <Network className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-semibold gradient-text mb-3">
-                        Persistent Ownership
-                      </h3>
-                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
-                      <p className="text-gray-300 leading-relaxed text-sm">
-                        Ditch ephemeral views—build Discord hubs where your brand lives indefinitely, owning data, rules, and relationships for sustained growth.
-                      </p>
-                    </Card>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="relative"
-                  >
-                    <Card className="h-full text-center" glowColor="mixed">
-                      <div className="flex justify-center mb-4">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
-                          <MessageCircle className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-semibold gradient-text mb-3">
-                        Conversational Retention
-                      </h3>
-                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
-                      <p className="text-gray-300 leading-relaxed text-sm">
-                        Engage in real-time dialogues that spark word-of-mouth magic; members linger for months, turning one ad into endless impressions.
-                      </p>
-                    </Card>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                    className="relative"
-                  >
-                    <Card className="h-full text-center" glowColor="mixed">
-                      <div className="flex justify-center mb-4">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
-                          <TrendingUp className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-semibold gradient-text mb-3">
-                        ROI in Depth
-                      </h3>
-                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
-                      <p className="text-gray-300 leading-relaxed text-sm">
-                        Where traditional platforms chase seconds of attention, Discord delivers loops of interaction—higher participation, deeper loyalty.
-                      </p>
-                    </Card>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.6 }}
-                    className="relative"
-                  >
-                    <Card className="h-full text-center" glowColor="mixed">
-                      <div className="flex justify-center mb-4">
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
-                          <Gamepad2 className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-semibold gradient-text mb-3">
-                        Gaming Synergy
-                      </h3>
-                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
-                      <p className="text-gray-300 leading-relaxed text-sm">
-                        Tailored for studios: Integrate UEFN experiences seamlessly, making your brand a playable force in gaming communities.
-                      </p>
-                    </Card>
-                  </motion.div>
-                  </div>
-                </SectionContainer>
 
               </Container>
             </SectionWrapper>
@@ -814,6 +712,118 @@ export default function Home() {
                       </RowContainer>
                     </div>
                   </SectionContainer>
+
+                  {/* Why Discord Drives Superior ROI */}
+                  <SectionContainer className="mb-16">
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="text-center"
+                    >
+                      <h3 className="text-2xl font-bold mb-4 text-cyber-blue">
+                        Why Discord Drives Superior ROI
+                      </h3>
+                      <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                        Beyond fleeting impressions to owned universes—where your brand lives indefinitely, builds lasting relationships, and delivers measurable results that traditional platforms can't match
+                      </p>
+                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-8"></div>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6 }}
+                      className="relative"
+                    >
+                      <Card className="h-full text-center" glowColor="mixed">
+                        <div className="flex justify-center mb-4">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
+                            <Network className="w-8 h-8 text-white" />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-semibold gradient-text mb-3">
+                          Persistent Ownership
+                        </h3>
+                        <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                        <p className="text-gray-300 leading-relaxed text-sm">
+                          Ditch ephemeral views—build Discord hubs where your brand lives indefinitely, owning data, rules, and relationships for sustained growth.
+                        </p>
+                      </Card>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.2 }}
+                      className="relative"
+                    >
+                      <Card className="h-full text-center" glowColor="mixed">
+                        <div className="flex justify-center mb-4">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
+                            <MessageCircle className="w-8 h-8 text-white" />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-semibold gradient-text mb-3">
+                          Conversational Retention
+                        </h3>
+                        <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                        <p className="text-gray-300 leading-relaxed text-sm">
+                          Engage in real-time dialogues that spark word-of-mouth magic; members linger for months, turning one ad into endless impressions.
+                        </p>
+                      </Card>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
+                      className="relative"
+                    >
+                      <Card className="h-full text-center" glowColor="mixed">
+                        <div className="flex justify-center mb-4">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
+                            <TrendingUp className="w-8 h-8 text-white" />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-semibold gradient-text mb-3">
+                          ROI in Depth
+                        </h3>
+                        <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                        <p className="text-gray-300 leading-relaxed text-sm">
+                          Where traditional platforms chase seconds of attention, Discord delivers loops of interaction—higher participation, deeper loyalty.
+                        </p>
+                      </Card>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                      className="relative"
+                    >
+                      <Card className="h-full text-center" glowColor="mixed">
+                        <div className="flex justify-center mb-4">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
+                            <Gamepad2 className="w-8 h-8 text-white" />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-semibold gradient-text mb-3">
+                          Gaming Synergy
+                        </h3>
+                        <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                        <p className="text-gray-300 leading-relaxed text-sm">
+                          Tailored for studios: Integrate UEFN experiences seamlessly, making your brand a playable force in gaming communities.
+                        </p>
+                      </Card>
+                    </motion.div>
+                    </div>
+                  </SectionContainer>
                 </div>
               </Container>
                 </div>
@@ -821,7 +831,7 @@ export default function Home() {
             </SectionWrapper>
 
             {/* Testimonials Section */}
-            <SectionWrapper id="testimonials" className="py-20 bg-deeper-blue/30">
+            <SectionWrapper id="testimonials" className="py-20 bg-deeper-blue/60">
               <Container>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -833,18 +843,18 @@ export default function Home() {
                     Trusted by Industry Leaders
                   </h2>
                   <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Real results from real partnerships—see how we've transformed Discord communities for gaming studios and brands
+                    Real results from real partnerships—revolutionizing Discord communities worldwide with measurable growth and authentic engagement
                   </p>
                 </motion.div>
 
                 {/* Testimonials Carousel */}
                 <div
-                  className="relative overflow-hidden py-4"
-                  style={{ height: '400px' }}
+                  className="relative overflow-hidden mb-16 py-4"
+                  style={{ height: '340px' }}
                 >
                   {/* Fade masks on edges */}
-                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#121325] to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#121325] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#151629] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#151629] to-transparent z-10 pointer-events-none" />
 
                   <motion.div
                     className="absolute inset-0 flex items-center gap-8 py-4"
@@ -873,7 +883,7 @@ export default function Home() {
                         <motion.div
                           key={`${testimonial.id}-${index}`}
                           className="flex-shrink-0"
-                          style={{ width: '450px' }}
+                          style={{ height : '280px', width: '450px' }}
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
@@ -938,6 +948,29 @@ export default function Home() {
                   </motion.div>
                 </div>
 
+                {/* Temporary Placeholder Banner */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="mb-12 mt-8"
+                >
+                  <div className="bg-cyber-blue/20 border border-cyber-blue/40 rounded-lg p-4 text-center max-w-2xl mx-auto">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <svg className="w-5 h-5 text-cyber-blue" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      </svg>
+                      <span className="text-cyber-blue font-semibold text-sm uppercase tracking-wide">
+                        Coming Soon
+                      </span>
+                    </div>
+                    <p className="text-gray-300 text-sm">
+                      These testimonials are temporary placeholders. We're currently updating our website with accurate reviews from our valued clients.
+                    </p>
+                  </div>
+                </motion.div>
+
                 {/* Companies Section - Part of Testimonials */}
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -948,42 +981,42 @@ export default function Home() {
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
                     Companies Who Trust Us
                   </h2>
-                  <p className="text-gray-400 max-w-2xl mx-auto">
-                    Trusted by industry leaders and innovative startups across gaming and tech
+                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Industry leaders and innovative startups across gaming, tech, and entertainment trust us for excellence in community engagement
                   </p>
                 </motion.div>
 
                 {/* Company Logo Carousel */}
-                <div className="relative overflow-hidden py-4" style={{ height: '320px' }}>
+                <div className="relative overflow-hidden py-4" style={{ height: '340px' }}>
                   {/* Fade masks on edges */}
-                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#121325] to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#121325] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#151629] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#151629] to-transparent z-10 pointer-events-none" />
 
                   <motion.div
-                    className="absolute inset-0 flex items-center gap-12 py-4"
-                    animate={{ x: [0, -(220 + 48) * companies.length] }} // Move exactly one full set of companies
+                    className="absolute inset-0 flex items-center gap-8 py-4"
+                    animate={{ x: [0, -(220 + 32) * companies.length] }} // Move exactly one full set of companies
                     transition={{
                       duration: 60,
                       repeat: Infinity,
                       ease: "linear",
                       repeatType: "loop"
                     }}
-                    style={{ width: `${(220 + 48) * companies.length * 2}px` }} // Width for 2 sets
+                    style={{ width: `${(220 + 32) * companies.length * 2}px` }} // Width for 2 sets
                   >
                     {/* Create seamless infinite loop */}
                     {[...companies, ...companies].map((company, index) => (
                       <motion.div
                         key={`${company.id}-${index}`}
-                        className={`group relative rounded-xl transition-all duration-300 cursor-pointer flex-shrink-0 ${
-                          company.isNDA
-                            ? "bg-white/2 border border-white/5 opacity-40 hover:opacity-60"
-                            : "bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20"
-                        } ${!company.isNDA && getAccentColors(company.accentColor).glow}`}
-                        style={{ height: '280px', width: '220px' }}
+                        className="flex-shrink-0"
+                        style={{ width: '220px', height: '280px' }}
                         initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: company.isNDA ? 0.4 : 1, y: 0 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
+                      >
+                        <Card
+                          className={`h-full cursor-pointer p-0 flex flex-col ${company.isNDA ? 'opacity-40 hover:opacity-60' : ''}`}
+                          glowColor={company.accentColor as 'blue' | 'purple' | 'mixed'}
                         onClick={() => {
                           if (!company.isNDA && company.link !== '#') {
                             window.open(company.link, '_blank');
@@ -1013,12 +1046,12 @@ export default function Home() {
                                 if (container) {
                                   // Hide the broken image and show fallback
                                   target.style.display = 'none';
-                                  const fallback = document.createElement('div');
-                                  fallback.className = `text-6xl font-bold transition-colors duration-300 ${
-                                    company.isNDA
-                                      ? "text-gray-600 group-hover:text-gray-500"
-                                      : "text-gray-400 group-hover:text-white"
-                                  }`;
+                                const fallback = document.createElement('div');
+                                fallback.className = `text-6xl font-bold transition-colors duration-300 ${
+                                  company.isNDA
+                                    ? "text-gray-600"
+                                    : "text-gray-400"
+                                }`;
                                   fallback.textContent = company.displayName.charAt(0);
                                   container.appendChild(fallback);
                                 }
@@ -1038,17 +1071,18 @@ export default function Home() {
                         {/* Company Name - Bottom section */}
                         <div className={`flex items-center justify-center transition-all duration-300 ${
                           company.isNDA
-                            ? "bg-gray-900/30 group-hover:bg-gray-800/40"
-                            : "bg-gray-800/50 group-hover:bg-gray-700/50"
+                            ? "bg-gray-900/30"
+                            : "bg-gray-800/50"
                         }`} style={{ height: '60px' }}>
                           <p className={`transition-colors duration-300 text-base font-medium text-center ${
                             company.isNDA
-                              ? "text-gray-600 group-hover:text-gray-500"
-                              : "text-gray-400 group-hover:text-white"
+                              ? "text-gray-600"
+                              : "text-gray-400"
                           }`}>
                             {company.isNDA ? `${company.name} (Coming Soon)` : company.name}
                           </p>
                         </div>
+                      </Card>
                       </motion.div>
                     ))}
                   </motion.div>
@@ -1123,23 +1157,38 @@ export default function Home() {
                       <p className="text-gray-300 mb-4">
                         Drop us a line through the form or reach out on social media. We're always up for discussing game-changing ideas.
                       </p>
-                      <div className="flex space-x-4">
+                      <div className="flex flex-wrap gap-4">
                         <a
-                          href="#"
-                          className="text-cyber-blue hover:text-white transition-colors duration-300"
+                          href="https://discord.gg/modulix"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
                         >
-                          Twitter
-                        </a>
-                        <a
-                          href="#"
-                          className="text-cyber-blue hover:text-white transition-colors duration-300"
-                        >
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0789.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0789-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0067.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0408.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9758 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+                          </svg>
                           Discord
                         </a>
                         <a
-                          href="#"
-                          className="text-cyber-blue hover:text-white transition-colors duration-300"
+                          href="https://x.com/ModulixSolution"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
                         >
+                          <svg width="16" height="16" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
+                            <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" fill="currentColor"/>
+                          </svg>
+                          X
+                        </a>
+                        <a
+                          href="https://linkedin.com/company/modulixsolution"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+                        >
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                          </svg>
                           LinkedIn
                         </a>
                       </div>
@@ -1160,7 +1209,7 @@ export default function Home() {
             </SectionWrapper>
 
             {/* FAQ Section */}
-            <SectionWrapper id="faq" className="py-20">
+            <SectionWrapper id="faq" className="py-20 bg-deeper-blue/60">
               <Container>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -1179,17 +1228,13 @@ export default function Home() {
                 <div className="max-w-3xl mx-auto space-y-4">
                   {faqs.map((faq, index) => {
                     const isOpen = openFaqs.has(index);
-                    const [isHovered, setIsHovered] = useState(false);
 
                     return (
                       <Card
                         key={index}
-                        hover={false}
-                        className={`cursor-pointer transition-all duration-300 ${
-                          isHovered
-                            ? 'shadow-neon-blue ring-2 ring-cyber-blue/30'
-                            : ''
-                        }`}
+                        hover={true}
+                        glowColor="mixed"
+                        className="cursor-pointer"
                         onClick={() => {
                           const newOpenFaqs = new Set(openFaqs);
                           if (newOpenFaqs.has(index)) {
@@ -1199,8 +1244,6 @@ export default function Home() {
                           }
                           setOpenFaqs(newOpenFaqs);
                         }}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
                       >
                         <div className="flex justify-between items-center">
                           <h3 className={`text-lg font-bold transition-colors duration-300 ${
