@@ -273,9 +273,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Modulix Solutions - Discord Community Management & Gaming Brand Advertising</title>
+        <title>Modulix Solutions - Discord Community Management</title>
         <meta name="description" content="Transform Discord into revenue-generating communities with authentic gaming brand advertising, UEFN integrations, and community management for studios and brands." />
-        <meta name="keywords" content="Discord community management, gaming server advertising, UEFN marketing, Discord bot advertising, gaming community engagement, Discord marketing campaigns, gaming brand promotion, community building, Discord server management, Fortnite advertising, Discord ad network, gaming community growth, Discord advertising agency" />
+        <meta name="keywords" content="Discord community management, gaming server advertising, UEFN marketing, Discord bot advertising, gaming community engagement, Discord marketing campaigns, gaming brand promotion, community building, Discord server management, Fortnite advertising, Discord ad network, gaming community growth, Discord advertising agency, Modulix Solutions, Chartis Games, WildFire Discord, Readyup" />
         <meta name="author" content="Modulix Solutions" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
@@ -409,7 +409,7 @@ export default function Home() {
                     transition={{ duration: 0.8, delay: 0.4 }}
                     className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed"
                   >
-                    Craft authentic, scalable engagements that transform fleeting interactions into enduring brand loyalty—empowering gaming studios and brands to own the conversation in the heart of gaming's digital universe.
+                    Craft authentic, scalable engagements that transform fleeting interactions into enduring brand loyalty empowering gaming studios and brands to own the conversation in the heart of gaming's digital universe.
                   </motion.p>
 
                   <motion.div

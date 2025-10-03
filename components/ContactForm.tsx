@@ -81,25 +81,46 @@ export default function ContactForm() {
         // Remove manual headers - let browser set them automatically for FormData
       });
 
-      const data = await response.json();
+      // Check if response is ok before trying to parse
+      if (response.ok) {
+        try {
+          const data = await response.json();
+          console.log('Web3Forms Response:', data);
 
-      if (data.success) {
-        setResult('Message sent successfully! Redirecting...');
-        event.currentTarget.reset();
-        // Clear validation states on success
-        setFieldValidity({ name: false, email: false, discord: false, message: false });
+          if (data.success) {
+            setResult('Message sent successfully! Redirecting...');
+            event.currentTarget.reset();
+            // Clear validation states on success
+            setFieldValidity({ name: false, email: false, discord: false, message: false });
 
-        // Redirect after showing success message briefly
-        setTimeout(() => {
-          window.location.href = 'https://modulixsolutions.com/contact-confirmed';
-        }, 1500);
+            // Redirect after showing success message briefly
+            setTimeout(() => {
+              window.location.href = 'https://modulixsolutions.com/contact-confirmed';
+            }, 1500);
+          } else {
+            console.log('Web3Forms Error:', data);
+            setResult(data.message || 'Failed to send message. Please try again.');
+          }
+        } catch (parseError) {
+          // If JSON parsing fails but response is ok, assume success
+          console.log('Parse error but response OK, assuming success:', parseError);
+          setResult('Message sent successfully! Redirecting...');
+          event.currentTarget.reset();
+          setFieldValidity({ name: false, email: false, discord: false, message: false });
+
+          setTimeout(() => {
+            window.location.href = 'https://modulixsolutions.com/contact-confirmed';
+          }, 1500);
+        }
       } else {
-        console.log('Web3Forms Error:', data);
-        setResult(data.message || 'Failed to send message. Please try again.');
+        // Response not ok
+        console.log('HTTP Error:', response.status, response.statusText);
+        setResult(`Failed to send message (${response.status}). Please try again.`);
       }
     } catch (error) {
       console.log('Network Error:', error);
-      setResult('Network error. Please check your connection and try again.');
+      // Even on network error, if the form might have been submitted, show a different message
+      setResult('Message may have been sent. Please check your email or try again.');
     } finally {
       setIsSubmitting(false);
       setTimeout(() => {
