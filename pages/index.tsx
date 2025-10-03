@@ -6,7 +6,6 @@ import { Bot, Network, Users, Target, Palette, TrendingUp, Shield, Settings, Mes
 
 import Container from '../components/Container';
 import RowContainer from '../components/RowContainer';
-import ListContainer from '../components/ListContainer';
 import SectionWrapper from '../components/SectionWrapper';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -51,24 +50,27 @@ export default function Home() {
 
   const services = [
     [
-      { title: 'Automated Ads', description: 'Seamless bot-driven placements in active conversations for authentic, high-frequency brand exposure.', iconKey: 'Bot' },
-      { title: 'Network Ads', description: 'Targeted reach in vibrant Discord communities, fostering genuine engagement through aligned incentives.', iconKey: 'Network' },
+      { title: 'Scalable Ad Services', description: '', iconKey: 'Bot', isHeader: true },
+      { title: 'Automated Ads via Bots', description: 'Deploy intelligent bots for seamless, conversation-embedded placements across active servers—delivering high-frequency, authentic exposure that blends effortlessly into daily chats, scaling with minimal oversight.', iconKey: 'Bot' },
+      { title: 'Network Ads Across Servers', description: 'Tap into curated Discord networks for targeted, incentive-aligned visibility; we handle placements, ensuring genuine interactions while sharing success with community owners.', iconKey: 'Network' },
     ],
     [
-      { title: 'Tailored Selection', description: 'Insights on interests, location, and cultural fit for optimal performance.', iconKey: 'Target' },
-      { title: 'Immersive Formats', description: 'Tournaments, announcements, giveaways, UGC challenges, and custom Activities; natural touchpoints.', iconKey: 'Gamepad2' },
+      { title: 'Managed Campaigns', description: '', iconKey: 'Target', isHeader: true },
+      { title: 'Tailored Community Selection', description: 'Leverage proprietary insights on interests, demographics, and cultural resonance to match your brand with the perfect servers—predicting performance before launch.', iconKey: 'Target' },
+      { title: 'Immersive Ad Formats', description: 'From sponsored gaming tournaments and explosive giveaways to UGC challenges and bespoke Discord Activities, we craft touchpoints like announcements, pinned events, and chat insertions that feel organic.', iconKey: 'Gamepad2' },
     ],
     [
-      { title: 'Bespoke Creative', description: 'Native activations that resonate deeply, extending to platforms like Reddit.', iconKey: 'Palette' },
-      { title: 'End-to-End', description: 'From concept to insights, ensuring smooth delivery.', iconKey: 'Settings' },
+      { title: 'Bespoke Creative Strategy', description: 'Develop community-first narratives with native visuals and hooks; extend top performers to Reddit and beyond for amplified reach.', iconKey: 'Palette' },
+      { title: 'End-to-End Execution', description: 'Full-cycle management: From brief intake and approvals to flawless rollout and post-campaign debriefs, freeing you to focus on strategy.', iconKey: 'Settings' },
     ],
     [
-      { title: 'Analytics', description: 'Track impressions, interactions, conversions, and uplift for proven impact.', iconKey: 'TrendingUp' },
-      { title: 'Safety', description: 'Rigorous vetting, moderation, and oversight.', iconKey: 'Shield' },
+      { title: 'Comprehensive Analytics', description: 'Real-time dashboards tracking impressions, engagements, conversions, and brand lift—proving ROI with uplift studies included standard.', iconKey: 'TrendingUp' },
+      { title: 'Trusted Brand Safety', description: 'Onboard vetting, AI-moderated environments, and dedicated oversight ensure activations align with platform rules and community vibes.', iconKey: 'Shield' },
     ],
     [
-      { title: 'Custom Builds', description: 'Tailored server designs to own conversations, build loyalty, and drive retention—full management or handover.', iconKey: 'MessageCircle' },
-      { title: 'Moderation/Gaming', description: 'Vibrant 24/7 interactions and events. Specialized UEFN tie-ins for immersive brand experiences.', iconKey: 'Users' },
+      { title: 'Premium Builds', description: '', iconKey: 'MessageCircle', isHeader: true },
+      { title: 'Custom Community Builds', description: 'Design and launch branded servers as loyalty engines—modular channels, bots, and launch events; opt for full management or trained handover.', iconKey: 'MessageCircle' },
+      { title: 'Moderation & Gaming Integrations', description: '24/7 engagement fueling with events and content; specialize in UEFN tie-ins, weaving brands into interactive game worlds for immersive retention.', iconKey: 'Users' },
     ],
   ];
 
@@ -231,15 +233,15 @@ export default function Home() {
   };
 
   const faqs = [
-    { question: 'How do you select communities?', answer: 'Tailored matching via insights on interests, location, and fit.' },
-    { question: 'What ad formats?', answer: 'Immersive options like tournaments, giveaways, and custom Activities.' },
-    { question: 'Do you manage campaigns?', answer: 'End-to-end, from strategy to measurement.' },
-    { question: 'What analytics?', answer: 'Comprehensive tracking of interactions and uplift.' },
-    { question: 'Brand safety?', answer: 'Rigorous vetting and oversight.' },
-    { question: 'Case studies?', answer: 'Get in touch for tailored examples.' },
+    { question: 'How do you ensure the right community fit for our brand?', answer: 'We map servers using interest profiles, location data, and cultural alignment—drawing from admin insights and content analysis to predict resonance and avoid mismatches.' },
+    { question: 'What makes your ad formats stand out in gaming spaces?', answer: 'Beyond static posts, we specialize in interactive spectacles like tournament sponsorships, live giveaways, and UEFN-linked Activities—formats that ignite participation and feel like community events.' },
+    { question: 'Can you handle full campaign orchestration?', answer: 'Absolutely—our team translates your brief into a phased strategy: ideation, creative dev, execution, and insights reporting, with real-time adjustments for peak performance.' },
+    { question: 'How do you measure and optimize success?', answer: 'Layered metrics from engagements and conversions to sentiment uplift; we provide dashboards and A/B insights to refine future orbits, ensuring every dollar drives loyalty.' },
+    { question: 'What safeguards protect our brand in these communities?', answer: 'Multi-tiered: Pre-vet servers for tone and activity, leverage Discord\'s AI tools, and station mods/staff for proactive monitoring—upholding authenticity without stifling fun.' },
+    { question: 'How does Modulix differ from generic ad networks?', answer: 'We\'re gaming natives: Modular, UEFN-savvy solutions that prioritize owned ecosystems over spray-and-pray tactics, delivering deeper ROI for brands ready to level up.' },
   ];
 
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
 
   // Handle scroll breakout for reviews
   const handleReviewScroll = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -271,14 +273,62 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Modulix Solutions - Discord Community Solutions for Brands</title>
-        <meta name="description" content="Transform Discord into an owned hub for lasting relationships—authentic engagements for brands in gaming/UEFN communities." />
+        <title>Modulix Solutions - Discord Community Management & Gaming Brand Advertising</title>
+        <meta name="description" content="Transform Discord into revenue-generating communities with authentic gaming brand advertising, UEFN integrations, and community management for studios and brands." />
+        <meta name="keywords" content="Discord community management, gaming server advertising, UEFN marketing, Discord bot advertising, gaming community engagement, Discord marketing campaigns, gaming brand promotion, community building, Discord server management, Fortnite advertising, Discord ad network, gaming community growth, Discord advertising agency" />
+        <meta name="author" content="Modulix Solutions" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="English" />
+        <meta name="revisit-after" content="7 days" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-        <meta property="og:title" content="Modulix Solutions - Discord Community Solutions" />
-        <meta property="og:description" content="Elevate engagement and retention beyond traditional platforms with authentic Discord integrations." />
+        <link rel="canonical" href="https://modulixsolutions.com" />
+
+        {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://modulixsolutions.com" />
+        <meta property="og:title" content="Modulix Solutions - Discord Community Management & Gaming Brand Advertising" />
+        <meta property="og:description" content="Transform Discord into revenue-generating communities with authentic gaming brand advertising, UEFN integrations, and community management for studios and brands." />
         <meta property="og:image" content="/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="Modulix Solutions" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://modulixsolutions.com" />
+        <meta name="twitter:title" content="Modulix Solutions - Discord Community Management & Gaming Brand Advertising" />
+        <meta name="twitter:description" content="Transform Discord into revenue-generating communities with authentic gaming brand advertising, UEFN integrations, and community management for studios and brands." />
+        <meta name="twitter:image" content="/og-image.jpg" />
+
+        {/* Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Modulix Solutions",
+              "url": "https://modulixsolutions.com",
+              "logo": "https://modulixsolutions.com/logo.png",
+              "description": "Discord community management and gaming brand advertising specialists, offering authentic engagements, UEFN integrations, and community building services.",
+              "foundingDate": "2024",
+              "industry": "Digital Marketing, Gaming, Community Management",
+              "serviceType": ["Discord Advertising", "Community Management", "Gaming Marketing", "UEFN Integration"],
+              "areaServed": "Global",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "Customer Service",
+                "url": "https://modulixsolutions.com#contact"
+              },
+              "sameAs": [
+                "https://discord.gg/modulix",
+                "https://twitter.com/modulixsolutions",
+                "https://linkedin.com/company/modulix-solutions"
+              ]
+            })
+          }}
+        />
       </Head>
 
       <div className="min-h-screen">
@@ -359,8 +409,7 @@ export default function Home() {
                     transition={{ duration: 0.8, delay: 0.4 }}
                     className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed"
                   >
-                    Turn Discord into your brand's ultimate community hub and<br />
-                    build lasting relationships that traditional platforms can't match.
+                    Craft authentic, scalable engagements that transform fleeting interactions into enduring brand loyalty—empowering gaming studios and brands to own the conversation in the heart of gaming's digital universe.
                   </motion.p>
 
                   <motion.div
@@ -369,7 +418,7 @@ export default function Home() {
                     transition={{ duration: 0.8, delay: 1.2 }}
                   >
                     <Button onClick={scrollToContact} size="lg" className="text-lg px-10 py-5">
-                      Start Your Project
+                      Launch Your Campaign
                     </Button>
                   </motion.div>
 
@@ -377,6 +426,214 @@ export default function Home() {
               </Container>
                 </div>
               </Parallax>
+            </SectionWrapper>
+
+            {/* About Us Section */}
+            <SectionWrapper id="about" className="py-20 bg-deeper-blue/30">
+              <Container>
+                <RowContainer>
+                  {/* Left side - Visual */}
+                  <div className="w-full lg:w-1/2 mb-12 lg:mb-0">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.8 }}
+                      viewport={{ once: true }}
+                      className="relative h-96 lg:h-full flex items-center justify-center"
+                    >
+                      <div className="w-full h-full bg-gradient-to-br from-dark-navy to-deeper-blue rounded-lg relative overflow-hidden">
+                        {/* Hexagonal network nodes */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="relative">
+                            <div className="w-32 h-32 border-2 border-neon-purple rounded-full opacity-30"></div>
+                            <div className="absolute -top-8 left-8 w-16 h-16 border-2 border-neon-blue rounded-full opacity-40"></div>
+                            <div className="absolute -bottom-8 right-8 w-16 h-16 border-2 border-neon-purple rounded-full opacity-40"></div>
+                            <div className="absolute top-8 -left-8 w-12 h-12 border-2 border-neon-cyan rounded-full opacity-50"></div>
+                            <div className="absolute bottom-8 -right-8 w-12 h-12 border-2 border-neon-blue rounded-full opacity-50"></div>
+                            {/* Connecting lines */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <svg width="200" height="200" className="absolute opacity-20">
+                                <line x1="100" y1="40" x2="60" y2="80" stroke="url(#gradient)" strokeWidth="1"/>
+                                <line x1="100" y1="40" x2="140" y2="80" stroke="url(#gradient)" strokeWidth="1"/>
+                                <line x1="60" y1="80" x2="100" y2="120" stroke="url(#gradient)" strokeWidth="1"/>
+                                <line x1="140" y1="80" x2="100" y2="120" stroke="url(#gradient)" strokeWidth="1"/>
+                                <line x1="100" y1="120" x2="60" y2="160" stroke="url(#gradient)" strokeWidth="1"/>
+                                <line x1="100" y1="120" x2="140" y2="160" stroke="url(#gradient)" strokeWidth="1"/>
+                                <defs>
+                                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#00D4FF" />
+                                    <stop offset="100%" stopColor="#A855F7" />
+                                  </linearGradient>
+                                </defs>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Particle effect overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/20"></div>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Right side - Content */}
+                  <div className="w-full lg:w-1/2 lg:pl-12">
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: 0.2 }}
+                      viewport={{ once: true }}
+                    >
+                      <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                        Modulix: Architects of Discord's Gaming Frontier
+                      </h2>
+
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        viewport={{ once: true }}
+                        className="text-lg text-gray-300 mb-6 leading-relaxed"
+                      >
+                        Born from the shadows of UEFN's creative labs, Modulix Solutions is a covert collective of game developers and strategists. We bridge brands and Discord's vibrant ecosystems with seamless, native integrations—transforming servers into owned galaxies of engagement and retention.
+                      </motion.p>
+
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        viewport={{ once: true }}
+                        className="text-lg text-gray-300 mb-8 leading-relaxed"
+                      >
+                        Our edge? A modular playbook forged in world-building fires—scalable, insight-driven tactics that nail cultural fit and deliver impact, sidestepping the clutter of legacy ads.
+                      </motion.p>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.8 }}
+                        viewport={{ once: true }}
+                      >
+                        <Button onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })} size="lg">
+                          Explore Our Vision
+                        </Button>
+                      </motion.div>
+                    </motion.div>
+                  </div>
+                </RowContainer>
+              </Container>
+            </SectionWrapper>
+
+            {/* Value Propositions Section */}
+            <SectionWrapper id="value-props" className="py-20 bg-deeper-blue/30">
+              <Container>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-center mb-16"
+                >
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                    Why Discord Drives Superior ROI
+                  </h2>
+                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Beyond fleeting impressions to owned universes—where your brand lives indefinitely, builds lasting relationships, and delivers measurable results that traditional platforms can't match
+                  </p>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="relative"
+                  >
+                    <Card className="h-full text-center" glowColor="mixed">
+                      <div className="flex justify-center mb-4">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
+                          <Network className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-semibold gradient-text mb-3">
+                        Persistent Ownership
+                      </h3>
+                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                      <p className="text-gray-300 leading-relaxed text-sm">
+                        Ditch ephemeral views—build Discord hubs where your brand lives indefinitely, owning data, rules, and relationships for sustained growth.
+                      </p>
+                    </Card>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="relative"
+                  >
+                    <Card className="h-full text-center" glowColor="mixed">
+                      <div className="flex justify-center mb-4">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
+                          <MessageCircle className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-semibold gradient-text mb-3">
+                        Conversational Retention
+                      </h3>
+                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                      <p className="text-gray-300 leading-relaxed text-sm">
+                        Engage in real-time dialogues that spark word-of-mouth magic; members linger for months, turning one ad into endless impressions.
+                      </p>
+                    </Card>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className="relative"
+                  >
+                    <Card className="h-full text-center" glowColor="mixed">
+                      <div className="flex justify-center mb-4">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
+                          <TrendingUp className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-semibold gradient-text mb-3">
+                        ROI in Depth
+                      </h3>
+                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                      <p className="text-gray-300 leading-relaxed text-sm">
+                        Where traditional platforms chase seconds of attention, Discord delivers loops of interaction—higher participation, deeper loyalty.
+                      </p>
+                    </Card>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="relative"
+                  >
+                    <Card className="h-full text-center" glowColor="mixed">
+                      <div className="flex justify-center mb-4">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
+                          <Gamepad2 className="w-8 h-8 text-white" />
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-semibold gradient-text mb-3">
+                        Gaming Synergy
+                      </h3>
+                      <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                      <p className="text-gray-300 leading-relaxed text-sm">
+                        Tailored for studios: Integrate UEFN experiences seamlessly, making your brand a playable force in gaming communities.
+                      </p>
+                    </Card>
+                  </motion.div>
+                </div>
+              </Container>
             </SectionWrapper>
 
             {/* Services Section */}
@@ -394,41 +651,182 @@ export default function Home() {
                   className="text-center mb-16"
                 >
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                    Comprehensive Discord Solutions
+                    Our Service Ecosystem
                   </h2>
                   <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                     From automated advertising to custom community builds, we deliver authentic engagement that drives results.
                   </p>
                 </motion.div>
 
-                <ListContainer>
-                  {services.map((serviceRow, rowIndex) => (
-                    <RowContainer key={rowIndex}>
-                      {serviceRow.map((service, serviceIndex) => (
-                        <Card key={serviceIndex} className="flex-1" glowColor="mixed">
+                <div className="space-y-16">
+                  {/* Scalable Ad Services */}
+                  <Card className="mb-12" hover={false}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="text-center mb-8"
+                    >
+                      <h3 className="text-3xl font-bold text-cyber-blue">
+                        Scalable Ad Services
+                      </h3>
+                    </motion.div>
+                    <div className="service-brackets">
+                      <RowContainer>
+                        <Card className="flex-1" glowColor="mixed">
                           <div className="flex items-center mb-3">
-                            {service.iconKey === 'Bot' && <Bot className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'Network' && <Network className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'Users' && <Users className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'Target' && <Target className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'Palette' && <Palette className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'TrendingUp' && <TrendingUp className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'Shield' && <Shield className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'Settings' && <Settings className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'MessageCircle' && <MessageCircle className="w-6 h-6 text-cyber-blue mr-3" />}
-                            {service.iconKey === 'Gamepad2' && <Gamepad2 className="w-6 h-6 text-cyber-blue mr-3" />}
-                            <h3 className="text-xl font-semibold text-cyber-blue">
-                              {service.title}
-                            </h3>
+                            <Bot className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Automated Ads via Bots
+                            </h4>
                           </div>
                           <p className="text-gray-300 leading-relaxed">
-                            {service.description}
+                            Deploy intelligent bots for seamless, conversation-embedded placements across active servers—delivering high-frequency, authentic exposure that blends effortlessly into daily chats, scaling with minimal oversight.
                           </p>
                         </Card>
-                      ))}
-                    </RowContainer>
-                  ))}
-                </ListContainer>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <Network className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Network Ads Across Servers
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            Tap into curated Discord networks for targeted, incentive-aligned visibility; we handle placements, ensuring genuine interactions while sharing success with community owners.
+                          </p>
+                        </Card>
+                      </RowContainer>
+                    </div>
+                  </Card>
+
+                  {/* Managed Campaigns */}
+                  <Card className="mb-12" hover={false}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="text-center mb-8"
+                    >
+                      <h3 className="text-3xl font-bold text-cyber-blue">
+                        Managed Campaigns
+                      </h3>
+                    </motion.div>
+                    <div className="service-brackets space-y-8">
+                      <RowContainer>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <Target className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Tailored Community Selection
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            Leverage proprietary insights on interests, demographics, and cultural resonance to match your brand with the perfect servers—predicting performance before launch.
+                          </p>
+                        </Card>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <Gamepad2 className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Immersive Ad Formats
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            From sponsored gaming tournaments and explosive giveaways to UGC challenges and bespoke Discord Activities, we craft touchpoints like announcements, pinned events, and chat insertions that feel organic.
+                          </p>
+                        </Card>
+                      </RowContainer>
+                      <RowContainer>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <Palette className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Bespoke Creative Strategy
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            Develop community-first narratives with native visuals and hooks; extend top performers to Reddit and beyond for amplified reach.
+                          </p>
+                        </Card>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <Settings className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              End-to-End Execution
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            Full-cycle management: From brief intake and approvals to flawless rollout and post-campaign debriefs, freeing you to focus on strategy.
+                          </p>
+                        </Card>
+                      </RowContainer>
+                      <RowContainer>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <TrendingUp className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Comprehensive Analytics
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            Real-time dashboards tracking impressions, engagements, conversions, and brand lift—proving ROI with uplift studies included standard.
+                          </p>
+                        </Card>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <Shield className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Trusted Brand Safety
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            Onboard vetting, AI-moderated environments, and dedicated oversight ensure activations align with platform rules and community vibes.
+                          </p>
+                        </Card>
+                      </RowContainer>
+                    </div>
+                  </Card>
+
+                  {/* Premium Builds */}
+                  <Card className="mb-12" hover={false}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="text-center mb-8"
+                    >
+                      <h3 className="text-3xl font-bold text-cyber-blue">
+                        Premium Builds
+                      </h3>
+                    </motion.div>
+                    <div className="service-brackets">
+                      <RowContainer>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <MessageCircle className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Custom Community Builds
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            Design and launch branded servers as loyalty engines—modular channels, bots, and launch events; opt for full management or trained handover.
+                          </p>
+                        </Card>
+                        <Card className="flex-1" glowColor="mixed">
+                          <div className="flex items-center mb-3">
+                            <Users className="w-6 h-6 text-cyber-blue mr-3" />
+                            <h4 className="text-xl font-semibold gradient-text">
+                              Moderation & Gaming Integrations
+                            </h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">
+                            24/7 engagement fueling with events and content; specialize in UEFN tie-ins, weaving brands into interactive game worlds for immersive retention.
+                          </p>
+                        </Card>
+                      </RowContainer>
+                    </div>
+                  </Card>
+                </div>
               </Container>
                 </div>
               </Parallax>
@@ -446,6 +844,9 @@ export default function Home() {
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
                     Trusted by Industry Leaders
                   </h2>
+                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Real results from real partnerships—see how we've transformed Discord communities for gaming studios and brands
+                  </p>
                 </motion.div>
 
                 {/* Testimonials Carousel */}
@@ -460,7 +861,7 @@ export default function Home() {
                   <motion.div
                     className="absolute inset-0 flex items-center gap-8 py-4"
                     animate={{
-                      x: [0, -(450 + 32) * testimonials.length],
+                      x: [-(450 + 32) * testimonials.length, 0],
                     }}
                     transition={{
                       duration: isHoveringTestimonials ? 10000 : 45, // Very slow when hovering (effectively paused)
@@ -557,7 +958,7 @@ export default function Home() {
                   className="text-center mb-16"
                 >
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                    Companies I've Worked With
+                    Companies Who Trust Us
                   </h2>
                   <p className="text-gray-400 max-w-2xl mx-auto">
                     Trusted by industry leaders and innovative startups across gaming and tech
@@ -695,7 +1096,7 @@ export default function Home() {
                     className="space-y-6"
                   >
                     <div>
-                      <h3 className="text-2xl font-bold mb-4 gradient-text">
+                      <h3 className="text-3xl font-bold text-cyber-blue">
                         Brands Ready to Dominate
                       </h3>
                       <p className="text-gray-300 mb-6">
@@ -771,7 +1172,7 @@ export default function Home() {
             </SectionWrapper>
 
             {/* FAQ Section */}
-            <SectionWrapper id="faq" className="py-20 bg-deeper-blue/30">
+            <SectionWrapper id="faq" className="py-20">
               <Container>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -782,34 +1183,69 @@ export default function Home() {
                   <h2 className="text-3xl md:text-4xl font-bold mb-4">
                     Frequently Asked Questions
                   </h2>
+                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Everything you need to know about transforming your Discord community
+                  </p>
                 </motion.div>
 
                 <div className="max-w-3xl mx-auto space-y-4">
-                  {faqs.map((faq, index) => (
-                    <Card key={index} hover={false} className="cursor-pointer" onClick={() => setOpenFaq(openFaq === index ? null : index)}>
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-lg font-semibold text-white">
-                          {faq.question}
-                        </h3>
-                        <motion.span
-                          animate={{ rotate: openFaq === index ? 180 : 0 }}
-                          className="text-cyber-blue"
-                        >
-                          ▼
-                        </motion.span>
-                      </div>
-                      {openFaq === index && (
+                  {faqs.map((faq, index) => {
+                    const isOpen = openFaqs.has(index);
+                    const [isHovered, setIsHovered] = useState(false);
+
+                    return (
+                      <Card
+                        key={index}
+                        hover={false}
+                        className={`cursor-pointer transition-all duration-300 ${
+                          isHovered
+                            ? 'shadow-neon-blue ring-2 ring-cyber-blue/30'
+                            : ''
+                        }`}
+                        onClick={() => {
+                          const newOpenFaqs = new Set(openFaqs);
+                          if (newOpenFaqs.has(index)) {
+                            newOpenFaqs.delete(index);
+                          } else {
+                            newOpenFaqs.add(index);
+                          }
+                          setOpenFaqs(newOpenFaqs);
+                        }}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                      >
+                        <div className="flex justify-between items-center">
+                          <h3 className={`text-lg font-bold transition-colors duration-300 ${
+                            isOpen ? 'text-cyber-blue' : 'text-white'
+                          }`}>
+                            {faq.question}
+                          </h3>
+                          <motion.span
+                            animate={{ rotate: isOpen ? 180 : 0 }}
+                            className={`transition-colors duration-300 ${
+                              isOpen ? 'text-neon-purple' : 'text-cyber-blue/70'
+                            }`}
+                          >
+                            ▼
+                          </motion.span>
+                        </div>
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-4 text-gray-300"
+                          animate={{
+                            opacity: isOpen ? 1 : 0,
+                            height: isOpen ? 'auto' : 0
+                          }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
                         >
-                          {faq.answer}
+                          <div className="mt-4 w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple"></div>
+                          <div className="mt-4 text-gray-300 leading-relaxed">
+                            {faq.answer}
+                          </div>
                         </motion.div>
-                      )}
-                    </Card>
-                  ))}
+                      </Card>
+                    );
+                  })}
                 </div>
               </Container>
             </SectionWrapper>

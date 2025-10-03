@@ -141,8 +141,32 @@ body {
   background-clip: text;
 }
 
+.h3-gradient-text {
+  background: linear-gradient(135deg, #00D4FF 0%, #A855F7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .text-glow {
   text-shadow: 0 0 15px rgba(0, 212, 255, 0.8), 0 0 30px rgba(168, 85, 247, 0.6);
+}
+
+/* Service section dividers */
+.service-brackets {
+  position: relative;
+  padding-top: 2rem;
+}
+
+.service-brackets::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00D4FF, #A855F7);
+  border-radius: 1px;
 }
 
 /* Hero animations */
