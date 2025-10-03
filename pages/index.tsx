@@ -10,7 +10,7 @@ import SectionWrapper from '../components/SectionWrapper';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/Button';
-import Card from '../components/Card';
+import Card, { SectionContainer } from '../components/Card';
 import ContactForm from '../components/ContactForm';
 import ParticleBackground from '../components/ParticleBackground';
 
@@ -50,12 +50,12 @@ export default function Home() {
 
   const services = [
     [
-      { title: 'Scalable Ad Services', description: '', iconKey: 'Bot', isHeader: true },
+      { title: 'Scalable Ad Services', description: 'Automated, intelligent advertising solutions that seamlessly integrate into Discord conversations, delivering authentic engagement at scale.', iconKey: 'Bot', isHeader: true },
       { title: 'Automated Ads via Bots', description: 'Deploy intelligent bots for seamless, conversation-embedded placements across active servers—delivering high-frequency, authentic exposure that blends effortlessly into daily chats, scaling with minimal oversight.', iconKey: 'Bot' },
       { title: 'Network Ads Across Servers', description: 'Tap into curated Discord networks for targeted, incentive-aligned visibility; we handle placements, ensuring genuine interactions while sharing success with community owners.', iconKey: 'Network' },
     ],
     [
-      { title: 'Managed Campaigns', description: '', iconKey: 'Target', isHeader: true },
+      { title: 'Managed Campaigns', description: 'End-to-end campaign management with strategic community selection, creative development, and comprehensive execution for maximum impact.', iconKey: 'Target', isHeader: true },
       { title: 'Tailored Community Selection', description: 'Leverage proprietary insights on interests, demographics, and cultural resonance to match your brand with the perfect servers—predicting performance before launch.', iconKey: 'Target' },
       { title: 'Immersive Ad Formats', description: 'From sponsored gaming tournaments and explosive giveaways to UGC challenges and bespoke Discord Activities, we craft touchpoints like announcements, pinned events, and chat insertions that feel organic.', iconKey: 'Gamepad2' },
     ],
@@ -68,7 +68,7 @@ export default function Home() {
       { title: 'Trusted Brand Safety', description: 'Onboard vetting, AI-moderated environments, and dedicated oversight ensure activations align with platform rules and community vibes.', iconKey: 'Shield' },
     ],
     [
-      { title: 'Premium Builds', description: '', iconKey: 'MessageCircle', isHeader: true },
+      { title: 'Premium Builds', description: 'Custom server development and management solutions designed for long-term brand presence and community engagement.', iconKey: 'MessageCircle', isHeader: true },
       { title: 'Custom Community Builds', description: 'Design and launch branded servers as loyalty engines—modular channels, bots, and launch events; opt for full management or trained handover.', iconKey: 'MessageCircle' },
       { title: 'Moderation & Gaming Integrations', description: '24/7 engagement fueling with events and content; specialize in UEFN tie-ins, weaving brands into interactive game worlds for immersive retention.', iconKey: 'Users' },
     ],
@@ -428,119 +428,95 @@ export default function Home() {
               </Parallax>
             </SectionWrapper>
 
-            {/* About Us Section */}
+            {/* About & Value Propositions Section */}
             <SectionWrapper id="about" className="py-20 bg-deeper-blue/30">
               <Container>
-                <RowContainer>
-                  {/* Left side - Visual */}
-                  <div className="w-full lg:w-1/2 mb-12 lg:mb-0">
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.8 }}
-                      viewport={{ once: true }}
-                      className="relative h-96 lg:h-full flex items-center justify-center"
-                    >
-                      <div className="w-full h-full bg-gradient-to-br from-dark-navy to-deeper-blue rounded-lg relative overflow-hidden">
-                        {/* Hexagonal network nodes */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="relative">
-                            <div className="w-32 h-32 border-2 border-neon-purple rounded-full opacity-30"></div>
-                            <div className="absolute -top-8 left-8 w-16 h-16 border-2 border-neon-blue rounded-full opacity-40"></div>
-                            <div className="absolute -bottom-8 right-8 w-16 h-16 border-2 border-neon-purple rounded-full opacity-40"></div>
-                            <div className="absolute top-8 -left-8 w-12 h-12 border-2 border-neon-cyan rounded-full opacity-50"></div>
-                            <div className="absolute bottom-8 -right-8 w-12 h-12 border-2 border-neon-blue rounded-full opacity-50"></div>
-                            {/* Connecting lines */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <svg width="200" height="200" className="absolute opacity-20">
-                                <line x1="100" y1="40" x2="60" y2="80" stroke="url(#gradient)" strokeWidth="1"/>
-                                <line x1="100" y1="40" x2="140" y2="80" stroke="url(#gradient)" strokeWidth="1"/>
-                                <line x1="60" y1="80" x2="100" y2="120" stroke="url(#gradient)" strokeWidth="1"/>
-                                <line x1="140" y1="80" x2="100" y2="120" stroke="url(#gradient)" strokeWidth="1"/>
-                                <line x1="100" y1="120" x2="60" y2="160" stroke="url(#gradient)" strokeWidth="1"/>
-                                <line x1="100" y1="120" x2="140" y2="160" stroke="url(#gradient)" strokeWidth="1"/>
-                                <defs>
-                                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#00D4FF" />
-                                    <stop offset="100%" stopColor="#A855F7" />
-                                  </linearGradient>
-                                </defs>
-                              </svg>
-                            </div>
+                {/* About Us Section */}
+                <div className="mb-20">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center max-w-4xl mx-auto"
+                  >
+                    {/* Decorative element */}
+                    <div className="flex justify-center mb-8">
+                      <div className="relative">
+                        <div className="w-24 h-24 border-2 border-neon-purple/30 rounded-full flex items-center justify-center">
+                          <div className="w-16 h-16 border-2 border-cyber-blue/40 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 border-2 border-neon-cyan/50 rounded-full"></div>
                           </div>
                         </div>
-                        {/* Particle effect overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/20"></div>
+                        {/* Connecting lines */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <svg width="96" height="96" className="absolute opacity-30">
+                            <line x1="48" y1="16" x2="24" y2="32" stroke="url(#about-gradient)" strokeWidth="1"/>
+                            <line x1="48" y1="16" x2="72" y2="32" stroke="url(#about-gradient)" strokeWidth="1"/>
+                            <line x1="24" y1="32" x2="48" y2="48" stroke="url(#about-gradient)" strokeWidth="1"/>
+                            <line x1="72" y1="32" x2="48" y2="48" stroke="url(#about-gradient)" strokeWidth="1"/>
+                            <line x1="48" y1="48" x2="24" y2="64" stroke="url(#about-gradient)" strokeWidth="1"/>
+                            <line x1="48" y1="48" x2="72" y2="64" stroke="url(#about-gradient)" strokeWidth="1"/>
+                            <defs>
+                              <linearGradient id="about-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#00D4FF" />
+                                <stop offset="100%" stopColor="#A855F7" />
+                              </linearGradient>
+                            </defs>
+                          </svg>
+                        </div>
                       </div>
-                    </motion.div>
-                  </div>
+                    </div>
 
-                  {/* Right side - Content */}
-                  <div className="w-full lg:w-1/2 lg:pl-12">
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.8, delay: 0.2 }}
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                      About Modulix
+                    </h2>
+
+                    <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+                      Pioneering the future of gaming community engagement through innovative Discord solutions
+                    </p>
+
+                    <div className="w-24 h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mx-auto mb-8"></div>
+
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
                       viewport={{ once: true }}
+                      className="text-xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto"
                     >
-                      <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                        Modulix: Architects of Discord's Gaming Frontier
-                      </h2>
+                      Born from the shadows of UEFN's creative labs, Modulix Solutions is a covert collective of game developers and strategists. We bridge brands and Discord's vibrant ecosystems with seamless, native integrations—transforming servers into owned galaxies of engagement and retention.
+                    </motion.p>
 
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.4 }}
-                        viewport={{ once: true }}
-                        className="text-lg text-gray-300 mb-6 leading-relaxed"
-                      >
-                        Born from the shadows of UEFN's creative labs, Modulix Solutions is a covert collective of game developers and strategists. We bridge brands and Discord's vibrant ecosystems with seamless, native integrations—transforming servers into owned galaxies of engagement and retention.
-                      </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      transition={{ duration: 0.8, delay: 0.5 }}
+                      viewport={{ once: true }}
+                      className="text-lg text-gray-300 leading-relaxed max-w-2xl mx-auto"
+                    >
+                      Our edge? A modular playbook forged in world-building fires—scalable, insight-driven tactics that nail cultural fit and deliver impact, sidestepping the clutter of legacy ads.
+                    </motion.p>
+                  </motion.div>
+                </div>
 
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                        viewport={{ once: true }}
-                        className="text-lg text-gray-300 mb-8 leading-relaxed"
-                      >
-                        Our edge? A modular playbook forged in world-building fires—scalable, insight-driven tactics that nail cultural fit and deliver impact, sidestepping the clutter of legacy ads.
-                      </motion.p>
+                {/* Value Propositions Section */}
+                <SectionContainer className="mb-16">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center"
+                  >
+                    <h3 className="text-2xl font-bold mb-4 text-cyber-blue">
+                      Why Discord Drives Superior ROI
+                    </h3>
+                    <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                      Beyond fleeting impressions to owned universes—where your brand lives indefinitely, builds lasting relationships, and delivers measurable results that traditional platforms can't match
+                    </p>
+                    <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-8"></div>
+                  </motion.div>
 
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.8 }}
-                        viewport={{ once: true }}
-                      >
-                        <Button onClick={() => document.querySelector('#services')?.scrollIntoView({ behavior: 'smooth' })} size="lg">
-                          Explore Our Vision
-                        </Button>
-                      </motion.div>
-                    </motion.div>
-                  </div>
-                </RowContainer>
-              </Container>
-            </SectionWrapper>
-
-            {/* Value Propositions Section */}
-            <SectionWrapper id="value-props" className="py-20 bg-deeper-blue/30">
-              <Container>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-center mb-16"
-                >
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                    Why Discord Drives Superior ROI
-                  </h2>
-                  <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Beyond fleeting impressions to owned universes—where your brand lives indefinitely, builds lasting relationships, and delivers measurable results that traditional platforms can't match
-                  </p>
-                </motion.div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -632,9 +608,12 @@ export default function Home() {
                       </p>
                     </Card>
                   </motion.div>
-                </div>
+                  </div>
+                </SectionContainer>
+
               </Container>
             </SectionWrapper>
+
 
             {/* Services Section */}
             <SectionWrapper id="services" className="py-20">
@@ -660,7 +639,7 @@ export default function Home() {
 
                 <div className="space-y-16">
                   {/* Scalable Ad Services */}
-                  <Card className="mb-12" hover={false}>
+                  <SectionContainer className="mb-12">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -670,6 +649,9 @@ export default function Home() {
                       <h3 className="text-3xl font-bold text-cyber-blue">
                         Scalable Ad Services
                       </h3>
+                      <p className="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
+                        Automated, intelligent advertising solutions that seamlessly integrate into Discord conversations, delivering authentic engagement at scale.
+                      </p>
                     </motion.div>
                     <div className="service-brackets">
                       <RowContainer>
@@ -697,10 +679,10 @@ export default function Home() {
                         </Card>
                       </RowContainer>
                     </div>
-                  </Card>
+                  </SectionContainer>
 
                   {/* Managed Campaigns */}
-                  <Card className="mb-12" hover={false}>
+                  <SectionContainer className="mb-12">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -710,6 +692,9 @@ export default function Home() {
                       <h3 className="text-3xl font-bold text-cyber-blue">
                         Managed Campaigns
                       </h3>
+                      <p className="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
+                        End-to-end campaign management with strategic community selection, creative development, and comprehensive execution for maximum impact.
+                      </p>
                     </motion.div>
                     <div className="service-brackets space-y-8">
                       <RowContainer>
@@ -785,10 +770,10 @@ export default function Home() {
                         </Card>
                       </RowContainer>
                     </div>
-                  </Card>
+                  </SectionContainer>
 
                   {/* Premium Builds */}
-                  <Card className="mb-12" hover={false}>
+                  <SectionContainer className="mb-12">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -798,6 +783,9 @@ export default function Home() {
                       <h3 className="text-3xl font-bold text-cyber-blue">
                         Premium Builds
                       </h3>
+                      <p className="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
+                        Custom server development and management solutions designed for long-term brand presence and community engagement.
+                      </p>
                     </motion.div>
                     <div className="service-brackets">
                       <RowContainer>
@@ -825,7 +813,7 @@ export default function Home() {
                         </Card>
                       </RowContainer>
                     </div>
-                  </Card>
+                  </SectionContainer>
                 </div>
               </Container>
                 </div>

@@ -11,6 +11,11 @@ interface CardProps {
   onMouseLeave?: () => void;
 }
 
+interface SectionContainerProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
 export default function Card({
   children,
   className = '',
@@ -42,5 +47,19 @@ export default function Card({
     >
       {children}
     </motion.div>
+  );
+}
+
+export function SectionContainer({
+  children,
+  className = ''
+}: SectionContainerProps) {
+  return (
+    <div className={`
+      bg-deeper-blue/50 backdrop-blur-sm border border-cyber-blue/20 rounded-lg p-6
+      ${className}
+    `}>
+      {children}
+    </div>
   );
 }
