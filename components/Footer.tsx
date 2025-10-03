@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { MessageCircle, Twitter, Mail } from 'lucide-react';
 import Container from './Container';
 
@@ -14,7 +15,11 @@ export default function Footer() {
 
           {/* Logo - Center */}
           <div className="flex items-center justify-center">
-            <h3 className="text-4xl font-bold logo-font text-white">MODULIX</h3>
+            <Link href="/">
+              <h3 className="text-4xl font-bold logo-font text-white cursor-pointer hover:text-cyber-blue transition-colors duration-300">
+                MODULIX
+              </h3>
+            </Link>
           </div>
 
           {/* Socials - Far Right */}

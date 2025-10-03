@@ -331,8 +331,10 @@ export default function Home() {
         />
       </Head>
 
-      <div className="min-h-screen">
-        <ParticleBackground />
+      <div className="min-h-screen relative">
+        <div className="absolute inset-0">
+          <ParticleBackground />
+        </div>
         <Header />
 
           <main>

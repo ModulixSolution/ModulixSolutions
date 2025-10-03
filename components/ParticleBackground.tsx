@@ -21,14 +21,32 @@ export default function ParticleBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size
+    // Set canvas size to parent container
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const rect = canvas.parentElement?.getBoundingClientRect();
+      if (rect) {
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      } else {
+        // Fallback to window size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
     };
 
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+
+    // Use ResizeObserver if available, fallback to window resize
+    if (window.ResizeObserver) {
+      const resizeObserver = new ResizeObserver(() => {
+        resizeCanvas();
+      });
+      if (canvas.parentElement) {
+        resizeObserver.observe(canvas.parentElement);
+      }
+    } else {
+      window.addEventListener('resize', resizeCanvas);
+    }
 
     // Create particles
     const particles: Particle[] = [];
@@ -55,9 +73,9 @@ export default function ParticleBackground() {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // Bounce off edges
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        // Bounce off canvas edges
+        if (particle.x <= 0 || particle.x >= canvas.width) particle.vx *= -1;
+        if (particle.y <= 0 || particle.y >= canvas.height) particle.vy *= -1;
 
         // Draw particle
         ctx.beginPath();
@@ -90,7 +108,11 @@ export default function ParticleBackground() {
     animate();
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      if (window.ResizeObserver && canvas.parentElement) {
+        // ResizeObserver cleanup is automatic when component unmounts
+      } else {
+        window.removeEventListener('resize', resizeCanvas);
+      }
     };
   }, []);
 

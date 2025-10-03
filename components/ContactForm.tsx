@@ -95,7 +95,7 @@ export default function ContactForm() {
 
             // Redirect after showing success message briefly
             setTimeout(() => {
-              window.location.href = 'https://modulixsolutions.com/contact-confirmed';
+              window.location.href = '/contact-confirmed';
             }, 1500);
           } else {
             console.log('Web3Forms Error:', data);
@@ -109,7 +109,7 @@ export default function ContactForm() {
           setFieldValidity({ name: false, email: false, discord: false, message: false });
 
           setTimeout(() => {
-            window.location.href = 'https://modulixsolutions.com/contact-confirmed';
+            window.location.href = '/contact-confirmed';
           }, 1500);
         }
       } else {

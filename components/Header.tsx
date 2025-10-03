@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
 import Container from './Container';
 
-export default function Header() {
+interface HeaderProps {
+  simple?: boolean;
+}
+
+export default function Header({ simple = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navItems = [
+  const fullNavItems = [
     { name: 'Home', href: '#hero' },
     { name: 'About', href: '#about' },
     { name: 'Services', href: '#services' },
@@ -15,11 +20,21 @@ export default function Header() {
     { name: 'FAQ', href: '#faq' }
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const simpleNavItems = [
+    { name: 'Home', href: '/' }
+  ];
+
+  const navItems = simple ? simpleNavItems : fullNavItems;
+
+  const handleNavClick = (href: string) => {
+    if (href.startsWith('#')) {
+      // Anchor link for same page scrolling
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
+    // For regular links, let the browser handle navigation
     setIsMenuOpen(false);
   };
 
@@ -32,28 +47,41 @@ export default function Header() {
     >
       <Container className="py-4">
         <div className="flex items-center justify-between">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center cursor-pointer"
-              onClick={() => scrollToSection('#hero')}
-            >
-              <span className="text-4xl font-bold logo-font text-white">
-                MODULIX
-              </span>
-            </motion.div>
+            <Link href="/">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center cursor-pointer"
+              >
+                <span className="text-4xl font-bold logo-font text-white">
+                  MODULIX
+                </span>
+              </motion.div>
+            </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             {navItems.map((item) => (
-              <motion.button
-                key={item.name}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => scrollToSection(item.href)}
-                className="text-white hover:text-cyber-blue transition-colors duration-300"
-              >
-                {item.name}
-              </motion.button>
+              item.href.startsWith('#') ? (
+                <motion.button
+                  key={item.name}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleNavClick(item.href)}
+                  className="text-white hover:text-cyber-blue transition-colors duration-300"
+                >
+                  {item.name}
+                </motion.button>
+              ) : (
+                <Link key={item.name} href={item.href}>
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="text-white hover:text-cyber-blue transition-colors duration-300 cursor-pointer"
+                  >
+                    {item.name}
+                  </motion.div>
+                </Link>
+              )
             ))}
           </nav>
 
@@ -76,13 +104,24 @@ export default function Header() {
           >
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-left text-white hover:text-cyber-blue transition-colors duration-300"
-                >
-                  {item.name}
-                </button>
+                item.href.startsWith('#') ? (
+                  <button
+                    key={item.name}
+                    onClick={() => handleNavClick(item.href)}
+                    className="text-left text-white hover:text-cyber-blue transition-colors duration-300"
+                  >
+                    {item.name}
+                  </button>
+                ) : (
+                  <Link key={item.name} href={item.href}>
+                    <div
+                      onClick={() => setIsMenuOpen(false)}
+                      className="text-left text-white hover:text-cyber-blue transition-colors duration-300 cursor-pointer"
+                    >
+                      {item.name}
+                    </div>
+                  </Link>
+                )
               ))}
             </div>
           </motion.nav>
