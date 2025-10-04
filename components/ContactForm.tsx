@@ -181,8 +181,8 @@ export default function ContactForm() {
                 type="text"
                 name="discord"
                 id="discord"
-                className="form-input w-full pr-10"
-                placeholder="username#1234 (optional)"
+                className="bg-deeper-blue border border-neon-purple/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-purple/60 focus:border-neon-purple w-full pr-10"
+                placeholder="@username"
                 disabled={isSubmitting}
                 onChange={(e) => handleFieldChange('discord', e.target.value)}
               />

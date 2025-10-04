@@ -21,7 +21,9 @@ module.exports = {
       },
       boxShadow: {
         'neon-purple': '0 0 20px rgba(168, 85, 247, 0.7)',
+        'neon-purple-glow': '0 0 20px rgba(168, 85, 247, 0.5), 0 0 35px rgba(168, 85, 247, 0.3)',
         'neon-blue': '0 0 20px rgba(59, 130, 246, 0.7)',
+        'neon-blue-glow': '0 0 20px rgba(0, 212, 255, 0.5), 0 0 35px rgba(0, 212, 255, 0.3)',
         'neon-cyan': '0 0 20px rgba(6, 182, 212, 0.7)',
         'neon-green': '0 0 20px rgba(34, 197, 94, 0.7)',
         'neon-orange': '0 0 20px rgba(249, 115, 22, 0.7)',

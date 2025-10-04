@@ -31,6 +31,12 @@ export default function Card({
     mixed: 'hover:shadow-cyber-blue/10 hover:shadow-neon-purple/10'
   };
 
+  const borderClasses = {
+    blue: 'border-cyber-blue/20',
+    purple: 'border-neon-purple/20',
+    mixed: 'border-cyber-blue/20'
+  };
+
   return (
     <motion.div
       whileHover={hover ? { y: -5, scale: 1.02 } : {}}
@@ -39,7 +45,7 @@ export default function Card({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className={`
-        bg-deeper-blue/50 backdrop-blur-sm border border-cyber-blue/20 rounded-lg p-6
+        bg-deeper-blue/50 backdrop-blur-sm border ${borderClasses[glowColor]} rounded-lg p-6
         ${hover ? `card-hover ${glowClasses[glowColor]}` : ''}
         ${onClick ? 'cursor-pointer' : ''}
         ${className}

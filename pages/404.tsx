@@ -29,6 +29,14 @@ export default function Custom404() {
         <div className="absolute inset-0">
           <ParticleBackground />
         </div>
+        <div className="absolute inset-0 pointer-events-none z-[1]" style={{
+          backgroundImage: "url('/hex-bg.png')",
+          backgroundRepeat: 'repeat',
+          backgroundAttachment: 'fixed',
+          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+          maskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+          opacity: 1
+        }}></div>
 
         <div className="relative z-10 flex flex-col h-full">
           <Header simple={true} />

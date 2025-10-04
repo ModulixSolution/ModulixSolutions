@@ -15,6 +15,7 @@ export default function Header({ simple = false }: HeaderProps) {
     { name: 'Home', href: '#hero' },
     { name: 'About', href: '#about' },
     { name: 'Services', href: '#services' },
+    { name: 'Modulix Bot', href: '#modulix-bot' },
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'Contact', href: '#contact' },
     { name: 'FAQ', href: '#faq' }
@@ -50,8 +51,9 @@ export default function Header({ simple = false }: HeaderProps) {
             <Link href="/">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="flex items-center cursor-pointer"
+                className="flex items-center gap-3 cursor-pointer"
               >
+                <img src="/modulix-icon.png" alt="Modulix Icon" className="w-14 h-14 object-contain" />
                 <span className="text-4xl font-bold logo-font text-white">
                   MODULIX
                 </span>
@@ -67,7 +69,7 @@ export default function Header({ simple = false }: HeaderProps) {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleNavClick(item.href)}
-                  className="text-white hover:text-cyber-blue transition-colors duration-300"
+                  className={`text-white hover:text-cyber-blue transition-colors duration-300 ${item.name === 'Testimonials' ? 'hidden lg:block' : ''}`}
                 >
                   {item.name}
                 </motion.button>
@@ -104,7 +106,7 @@ export default function Header({ simple = false }: HeaderProps) {
           >
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
-                item.href.startsWith('#') ? (
+                item.href.startsWith('#') && item.name !== 'Testimonials' ? (
                   <button
                     key={item.name}
                     onClick={() => handleNavClick(item.href)}

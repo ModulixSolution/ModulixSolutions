@@ -18,6 +18,111 @@ export default function Home() {
   const [currentTagline, setCurrentTagline] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isHoveringTestimonials, setIsHoveringTestimonials] = useState(false);
+  const [currentBotFeature, setCurrentBotFeature] = useState(0);
+  const [isHoveringBotFeature, setIsHoveringBotFeature] = useState(false);
+
+  const botFeatures = [
+    {
+      title: 'Infinite Customization',
+      bullets: [
+        'Tailor modules, commands, & UI to your brand.',
+        'Build drag-drop automations for custom workflows.',
+        'Toggle kid-friendly or 18+ features during setup.'
+      ],
+      icon: <Palette className="w-12 h-12 text-white" />,
+      color: 'blue'
+    },
+    {
+      title: 'Event-Driven Core',
+      bullets: [
+        'Seamless module communication via event bus.',
+        'Add/remove modules without downtime.',
+        'Scalable & future-proof for growth.'
+      ],
+      icon: <Network className="w-12 h-12 text-white" />,
+      color: 'purple'
+    },
+    {
+      title: 'Hybrid Profile System',
+      bullets: [
+        'Global stats (karma) + guild data (XP, badges).',
+        'Modules add custom fields like game wins.',
+        'Unlock cosmetics for engaging user views.'
+      ],
+      icon: <Users className="w-12 h-12 text-white" />,
+      color: 'blue'
+    },
+    {
+      title: 'Modular Monetization',
+      bullets: [
+        'Pay per module with bundle discounts.',
+        'Free core features; premium unlocks advanced.',
+        'Seamless dashboard upgrades via Stripe.'
+      ],
+      icon: <Settings className="w-12 h-12 text-white" />,
+      color: 'purple'
+    },
+    {
+      title: 'AI-Powered Security',
+      bullets: [
+        'Global alt detection with action tracking.',
+        'Auto-lock mods on rapid deletes; interactive alerts.',
+        'NLP spam ban & configurable blacklists.'
+      ],
+      icon: <Shield className="w-12 h-12 text-white" />,
+      color: 'blue'
+    },
+    {
+      title: 'Engaging Leveling System',
+      bullets: [
+        'XP from chats, voice, games, & more.',
+        'Custom formulas, streaks, & challenges.',
+        'Seasonal leaderboards with karma perks.'
+      ],
+      icon: <TrendingUp className="w-12 h-12 text-white" />,
+      color: 'purple'
+    },
+    {
+      title: 'RNG & Casino Games',
+      bullets: [
+        'Kid-safe/18+ with odds, bets, & cooldowns.',
+        'Rewards like XP/items; integrate economy.',
+        'Streaks & leaderboards for fun competition.'
+      ],
+      icon: <Gamepad2 className="w-12 h-12 text-white" />,
+      color: 'blue'
+    },
+    {
+      title: 'Interactive Ticket System',
+      bullets: [
+        'Private threads with AI tagging/responses.',
+        'Auto-appeals from bans with analytics.',
+        'Custom categories & satisfaction tracking.'
+      ],
+      icon: <MessageCircle className="w-12 h-12 text-white" />,
+      color: 'purple'
+    },
+    {
+      title: 'Powerful Automations',
+      bullets: [
+        'Visual WHEN/IF/THEN logic builder.',
+        'Trigger on events/commands across modules.',
+        'Extensible with module-specific actions.'
+      ],
+      icon: <Bot className="w-12 h-12 text-white" />,
+      color: 'blue'
+    },
+    {
+      title: 'Advanced Embed Builder',
+      bullets: [
+        'V1/V2 toggle with components & multi-embeds.',
+        'Dynamic variables like {user.mention}.',
+        'Save/duplicate templates with live previews.'
+      ],
+      icon: <Palette className="w-12 h-12 text-white" />,
+      color: 'purple'
+    }
+  ];
 
   const taglines = [
     'Build Authentic Discord Communities',
@@ -40,6 +145,17 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [taglines.length]);
+
+  // Auto-rotate bot features every 7.5 seconds (pause when hovering)
+  useEffect(() => {
+    if (isHoveringBotFeature) return;
+
+    const interval = setInterval(() => {
+      setCurrentBotFeature((prev) => (prev + 1) % botFeatures.length);
+    }, 7500);
+
+    return () => clearInterval(interval);
+  }, [botFeatures.length, isHoveringBotFeature]);
 
   const scrollToContact = () => {
     const element = document.querySelector('#contact');
@@ -413,8 +529,34 @@ export default function Home() {
             </SectionWrapper>
 
             {/* About & Value Propositions Section */}
-            <SectionWrapper id="about" className="py-20 bg-deeper-blue/60">
-              <Container>
+            <SectionWrapper id="about" className="py-20 bg-deeper-blue/60 relative">
+              {/* Background Icon */}
+              <div className="absolute inset-0 pointer-events-none z-[2]" style={{
+                backgroundImage: `url("data:image/svg+xml;base64,${btoa(`
+                  <svg viewBox="0 0 369 431" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="white" d="M123.2097,256.5419c3.3564,1.7799 53.7644,28.8017 56.1421,30.1319c6.3382,2.3372 5.079,2.2875 11.6624,-0.0176c2.5274,-1.2166 43.6758,-25.6452 52.6758,-29.6452c6.5646,-3 11.4212,0.011 11.5849,6c0.0678,2.4821 -0.3991,127.7513 -0.3991,127.7513c0,0 -57.4462,34.3318 -58.3051,34.8516c-0.7469,0.4541 -1.4939,0.9081 -2.2634,1.376c-4.7664,2.779 -8.5079,4.2789 -14.1155,3.2334c-3.8871,-1.6292 -69.2518,-39.3998 -69.2518,-39.3998c0,0 0.7214,-119.6568 0.75,-127.8125c0,-4.5559 6,-9 11.5198,-6.4691zM143.1918,304.2234c0,0 -0.5018,59.7877 -0.5018,63.7877c0.723,2.7111 24,17 31.929,21.4987c12.071,5.5013 7.071,5.5013 18.5639,0.5013c10.5071,-5.7445 29.1747,-19.8304 31.0089,-21.7877c1.196,-4.0046 1,-64 1,-64c0,0 -28.2424,15.0938 -33.5018,17.7877c-7.1107,3.0497 -6.3401,3.2991 -15,0c-8.352,-3.4781 -33.4982,-17.7877 -33.4982,-17.7877z"/>
+                    <path fill="white" d="M299.7864,64.2624c0,0 47.0288,27.2661 49.8263,28.8228c14.6721,8.3242 18.5414,6.9259 18.7414,22.9259c0.1814,2.5997 -0.1478,74.2208 -0.1478,74.2208c0,0 -100.1194,55.3851 -104.1224,56.1388c-10.1567,0.4837 -16.0429,-5.0602 -16.0429,-18.1188c-0.5018,-15.7356 1.1508,-49.0284 1.1508,-49.0284c0,0 -50.2786,-28.2105 -51.0681,-28.665c-3.8749,-2.6776 -5.4519,-5.7952 -6.3342,-10.4639c-1.0812,-3.1249 -1.2068,-13.6738 13.7375,-22.5902c6.7814,-4.1442 94.2595,-53.2419 94.2595,-53.2419zM333.36,170.6384c0,0 3.2625,-2.8544 3.7351,-6.49c0.0935,-1.6544 0.4808,-18.9164 0.6201,-21.7551c-0.2851,-8.6466 -0.0252,-13.0514 -2.8463,-16.8838c-7.7379,-7.4985 -31.6039,-18.3798 -35.6654,-21.0361c-3.2216,-2.0018 -3.7682,-0.81 -6.7734,1.2773c-0.7821,0.5404 -51.2383,33.4727 -51.2383,33.4727l25.6753,15.3555c0,0 7.8229,4.0558 10.3247,6.6445c1.4982,1.7877 1.375,21.5 1.375,21.5l-0.375,20.5z"/>
+                    <path fill="white" d="M67.0935,64.8489c0,0 98.4979,56.6556 100.898,57.9393c8.1541,4.8922 12.1117,19.421 3.5975,26.435c-3.4338,3.9933 -52.3973,30.0001 -52.3973,30.0001c0,0 0.6479,46.986 0.6798,48.2506c-0.5033,14.0301 -7.1902,20.508 -18.513,18.799c-4.5437,-1.8932 -101.2912,-55.482 -101.2912,-55.482c0,0 -0.0079,-72.6544 0,-75.2474c0.1952,-10.2347 1.9319,-10.0437 5.4984,-13.8551c2.7523,-2.48 61.5277,-36.8396 61.5277,-36.8396zM66.69,105.61c-0.8886,0.5562 -28.6315,17.2106 -29.2153,17.5182c-2.7689,1.6596 -4.7847,2.8828 -5.7847,6.8828c-0.3503,2.4004 -1.8376,25.6401 -1.996,28.4602c-0.4379,9.0891 0.996,8.5398 4.0458,11.5662c3.8006,3.1432 56.452,33.186 56.452,33.186c0,0 1.2643,-36.2576 1.4982,-37.9568c0.2059,-1.4963 -0.0137,-3.4783 1.6735,-4.464c11.1973,-6.542 33.8283,-21.5792 33.8283,-21.5792c0,0 -48.6841,-31.334 -52.5018,-34.2123c-3.3409,-2.4132 -3.2877,-2.401 -8,0.599z"/>
+                    <path fill="white" d="M201.1918,71.2234M167.1918,71.2234M217.69,59.503c0,0 -20.7688,-13.6719 -26,-16.9438c-7,-3.5481 -7,-3.5481 -13.4357,-0.0233c-0.9423,0.5607 -24.5124,14.6758 -28.0625,16.6875c0.66,0.66 34.4982,22.7877 34.4982,22.7877zM261.1871,42.0237c6.3773,3.6649 12.7134,7.3888 19.0046,11.1997c-2.5536,2.6956 -85.834,52.7356 -91.7734,56.9531c-2.9796,1.4009 -4.1209,1.1184 -7.2266,0.0469c-2.5197,-1.2741 -92,-55 -93,-57c6.4901,-3.928 53.0293,-30.7914 69.6072,-40.6501c4.4129,-2.971 16.8037,-10.8862 21.2788,-11.9181c3.7885,-0.8736 6.9926,-0.8736 9.6122,0c3.6474,1.3559 15.5248,8.1363 19.4865,10.715c1.7094,0.9634 44.4801,25.757 53.0106,30.6535z"/>
+                    <path fill="white" d="M368.1918,213.2234c0,0 0.3642,96.7817 0.3733,97.59c-0.0277,5.9999 -0.751,10.4051 -4.8459,15.0975c-4.8647,4.016 -88.5273,52.3125 -88.5273,52.3125c0,0 0,-71.94 0,-109c0.0473,-0.2123 -0.0287,-4.2123 4.4982,-7.2123c3,-2.5676 88.5018,-48.7877 88.5018,-48.7877zM320.1918,314.2234M335.1918,304.2234c0,-13.86 0,-42 0,-42c0,0 -12.5018,4.7877 -28.9389,13.8507c-4.9717,3.937 -5.4328,5.7724 -5.546,12.7897c-0.0806,4.9994 0.4849,35.3596 0.4849,35.3596c0,0 33.1999,-19.2123 34,-20z"/>
+                    <path fill="white" d="M0.1918,213.2234c0,0 76.8875,44.1738 82,47c9.4982,6.0904 10.2128,6.7877 11.0646,12.479c0.66,0 -0.0646,105.521 -0.0646,105.521c0,0 -67.8491,-39.074 -72.8125,-41.9375c-18.6893,-10.7905 -20.1145,-16.7673 -20.361,-27.2748c-0.0886,-1.4468 0.1735,-95.7877 0.1735,-95.7877zM33.1918,262.2234v42l34,20c0,0 1.0094,-35.3274 1.1153,-37.6574c0.5097,-3.5338 -1.9078,-7.0407 -6.5203,-9.944c-6.5068,-3.6126 -28.595,-14.3986 -28.595,-14.3986z"/>
+                  </svg>
+                `)}")`,
+                backgroundSize: '70vh',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center calc(16vh)',
+                backgroundAttachment: 'fixed',
+                opacity: 0.02
+              }}></div>
+              <div className="absolute inset-0 pointer-events-none z-[1]" style={{
+                backgroundImage: "url('/hex-bg.png')",
+                backgroundRepeat: 'repeat',
+                backgroundAttachment: 'fixed',
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+                maskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+                opacity: 1
+              }}></div>
+              <Container className="relative z-[10]">
                 {/* About Us Section */}
                 <div className="mb-20">
                   <motion.div
@@ -423,33 +565,6 @@ export default function Home() {
                     viewport={{ once: true }}
                     className="text-center max-w-4xl mx-auto"
                   >
-                    {/* Decorative element */}
-                    <div className="flex justify-center mb-8">
-                      <div className="relative">
-                        <div className="w-24 h-24 border-2 border-neon-purple/30 rounded-full flex items-center justify-center">
-                          <div className="w-16 h-16 border-2 border-cyber-blue/40 rounded-full flex items-center justify-center">
-                            <div className="w-8 h-8 border-2 border-neon-cyan/50 rounded-full"></div>
-                          </div>
-                        </div>
-                        {/* Connecting lines */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <svg width="96" height="96" className="absolute opacity-30">
-                            <line x1="48" y1="16" x2="24" y2="32" stroke="url(#about-gradient)" strokeWidth="1"/>
-                            <line x1="48" y1="16" x2="72" y2="32" stroke="url(#about-gradient)" strokeWidth="1"/>
-                            <line x1="24" y1="32" x2="48" y2="48" stroke="url(#about-gradient)" strokeWidth="1"/>
-                            <line x1="72" y1="32" x2="48" y2="48" stroke="url(#about-gradient)" strokeWidth="1"/>
-                            <line x1="48" y1="48" x2="24" y2="64" stroke="url(#about-gradient)" strokeWidth="1"/>
-                            <line x1="48" y1="48" x2="72" y2="64" stroke="url(#about-gradient)" strokeWidth="1"/>
-                            <defs>
-                              <linearGradient id="about-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="#00D4FF" />
-                                <stop offset="100%" stopColor="#A855F7" />
-                              </linearGradient>
-                            </defs>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
 
                     <div className="flex flex-col lg:flex-row items-start gap-8">
                       {/* Text Section */}
@@ -498,13 +613,21 @@ export default function Home() {
 
 
             {/* Services Section */}
-            <SectionWrapper id="services" className="py-20">
+            <SectionWrapper id="services" className="py-20 relative">
+              <div className="absolute inset-0 pointer-events-none z-[1]" style={{
+                backgroundImage: "url('/hex-bg-white.png')",
+                backgroundRepeat: 'repeat',
+                backgroundAttachment: 'fixed',
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.055) 12.5%, rgba(0,0,0,0.01) 25%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.055) 87.5%, rgba(0,0,0,0.1) 100%)',
+                maskImage: 'linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.055) 12.5%, rgba(0,0,0,0.01) 25%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.055) 87.5%, rgba(0,0,0,0.1) 100%)',
+                opacity: 1
+              }}></div>
               <Parallax
                 bgImage="https://source.unsplash.com/random/1920x1080/?abstract,tech"
                 strength={200}
               >
                 <div className="py-20">
-                  <Container>
+                  <Container className="relative z-[10]">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -537,7 +660,7 @@ export default function Home() {
                     </motion.div>
                     <div className="service-brackets">
                       <RowContainer>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
                           <div className="flex items-center mb-3">
                             <Bot className="w-6 h-6 text-cyber-blue mr-3" />
                             <h4 className="text-xl font-semibold gradient-text">
@@ -548,7 +671,7 @@ export default function Home() {
                             Deploy intelligent bots for seamless, conversation-embedded placements across active servers—delivering high-frequency, authentic exposure that blends effortlessly into daily chats, scaling with minimal oversight.
                           </p>
                         </Card>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
                           <div className="flex items-center mb-3">
                             <Network className="w-6 h-6 text-cyber-blue mr-3" />
                             <h4 className="text-xl font-semibold gradient-text">
@@ -564,7 +687,7 @@ export default function Home() {
                   </SectionContainer>
 
                   {/* Managed Campaigns */}
-                  <SectionContainer className="mb-12">
+                  <SectionContainer className="mb-12 border-neon-purple/30">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -578,12 +701,12 @@ export default function Home() {
                         End-to-end campaign management with strategic community selection, creative development, and comprehensive execution for maximum impact.
                       </p>
                     </motion.div>
-                    <div className="service-brackets space-y-8">
+                    <div className="service-brackets service-brackets-purple space-y-8">
                       <RowContainer>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                           <div className="flex items-center mb-3">
-                            <Target className="w-6 h-6 text-cyber-blue mr-3" />
-                            <h4 className="text-xl font-semibold gradient-text">
+                            <Target className="w-6 h-6 text-neon-purple mr-3" />
+                            <h4 className="text-xl font-semibold bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
                               Tailored Community Selection
                             </h4>
                           </div>
@@ -591,10 +714,10 @@ export default function Home() {
                             Leverage proprietary insights on interests, demographics, and cultural resonance to match your brand with the perfect servers—predicting performance before launch.
                           </p>
                         </Card>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                           <div className="flex items-center mb-3">
-                            <Gamepad2 className="w-6 h-6 text-cyber-blue mr-3" />
-                            <h4 className="text-xl font-semibold gradient-text">
+                            <Gamepad2 className="w-6 h-6 text-neon-purple mr-3" />
+                            <h4 className="text-xl font-semibold bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
                               Immersive Ad Formats
                             </h4>
                           </div>
@@ -604,10 +727,10 @@ export default function Home() {
                         </Card>
                       </RowContainer>
                       <RowContainer>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                           <div className="flex items-center mb-3">
-                            <Palette className="w-6 h-6 text-cyber-blue mr-3" />
-                            <h4 className="text-xl font-semibold gradient-text">
+                            <Palette className="w-6 h-6 text-neon-purple mr-3" />
+                            <h4 className="text-xl font-semibold bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
                               Bespoke Creative Strategy
                             </h4>
                           </div>
@@ -615,10 +738,10 @@ export default function Home() {
                             Develop community-first narratives with native visuals and hooks; extend top performers to Reddit and beyond for amplified reach.
                           </p>
                         </Card>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                           <div className="flex items-center mb-3">
-                            <Settings className="w-6 h-6 text-cyber-blue mr-3" />
-                            <h4 className="text-xl font-semibold gradient-text">
+                            <Settings className="w-6 h-6 text-neon-purple mr-3" />
+                            <h4 className="text-xl font-semibold bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
                               End-to-End Execution
                             </h4>
                           </div>
@@ -628,10 +751,10 @@ export default function Home() {
                         </Card>
                       </RowContainer>
                       <RowContainer>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                           <div className="flex items-center mb-3">
-                            <TrendingUp className="w-6 h-6 text-cyber-blue mr-3" />
-                            <h4 className="text-xl font-semibold gradient-text">
+                            <TrendingUp className="w-6 h-6 text-neon-purple mr-3" />
+                            <h4 className="text-xl font-semibold bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
                               Comprehensive Analytics
                             </h4>
                           </div>
@@ -639,10 +762,10 @@ export default function Home() {
                             Real-time dashboards tracking impressions, engagements, conversions, and brand lift—proving ROI with uplift studies included standard.
                           </p>
                         </Card>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                           <div className="flex items-center mb-3">
-                            <Shield className="w-6 h-6 text-cyber-blue mr-3" />
-                            <h4 className="text-xl font-semibold gradient-text">
+                            <Shield className="w-6 h-6 text-neon-purple mr-3" />
+                            <h4 className="text-xl font-semibold bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
                               Trusted Brand Safety
                             </h4>
                           </div>
@@ -671,7 +794,7 @@ export default function Home() {
                     </motion.div>
                     <div className="service-brackets">
                       <RowContainer>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
                           <div className="flex items-center mb-3">
                             <MessageCircle className="w-6 h-6 text-cyber-blue mr-3" />
                             <h4 className="text-xl font-semibold gradient-text">
@@ -682,7 +805,7 @@ export default function Home() {
                             Design and launch branded servers as loyalty engines—modular channels, bots, and launch events; opt for full management or trained handover.
                           </p>
                         </Card>
-                        <Card className="flex-1" glowColor="mixed">
+                        <Card className="flex-1 hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
                           <div className="flex items-center mb-3">
                             <Users className="w-6 h-6 text-cyber-blue mr-3" />
                             <h4 className="text-xl font-semibold gradient-text">
@@ -722,7 +845,7 @@ export default function Home() {
                       transition={{ duration: 0.6 }}
                       className="relative"
                     >
-                      <Card className="h-full text-center" glowColor="mixed">
+                      <Card className="h-full text-center hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
                         <div className="flex justify-center mb-4">
                           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
                             <Network className="w-8 h-8 text-white" />
@@ -745,16 +868,16 @@ export default function Home() {
                       transition={{ duration: 0.6, delay: 0.2 }}
                       className="relative"
                     >
-                      <Card className="h-full text-center" glowColor="mixed">
+                      <Card className="h-full text-center hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                         <div className="flex justify-center mb-4">
                           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
                             <MessageCircle className="w-8 h-8 text-white" />
                           </div>
                         </div>
-                        <h3 className="text-xl font-semibold gradient-text mb-3">
-                          Conversational Retention
+                        <h3 className="text-xl font-semibold mb-3 bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
+                          Retention
                         </h3>
-                        <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                        <div className="w-full h-0.5 bg-gradient-to-r from-neon-purple to-cyber-blue mb-4"></div>
                         <p className="text-gray-300 leading-relaxed text-sm">
                           Engage in real-time dialogues that spark word-of-mouth magic; members linger for months, turning one ad into endless impressions.
                         </p>
@@ -768,7 +891,7 @@ export default function Home() {
                       transition={{ duration: 0.6, delay: 0.4 }}
                       className="relative"
                     >
-                      <Card className="h-full text-center" glowColor="mixed">
+                      <Card className="h-full text-center hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
                         <div className="flex justify-center mb-4">
                           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyber-blue to-neon-purple flex items-center justify-center">
                             <TrendingUp className="w-8 h-8 text-white" />
@@ -791,16 +914,16 @@ export default function Home() {
                       transition={{ duration: 0.6, delay: 0.6 }}
                       className="relative"
                     >
-                      <Card className="h-full text-center" glowColor="mixed">
+                      <Card className="h-full text-center hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
                         <div className="flex justify-center mb-4">
                           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-neon-purple to-cyber-blue flex items-center justify-center">
                             <Gamepad2 className="w-8 h-8 text-white" />
                           </div>
                         </div>
-                        <h3 className="text-xl font-semibold gradient-text mb-3">
+                        <h3 className="text-xl font-semibold mb-3 bg-gradient-to-r from-neon-purple to-cyber-blue bg-clip-text text-transparent">
                           Gaming Synergy
                         </h3>
-                        <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
+                        <div className="w-full h-0.5 bg-gradient-to-r from-neon-purple to-cyber-blue mb-4"></div>
                         <p className="text-gray-300 leading-relaxed text-sm">
                           Tailored for studios: Integrate UEFN experiences seamlessly, making your brand a playable force in gaming communities.
                         </p>
@@ -814,9 +937,280 @@ export default function Home() {
               </Parallax>
             </SectionWrapper>
 
+            {/* Modulix Bot Teaser Section */}
+            <SectionWrapper id="modulix-bot" className="relative overflow-hidden">
+              <div className="absolute inset-0 backdrop-blur-[2px]"></div>
+              <div className="absolute inset-0 pointer-events-none z-[2]" style={{
+                backgroundImage: "url('/hex-bg.png')",
+                backgroundRepeat: 'repeat',
+                backgroundAttachment: 'fixed',
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+                maskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+                opacity: 1
+              }}></div>
+              <Parallax
+                bgImage="https://source.unsplash.com/random/1920x1080/?technology,network"
+                strength={200}
+              >
+                <div className="pt-20 pb-20 relative">
+                  <div className="absolute inset-0 bg-gradient-to-b from-cyber-blue/20 via-neon-purple/10 to-transparent"></div>
+              <Container className="relative z-10">
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                      className="text-center max-w-6xl mx-auto"
+                >
+                      {/* Eye-catching icon with animation */}
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    whileInView={{ scale: 1, rotate: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 100 }}
+                        className="mb-10 relative"
+                      >
+                        <motion.div 
+                          className="w-32 h-32 mx-auto bg-gradient-to-br from-cyber-blue to-neon-purple rounded-full flex items-center justify-center shadow-2xl relative p-4"
+                          animate={{ 
+                            boxShadow: [
+                              '0 0 30px rgba(0, 212, 255, 0.5)',
+                              '0 0 60px rgba(168, 85, 247, 0.7)',
+                              '0 0 30px rgba(0, 212, 255, 0.5)',
+                            ]
+                          }}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        >
+                          <svg className="w-full h-full text-white" viewBox="0 0 369 431" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                            <path d="M123.2097,256.5419c3.3564,1.7799 53.7644,28.8017 56.1421,30.1319c6.3382,2.3372 5.079,2.2875 11.6624,-0.0176c2.5274,-1.2166 43.6758,-25.6452 52.6758,-29.6452c6.5646,-3 11.4212,0.011 11.5849,6c0.0678,2.4821 -0.3991,127.7513 -0.3991,127.7513c0,0 -57.4462,34.3318 -58.3051,34.8516c-0.7469,0.4541 -1.4939,0.9081 -2.2634,1.376c-4.7664,2.779 -8.5079,4.2789 -14.1155,3.2334c-3.8871,-1.6292 -69.2518,-39.3998 -69.2518,-39.3998c0,0 0.7214,-119.6568 0.75,-127.8125c0,-4.5559 6,-9 11.5198,-6.4691zM143.1918,304.2234c0,0 -0.5018,59.7877 -0.5018,63.7877c0.723,2.7111 24,17 31.929,21.4987c12.071,5.5013 7.071,5.5013 18.5639,0.5013c10.5071,-5.7445 29.1747,-19.8304 31.0089,-21.7877c1.196,-4.0046 1,-64 1,-64c0,0 -28.2424,15.0938 -33.5018,17.7877c-7.1107,3.0497 -6.3401,3.2991 -15,0c-8.352,-3.4781 -33.4982,-17.7877 -33.4982,-17.7877z"/>
+                            <path d="M299.7864,64.2624c0,0 47.0288,27.2661 49.8263,28.8228c14.6721,8.3242 18.5414,6.9259 18.7414,22.9259c0.1814,2.5997 -0.1478,74.2208 -0.1478,74.2208c0,0 -100.1194,55.3851 -104.1224,56.1388c-10.1567,0.4837 -16.0429,-5.0602 -16.0429,-18.1188c-0.5018,-15.7356 1.1508,-49.0284 1.1508,-49.0284c0,0 -50.2786,-28.2105 -51.0681,-28.665c-3.8749,-2.6776 -5.4519,-5.7952 -6.3342,-10.4639c-1.0812,-3.1249 -1.2068,-13.6738 13.7375,-22.5902c6.7814,-4.1442 94.2595,-53.2419 94.2595,-53.2419zM333.36,170.6384c0,0 3.2625,-2.8544 3.7351,-6.49c0.0935,-1.6544 0.4808,-18.9164 0.6201,-21.7551c-0.2851,-8.6466 -0.0252,-13.0514 -2.8463,-16.8838c-7.7379,-7.4985 -31.6039,-18.3798 -35.6654,-21.0361c-3.2216,-2.0018 -3.7682,-0.81 -6.7734,1.2773c-0.7821,0.5404 -51.2383,33.4727 -51.2383,33.4727l25.6753,15.3555c0,0 7.8229,4.0558 10.3247,6.6445c1.4982,1.7877 1.375,21.5 1.375,21.5l-0.375,20.5z"/>
+                            <path d="M67.0935,64.8489c0,0 98.4979,56.6556 100.898,57.9393c8.1541,4.8922 12.1117,19.421 3.5975,26.435c-3.4338,3.9933 -52.3973,30.0001 -52.3973,30.0001c0,0 0.6479,46.986 0.6798,48.2506c-0.5033,14.0301 -7.1902,20.508 -18.513,18.799c-4.5437,-1.8932 -101.2912,-55.482 -101.2912,-55.482c0,0 -0.0079,-72.6544 0,-75.2474c0.1952,-10.2347 1.9319,-10.0437 5.4984,-13.8551c2.7523,-2.48 61.5277,-36.8396 61.5277,-36.8396zM66.69,105.61c-0.8886,0.5562 -28.6315,17.2106 -29.2153,17.5182c-2.7689,1.6596 -4.7847,2.8828 -5.7847,6.8828c-0.3503,2.4004 -1.8376,25.6401 -1.996,28.4602c-0.4379,9.0891 0.996,8.5398 4.0458,11.5662c3.8006,3.1432 56.452,33.186 56.452,33.186c0,0 1.2643,-36.2576 1.4982,-37.9568c0.2059,-1.4963 -0.0137,-3.4783 1.6735,-4.464c11.1973,-6.542 33.8283,-21.5792 33.8283,-21.5792c0,0 -48.6841,-31.334 -52.5018,-34.2123c-3.3409,-2.4132 -3.2877,-2.401 -8,0.599z"/>
+                            <path d="M201.1918,71.2234M167.1918,71.2234M217.69,59.503c0,0 -20.7688,-13.6719 -26,-16.9438c-7,-3.5481 -7,-3.5481 -13.4357,-0.0233c-0.9423,0.5607 -24.5124,14.6758 -28.0625,16.6875c0.66,0.66 34.4982,22.7877 34.4982,22.7877zM261.1871,42.0237c6.3773,3.6649 12.7134,7.3888 19.0046,11.1997c-2.5536,2.6956 -85.834,52.7356 -91.7734,56.9531c-2.9796,1.4009 -4.1209,1.1184 -7.2266,0.0469c-2.5197,-1.2741 -92,-55 -93,-57c6.4901,-3.928 53.0293,-30.7914 69.6072,-40.6501c4.4129,-2.971 16.8037,-10.8862 21.2788,-11.9181c3.7885,-0.8736 6.9926,-0.8736 9.6122,0c3.6474,1.3559 15.5248,8.1363 19.4865,10.715c1.7094,0.9634 44.4801,25.757 53.0106,30.6535z"/>
+                            <path d="M368.1918,213.2234c0,0 0.3642,96.7817 0.3733,97.59c-0.0277,5.9999 -0.751,10.4051 -4.8459,15.0975c-4.8647,4.016 -88.5273,52.3125 -88.5273,52.3125c0,0 0,-71.94 0,-109c0.0473,-0.2123 -0.0287,-4.2123 4.4982,-7.2123c3,-2.5676 88.5018,-48.7877 88.5018,-48.7877zM320.1918,314.2234M335.1918,304.2234c0,-13.86 0,-42 0,-42c0,0 -12.5018,4.7877 -28.9389,13.8507c-4.9717,3.937 -5.4328,5.7724 -5.546,12.7897c-0.0806,4.9994 0.4849,35.3596 0.4849,35.3596c0,0 33.1999,-19.2123 34,-20z"/>
+                            <path d="M0.1918,213.2234c0,0 76.8875,44.1738 82,47c9.4982,6.0904 10.2128,6.7877 11.0646,12.479c0.66,0 -0.0646,105.521 -0.0646,105.521c0,0 -67.8491,-39.074 -72.8125,-41.9375c-18.6893,-10.7905 -20.1145,-16.7673 -20.361,-27.2748c-0.0886,-1.4468 0.1735,-95.7877 0.1735,-95.7877zM33.1918,262.2234v42l34,20c0,0 1.0094,-35.3274 1.1153,-37.6574c0.5097,-3.5338 -1.9078,-7.0407 -6.5203,-9.944c-6.5068,-3.6126 -28.595,-14.3986 -28.595,-14.3986z"/>
+                      </svg>
+                          <motion.div 
+                            className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-neon-purple to-pink-500 rounded-full flex items-center justify-center border-4 border-dark-navy"
+                            animate={{ rotate: [0, 10, -10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0789.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0789-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0067.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0408.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9758 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+                            </svg>
+                          </motion.div>
+                  </motion.div>
+
+                        {/* Decorative rings */}
+                        <motion.div
+                          className="absolute inset-0 w-32 h-32 mx-auto border-2 border-cyber-blue/30 rounded-full"
+                          animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                        <motion.div
+                          className="absolute inset-0 w-32 h-32 mx-auto border-2 border-neon-purple/30 rounded-full"
+                          animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                        />
+                      </motion.div>
+
+                      {/* Main headline with better gradient */}
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                        className="text-5xl md:text-7xl font-bold mb-6 text-white"
+                  >
+                        Introducing the <span className="text-cyber-blue">Modulix Bot</span>
+                  </motion.h2>
+
+                      {/* Two Column Layout */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        {/* Left Column - Heading and Description */}
+                        <div>
+                  {/* Subheadline */}
+                  <motion.h3
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                            className="text-2xl md:text-3xl font-semibold mb-6 text-gray-400 text-left"
+                  >
+                            The Future is Nearly Here
+                  </motion.h3>
+
+                          {/* Description */}
+                          <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.6 }}
+                          >
+                            <p className="text-base md:text-lg text-gray-300 leading-relaxed text-left">
+                              Every feature traditional Discord bots offer, <span className="text-cyber-blue font-semibold">supercharged</span>. 
+                              <br /><br />
+                              A fully modular framework where you only pay for what you use, with <span className="text-cyber-blue font-semibold">infinite customization</span> and a powerful web dashboard. 
+                              <br /><br />
+                              Build communities that don't just grow, they dominate. Dive into a <span className="text-cyber-blue font-semibold">revolutionary ecosystem</span> powered by event-driven architecture, AI-enhanced security, addictive leveling, and seamless integrations that turn your server into an unstoppable force. 
+                              <br /><br />
+                              Prepare to <span className="text-cyber-blue font-semibold">redefine engagement</span>. Modulix is on the way.
+                            </p>
+                          </motion.div>
+                        </div>
+
+                        {/* Right Column - Cards */}
+                        <div className="flex items-center justify-center">
+                          {/* Rotating Feature Tile */}
+                          <div 
+                            className="relative h-[380px] flex items-center justify-center w-full max-w-lg"
+                            onMouseEnter={() => setIsHoveringBotFeature(true)}
+                            onMouseLeave={() => setIsHoveringBotFeature(false)}
+                          >
+                            {botFeatures.map((feature, index) => {
+                              const isVisible = currentBotFeature === index;
+                              const isPrevious = currentBotFeature === (index + 1) % botFeatures.length;
+                              
+                              return (
+                  <motion.div
+                                  key={feature.title}
+                                  initial={{ opacity: 0, x: 100, scale: 0.95 }}
+                                  animate={{
+                                    opacity: isVisible ? 1 : 0,
+                                    x: isVisible ? 0 : isPrevious ? -100 : 100,
+                                    scale: isVisible ? 1 : 0.95,
+                                    position: 'absolute' as const,
+                                    pointerEvents: isVisible ? 'auto' as const : 'none' as const
+                                  }}
+                                  transition={{ 
+                                    duration: 0.8,
+                                    ease: "easeInOut",
+                                    delay: isVisible ? 0.3 : 0
+                                  }}
+                                  className="w-full"
+                                >
+                                  <Card 
+                                    className={`text-center p-10 h-full transition-all duration-300 ${
+                                      feature.color === 'purple' ? 'hover:shadow-neon-purple-glow' : 'hover:shadow-neon-blue-glow'
+                                    }`} 
+                                    glowColor={feature.color as 'blue' | 'purple'}
+                                  >
+                                    <div className="flex justify-center mb-6">
+                                      <div 
+                                        className={`w-24 h-24 rounded-full flex items-center justify-center ${
+                                          feature.color === 'purple' 
+                                            ? 'bg-gradient-to-br from-neon-purple to-cyber-blue' 
+                                            : 'bg-gradient-to-br from-cyber-blue to-neon-purple'
+                                        }`}
+                                      >
+                                        {feature.icon}
+                    </div>
+                    </div>
+                                    <h4 className="text-2xl font-bold mb-4" style={{ color: feature.color === 'blue' ? '#00D4FF' : '#A855F7' }}>
+                                      {feature.title}
+                                    </h4>
+                                    <div 
+                                      className="w-full h-1 mb-6 rounded-full"
+                                      style={{ 
+                                        background: feature.color === 'blue' 
+                                          ? 'linear-gradient(90deg, #00D4FF, #A855F7)' 
+                                          : 'linear-gradient(90deg, #A855F7, #00D4FF)'
+                                      }}
+                                    />
+                                    <ul className="text-left space-y-4 max-w-xl mx-auto">
+                                      {feature.bullets.map((bullet, bulletIndex) => (
+                                        <li key={bulletIndex} className="flex items-start">
+                                          <span 
+                                            className="text-2xl mr-3 flex-shrink-0 mt-[-2px]"
+                                            style={{ color: feature.color === 'blue' ? '#00D4FF' : '#A855F7' }}
+                                          >
+                                            •
+                                          </span>
+                                          <span className="text-gray-300 leading-relaxed text-lg">
+                                            {bullet}
+                                          </span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </Card>
+                  </motion.div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Call to action badge - Centered below columns */}
+                  <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 1 }}
+                        className="flex justify-center mt-12"
+                      >
+                        <div className="px-8 py-4 bg-gradient-to-r from-cyber-blue/30 to-neon-purple/30 border-2 border-cyber-blue rounded-full backdrop-blur-sm">
+                          <div className="flex items-center gap-3">
+                            {/* Hexagonal Loading Symbol with Tumbling Inner Hexagon */}
+                            <div className="relative w-6 h-6">
+                              {/* Outer rotating hexagon */}
+                              <motion.svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                className="text-cyber-blue absolute inset-0"
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                              >
+                                <path
+                                  d="M12 2L21 7V17L12 22L3 17V7L12 2Z"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </motion.svg>
+                              
+                              {/* Inner tumbling hexagon - passively moved by outer hexagon's rotation */}
+                              <motion.svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                className="text-cyber-blue absolute inset-0"
+                                animate={{ 
+                                  rotate: [0, 15, 30, 90, 180, 270, 330, 360],
+                                  x: [0, 1, 2.5, 2.5, 2, 0, -2, 0],
+                                  y: [-1.5, 1, 2.5, 2.5, 2.5, 2.5, 0.5, -1.5]
+                                }}
+                                transition={{ 
+                                  duration: 3, 
+                                  repeat: Infinity, 
+                                  ease: [0.34, 0.61, 0.45, 0.99],
+                                  times: [0, 0.08, 0.12, 0.25, 0.5, 0.75, 0.92, 1]
+                                }}
+                              >
+                                <path
+                                  d="M12 8L17 11V16L12 19L7 16V11L12 8Z"
+                                  fill="currentColor"
+                                  opacity="0.5"
+                                />
+                              </motion.svg>
+                    </div>
+                            <span className="text-white font-bold text-lg">Coming Soon</span>
+                            <span className="text-gray-300">•</span>
+                            <span className="text-gray-300">Stay tuned for the revolution</span>
+                          </div>
+                        </div>
+                  </motion.div>
+                </motion.div>
+              </Container>
+                </div>
+              </Parallax>
+            </SectionWrapper>
+
             {/* Testimonials Section */}
-            <SectionWrapper id="testimonials" className="py-20 bg-deeper-blue/60">
-              <Container>
+            <SectionWrapper id="testimonials" className="hidden md:block py-20 relative">
+              <div className="absolute inset-0 bg-black/30 z-0"></div>
+              <Container className="relative z-10">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -833,12 +1227,12 @@ export default function Home() {
 
                 {/* Testimonials Carousel */}
                 <div
-                  className="relative overflow-hidden mb-16 py-4"
-                  style={{ height: '340px' }}
+                  className="relative overflow-hidden mb-16 py-8"
+                  style={{ height: '360px' }}
                 >
                   {/* Fade masks on edges */}
-                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#151629] to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#151629] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0A0B18] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0A0B18] to-transparent z-10 pointer-events-none" />
 
                   <motion.div
                     className="absolute inset-0 flex items-center gap-8 py-4"
@@ -863,6 +1257,9 @@ export default function Home() {
                       const maxDistance = 800; // Distance at which opacity starts decreasing
                       const opacity = Math.max(0.95, 1 - (distanceFromCenter / maxDistance));
 
+                      const cardColor = index % 2 === 0 ? 'blue' : 'purple';
+                      const glowClass = cardColor === 'purple' ? 'hover:shadow-neon-purple-glow' : 'hover:shadow-neon-blue-glow';
+
                       return (
                         <motion.div
                           key={`${testimonial.id}-${index}`}
@@ -874,8 +1271,8 @@ export default function Home() {
                           transition={{ delay: index * 0.1 }}
                         >
                           <Card
-                            className="h-full p-6"
-                            glowColor={testimonial.accentColor as 'blue' | 'purple' | 'mixed'}
+                            className={`h-full p-6 transition-all duration-300 ${glowClass}`}
+                            glowColor={cardColor}
                             onMouseEnter={() => setIsHoveringTestimonials(true)}
                             onMouseLeave={() => setIsHoveringTestimonials(false)}
                           >
@@ -971,10 +1368,10 @@ export default function Home() {
                 </motion.div>
 
                 {/* Company Logo Carousel */}
-                <div className="relative overflow-hidden py-4" style={{ height: '340px' }}>
+                <div className="relative overflow-hidden py-8" style={{ height: '360px' }}>
                   {/* Fade masks on edges */}
-                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#151629] to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#151629] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0A0B18] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0A0B18] to-transparent z-10 pointer-events-none" />
 
                   <motion.div
                     className="absolute inset-0 flex items-center gap-8 py-4"
@@ -988,7 +1385,11 @@ export default function Home() {
                     style={{ width: `${(220 + 32) * companies.length * 2}px` }} // Width for 2 sets
                   >
                     {/* Create seamless infinite loop */}
-                    {[...companies, ...companies].map((company, index) => (
+                    {[...companies, ...companies].map((company, index) => {
+                      const cardColor = index % 2 === 0 ? 'blue' : 'purple';
+                      const glowClass = cardColor === 'purple' ? 'hover:shadow-neon-purple-glow' : 'hover:shadow-neon-blue-glow';
+                      
+                      return (
                       <motion.div
                         key={`${company.id}-${index}`}
                         className="flex-shrink-0"
@@ -999,8 +1400,8 @@ export default function Home() {
                         transition={{ delay: index * 0.1 }}
                       >
                         <Card
-                          className="h-full cursor-pointer p-0 flex flex-col"
-                          glowColor={company.accentColor as 'blue' | 'purple' | 'mixed'}
+                            className={`h-full cursor-pointer p-0 flex flex-col transition-all duration-300 ${glowClass}`}
+                            glowColor={cardColor}
                         onClick={() => {
                           if (company.link !== '#') {
                             window.open(company.link, '_blank');
@@ -1037,22 +1438,31 @@ export default function Home() {
                         </div>
 
                         {/* Company Name - Bottom section */}
-                        <div className="flex items-center justify-center transition-all duration-300 bg-gray-800/50" style={{ height: '60px' }}>
-                          <p className="transition-colors duration-300 text-base font-medium text-center text-gray-400">
+                        <div className="flex items-center justify-center transition-all duration-300 p-4">
+                          <p className="transition-colors duration-300 text-base font-medium text-center text-gray-300">
                             {company.name}
                           </p>
                         </div>
                       </Card>
                       </motion.div>
-                    ))}
+                      );
+                    })}
                   </motion.div>
                 </div>
               </Container>
             </SectionWrapper>
 
             {/* CTA/Contact Section */}
-            <SectionWrapper id="contact" className="py-20">
-              <Container>
+            <SectionWrapper id="contact" className="py-20 relative">
+              <div className="absolute inset-0 pointer-events-none z-[1]" style={{
+                backgroundImage: "url('/hex-bg-white.png')",
+                backgroundRepeat: 'repeat',
+                backgroundAttachment: 'fixed',
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.055) 12.5%, rgba(0,0,0,0.01) 25%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.055) 87.5%, rgba(0,0,0,0.1) 100%)',
+                maskImage: 'linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.055) 12.5%, rgba(0,0,0,0.01) 25%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.055) 87.5%, rgba(0,0,0,0.1) 100%)',
+                opacity: 1
+              }}></div>
+              <Container className="relative z-[10]">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1169,8 +1579,16 @@ export default function Home() {
             </SectionWrapper>
 
             {/* FAQ Section */}
-            <SectionWrapper id="faq" className="py-20 bg-deeper-blue/60">
-              <Container>
+            <SectionWrapper id="faq" className="py-20 bg-deeper-blue/60 relative">
+              <div className="absolute inset-0 pointer-events-none z-[1]" style={{
+                backgroundImage: "url('/hex-bg.png')",
+                backgroundRepeat: 'repeat',
+                backgroundAttachment: 'fixed',
+                WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+                maskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 12.5%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 87.5%, rgba(0,0,0,0.5) 100%)',
+                opacity: 1
+              }}></div>
+              <Container className="relative z-[10]">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1188,13 +1606,16 @@ export default function Home() {
                 <div className="max-w-3xl mx-auto space-y-4">
                   {faqs.map((faq, index) => {
                     const isOpen = openFaqs.has(index);
+                    const isBlue = index % 2 === 0;
+                    const accentColor = isBlue ? '#00D4FF' : '#A855F7';
+                    const glowClass = isBlue ? 'hover:shadow-neon-blue-glow' : 'hover:shadow-neon-purple-glow';
 
                     return (
                       <Card
                         key={index}
                         hover={true}
-                        glowColor="mixed"
-                        className="cursor-pointer"
+                        glowColor={isBlue ? 'blue' : 'purple'}
+                        className={`cursor-pointer transition-all duration-300 ${glowClass}`}
                         onClick={() => {
                           const newOpenFaqs = new Set(openFaqs);
                           if (newOpenFaqs.has(index)) {
@@ -1206,16 +1627,20 @@ export default function Home() {
                         }}
                       >
                         <div className="flex justify-between items-center">
-                          <h3 className={`text-lg font-bold transition-colors duration-300 ${
-                            isOpen ? 'text-cyber-blue' : 'text-white'
-                          }`}>
+                          <h3 
+                            className="text-lg font-bold transition-colors duration-300"
+                            style={{ color: isOpen ? accentColor : '#ffffff' }}
+                          >
                             {faq.question}
                           </h3>
                           <motion.span
                             animate={{ rotate: isOpen ? 180 : 0 }}
-                            className={`transition-colors duration-300 ${
-                              isOpen ? 'text-neon-purple' : 'text-cyber-blue/70'
-                            }`}
+                            className="transition-colors duration-300"
+                            style={{ 
+                              color: isOpen 
+                                ? (isBlue ? '#A855F7' : '#00D4FF') // Purple arrow for blue cards, blue arrow for purple cards when open
+                                : '#ffffff'
+                            }}
                           >
                             ▼
                           </motion.span>
@@ -1229,7 +1654,14 @@ export default function Home() {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <div className="mt-4 w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple"></div>
+                          <div 
+                            className="mt-4 w-full h-0.5 rounded-full"
+                            style={{
+                              background: isBlue 
+                                ? 'linear-gradient(90deg, #00D4FF, #A855F7)'
+                                : 'linear-gradient(90deg, #A855F7, #00D4FF)'
+                            }}
+                          />
                           <div className="mt-4 text-gray-300 leading-relaxed">
                             {faq.answer}
                           </div>

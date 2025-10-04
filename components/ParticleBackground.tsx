@@ -21,32 +21,14 @@ export default function ParticleBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas size to parent container
+    // Set canvas size to window (since it's fixed positioned)
     const resizeCanvas = () => {
-      const rect = canvas.parentElement?.getBoundingClientRect();
-      if (rect) {
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-      } else {
-        // Fallback to window size
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
     resizeCanvas();
-
-    // Use ResizeObserver if available, fallback to window resize
-    if (window.ResizeObserver) {
-      const resizeObserver = new ResizeObserver(() => {
-        resizeCanvas();
-      });
-      if (canvas.parentElement) {
-        resizeObserver.observe(canvas.parentElement);
-      }
-    } else {
-      window.addEventListener('resize', resizeCanvas);
-    }
+    window.addEventListener('resize', resizeCanvas);
 
     // Create particles
     const particles: Particle[] = [];
@@ -108,11 +90,7 @@ export default function ParticleBackground() {
     animate();
 
     return () => {
-      if (window.ResizeObserver && canvas.parentElement) {
-        // ResizeObserver cleanup is automatic when component unmounts
-      } else {
-        window.removeEventListener('resize', resizeCanvas);
-      }
+      window.removeEventListener('resize', resizeCanvas);
     };
   }, []);
 
