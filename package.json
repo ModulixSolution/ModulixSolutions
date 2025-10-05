@@ -1,0 +1,50 @@
+{
+  "name": "modulix-solutions",
+  "version": "1.0.0",
+  "description": "Modulix Solutions LLC - Discord community solutions for brands with gaming/UEFN integrations",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next build && next export",
+    "deploy": "npx gh-pages -d out",
+    "type-check": "tsc --noEmit",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "discord",
+    "gaming",
+    "community",
+    "marketing",
+    "uefn",
+    "pinefruit",
+    "modulix"
+  ],
+  "author": "Modulix Solutions LLC",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.1",
+    "class-variance-authority": "^0.7.1",
+    "framer-motion": "^10.16.16",
+    "lucide-react": "^0.292.0",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "react-parallax": "^3.5.1",
+    "yup": "^1.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.53.0",
+    "eslint-config-next": "^14.0.4",
+    "gh-pages": "^6.0.0",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.2.2"
+  }
+}
