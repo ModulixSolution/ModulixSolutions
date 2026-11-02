@@ -148,7 +148,7 @@ async function waitForImagesToLoad(page: Page): Promise<void> {
  *
  * All three live in one 128px square, which `liveDecorations` masks.
  */
-async function waitForAnimationsToFinish(page: Page): Promise<void> {
+export async function waitForAnimationsToFinish(page: Page): Promise<void> {
   await page.waitForFunction(
     () =>
       document

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Bot, Network, Users, Target, Palette, TrendingUp, Shield, Settings, MessageCircle, Gamepad2, Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import Container from '../components/Container';
@@ -17,6 +17,7 @@ import ParticleBackground from '../components/ParticleBackground';
 import CompanyLogo from '../components/CompanyLogo';
 import StateMessage from '../components/states/StateMessage';
 import Seo from '../components/Seo';
+import { PLATFORM_EXAMPLES, TAGLINES } from '../lib/copy/positioning';
 import { getRoute } from '../lib/seo/routes';
 import { buildHomeStructuredData, serializeJsonLd } from '../lib/seo/structuredData';
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
@@ -127,19 +128,8 @@ const botFeatures = [
   }
 ];
 
-const taglines = [
-  'Build Authentic Discord Communities',
-  'Scale Your Gaming Brand Presence',
-  'Create Lasting Player Relationships',
-  'Transform Servers into Revenue Engines',
-  'Dominate Fortnite & Gaming Ecosystems',
-  'Elevate Community Engagement',
-  'Turn Discord into Brand Loyalty',
-  'Master Gaming Community Growth',
-  'Build the Ultimate Gaming Experience',
-  'Lead Your Industry Through Discord',
-];
-
+// The rotating taglines come from lib/copy/positioning.ts, where a guard test
+// holds them to describing the UGC space rather than any one platform.
 const TAGLINE_INTERVAL_MS = 3500;
 const BOT_FEATURE_INTERVAL_MS = 7500;
 
@@ -157,7 +147,7 @@ const companies = [
     displayName: 'READYUP',
     link: 'https://getreadyup.com',
     accentColor: 'white',
-    logoUrl: '/companies/readyup-logo.png',
+    logoUrl: '/companies/readyup-logo.webp',
   },
   {
     id: 'chartis',
@@ -165,7 +155,7 @@ const companies = [
     displayName: 'CHARTIS',
     link: 'https://chartis.gg',
     accentColor: 'blue',
-    logoUrl: '/companies/chartis-logo.png',
+    logoUrl: '/companies/chartis-logo.webp',
   },
   {
     id: 'foad',
@@ -173,7 +163,7 @@ const companies = [
     displayName: 'FOAD',
     link: 'https://www.foad.gg/',
     accentColor: 'green',
-    logoUrl: '/companies/foad-logo.png',
+    logoUrl: '/companies/foad-logo.webp',
   },
   {
     id: 'thirdmade',
@@ -181,7 +171,7 @@ const companies = [
     displayName: 'THIRDMADE',
     link: 'https://discord.gg/thirdmade',
     accentColor: 'purple',
-    logoUrl: '/companies/thirdmade-logo.png',
+    logoUrl: '/companies/thirdmade-logo.webp',
   },
   {
     id: 'uefntool',
@@ -189,7 +179,7 @@ const companies = [
     displayName: 'UEFN TOOL',
     link: 'https://discord.gg/uefntool',
     accentColor: 'blue',
-    logoUrl: '/companies/uefntool-logo.png',
+    logoUrl: '/companies/uefntool-logo.webp',
   },
   {
     id: 'fnsg',
@@ -197,7 +187,7 @@ const companies = [
     displayName: 'FNSG',
     link: 'https://discord.gg/fnsg',
     accentColor: 'orange',
-    logoUrl: '/companies/fnsg-logo.png',
+    logoUrl: '/companies/fnsg-logo.webp',
   },
   {
     id: 'vlo',
@@ -205,7 +195,7 @@ const companies = [
     displayName: 'VLO STUDIOS',
     link: 'https://discord.gg/w5Rg9yhte',
     accentColor: 'cyan',
-    logoUrl: '/companies/vlo-logo.png',
+    logoUrl: '/companies/vlo-logo.webp',
   },
   {
     id: 'solrise',
@@ -213,7 +203,7 @@ const companies = [
     displayName: 'SOLRISE',
     link: 'https://discord.gg/solrise',
     accentColor: 'yellow',
-    logoUrl: '/companies/solrise-logo.png',
+    logoUrl: '/companies/solrise-logo.webp',
   },
   {
     id: 'drying',
@@ -221,7 +211,7 @@ const companies = [
     displayName: 'DRYING',
     link: 'https://discord.gg/drying',
     accentColor: 'cyan',
-    logoUrl: '/companies/drying-logo.png',
+    logoUrl: '/companies/drying-logo.webp',
   },
   {
     id: 'casuallegends',
@@ -229,7 +219,7 @@ const companies = [
     displayName: 'CASUAL LEGENDS',
     link: 'https://discord.gg/casuallegends',
     accentColor: 'pink',
-    logoUrl: '/companies/casuallegends-logo.png',
+    logoUrl: '/companies/casuallegends-logo.webp',
   },
   {
     id: 'getshot',
@@ -237,7 +227,7 @@ const companies = [
     displayName: 'GETSHOT',
     link: 'https://discord.gg/getshot',
     accentColor: 'red',
-    logoUrl: '/companies/getshot-logo.png',
+    logoUrl: '/companies/getshot-logo.webp',
   },
 ];
 
@@ -263,7 +253,7 @@ const { title: HOME_TITLE, description: HOME_DESCRIPTION } = getRoute('/');
 const serviceGroups = {
   ads: {
     name: 'Scalable Ad Services',
-    description: 'Automated, intelligent advertising solutions that seamlessly integrate into Discord conversations, delivering authentic engagement at scale.',
+    description: 'Automated, intelligent advertising solutions that seamlessly integrate into the conversations communities are already having, delivering authentic engagement at scale.',
   },
   campaigns: {
     name: 'Managed Campaigns',
@@ -271,17 +261,17 @@ const serviceGroups = {
   },
   builds: {
     name: 'Premium Builds',
-    description: 'Custom server development and management solutions designed for long-term brand presence and community engagement.',
+    description: 'Custom community development and management solutions designed for long-term brand presence and engagement.',
   },
 } as const;
 
 const faqs = [
-  { question: 'How do you ensure the right community fit for our brand?', answer: 'We map servers using interest profiles, location data, and cultural alignment, drawing from admin insights and content analysis to predict resonance and avoid mismatches.' },
-  { question: 'What makes your ad formats stand out in gaming spaces?', answer: 'Beyond static posts, we specialize in interactive spectacles like tournament sponsorships, live giveaways, and UEFN-linked Activities: formats that ignite participation and feel like community events.' },
+  { question: 'How do you ensure the right community fit for our brand?', answer: 'We map communities using interest profiles, location data, and cultural alignment, drawing from admin insights and content analysis to predict resonance and avoid mismatches.' },
+  { question: 'What makes your ad formats stand out in gaming spaces?', answer: `Beyond static posts, we specialize in interactive spectacles like tournament sponsorships, live giveaways, and playable activations built inside the games themselves (${PLATFORM_EXAMPLES.games}): formats that ignite participation and feel like community events.` },
   { question: 'Can you handle full campaign orchestration?', answer: 'Absolutely: our team translates your brief into a phased strategy: ideation, creative dev, execution, and insights reporting, with real-time adjustments for peak performance.' },
   { question: 'How do you measure and optimize success?', answer: 'Layered metrics from engagements and conversions to sentiment uplift; we provide dashboards and A/B insights to refine future orbits, ensuring every dollar drives loyalty.' },
-  { question: 'What safeguards protect our brand in these communities?', answer: 'Multi-tiered: Pre-vet servers for tone and activity, leverage Discord\'s AI tools, and station mods/staff for proactive monitoring, upholding authenticity without stifling fun.' },
-  { question: 'How does Modulix differ from generic ad networks?', answer: 'We\'re gaming natives: Modular, UEFN-savvy solutions that prioritize owned ecosystems over spray-and-pray tactics, delivering deeper ROI for brands ready to level up.' },
+  { question: 'What safeguards protect our brand in these communities?', answer: 'Multi-tiered: Pre-vet communities for tone and activity, leverage each platform\'s own safety and AI tooling, and station mods/staff for proactive monitoring, upholding authenticity without stifling fun.' },
+  { question: 'How does Modulix differ from generic ad networks?', answer: 'We\'re natives of the space: modular, platform-fluent solutions that prioritize owned ecosystems over spray-and-pray tactics, delivering deeper ROI for brands ready to level up. When a new creation platform takes off, we are already working in it.' },
 ];
 
 /**
@@ -323,10 +313,10 @@ export default function Home() {
 
   useEffect(() => {
     // Modulo by zero yields NaN, which would index past the end of the list.
-    if (!taglinesRotating || taglines.length === 0) return;
+    if (!taglinesRotating || TAGLINES.length === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentTagline((prev) => (prev + 1) % taglines.length);
+      setCurrentTagline((prev) => (prev + 1) % TAGLINES.length);
     }, TAGLINE_INTERVAL_MS);
 
     return () => clearInterval(interval);
@@ -342,9 +332,12 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [botFeaturesRotating]);
 
-  // shrink-0 keeps these round and keeps the tap target at 36px when the
-  // neighbouring tagline is long enough to compete for the row.
-  const rotationControlClass = 'inline-flex shrink-0 items-center justify-center w-9 h-9 rounded-full border border-cyber-blue/40 bg-dark-navy/70 text-gray-300 hover:text-white hover:border-cyber-blue transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue';
+  // shrink-0 keeps these round when the neighbouring tagline is long enough to
+  // compete for the row. They paint at 36px, which is below the 44px floor, so
+  // `tap-target` adds the missing reach as an overlay: four of them share the
+  // carousel's control row with the "Feature N of 10" readout, and growing the
+  // boxes themselves would not leave that row 360px to sit in.
+  const rotationControlClass = 'tap-target inline-flex shrink-0 items-center justify-center w-9 h-9 rounded-full border border-cyber-blue/40 bg-dark-navy/70 text-gray-300 hover:text-white hover:border-cyber-blue transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue';
 
   return (
     <>
@@ -362,23 +355,47 @@ export default function Home() {
 
           <main id="main">
             {/* Hero Section */}
+            {/*
+              One `min-h-screen`, not three. This was nested on the section, on
+              an inner wrapper and again on the text column, so the hero came
+              out at 100vh plus the Container's 160px of padding: 704px inside
+              a 360x640 viewport, which pushed "Launch Your Campaign" below the
+              fold on a small phone. Centring is the section's job and the
+              padding is the Container's; neither needs its own viewport box.
+            */}
             <SectionWrapper id="hero" labelledBy="hero-heading" reveal={false} className="min-h-screen flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-black/20 z-0"></div>
-                <div className="min-h-screen flex items-center justify-center">
-                  <Container className="py-20">
-                <div className="text-center flex flex-col items-center justify-center min-h-screen">
+              {/*
+                Decorative tint, and it has to stay out of hit testing. It is
+                positioned while the hero content beside it is in normal flow,
+                and a positioned element paints over a static sibling whatever
+                its z-index says, so this overlay was swallowing pointer events
+                across the whole hero. The tagline pause control sits in that
+                flow and became unclickable by mouse and touch, which fails
+                WCAG 2.2.2: the mechanism to stop the rotation was present and
+                keyboard-reachable but not operable by pointer. jsdom does no
+                hit testing, so only the browser suite can catch this.
+              */}
+              <div className="absolute inset-0 bg-black/20 z-0 pointer-events-none" aria-hidden="true"></div>
+                  <Container className="py-12 md:py-20">
+                <div className="text-center flex flex-col items-center justify-center">
                   <p className="text-lg md:text-xl text-gray-300 font-medium mb-4">
                     Congratulations! You&apos;ve just stumbled upon...
                   </p>
 
-                  <h1 id="hero-heading" className="text-5xl md:text-6xl lg:text-8xl font-bold mb-6 leading-tight">
+                  <h1 id="hero-heading" className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-6 leading-tight">
                     <span className="gradient-text text-glow">MODULIX</span>{' '}
                     <span className="text-white">SOLUTIONS</span>
                   </h1>
 
-                  <div className="h-16 md:h-20 flex items-center justify-center gap-4 mb-6">
+                  {/*
+                    min-h, not h: at 360px the longest taglines already fill
+                    this row exactly, so a fixed height had no slack left and
+                    the first reader to enlarge their text (WCAG 1.4.4 asks for
+                    200%) would have had it spill over the copy below.
+                  */}
+                  <div className="min-h-16 md:min-h-20 flex items-center justify-center gap-4 mb-6">
                     <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white">
-                      {taglines[currentTagline]}
+                      {TAGLINES[currentTagline]}
                     </h2>
                     {!prefersReducedMotion && (
                       <button
@@ -394,8 +411,13 @@ export default function Home() {
                     )}
                   </div>
 
-                  <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed">
-                    Craft authentic, scalable engagements that transform fleeting interactions into enduring brand loyalty empowering gaming studios and brands to own the conversation in the heart of gaming&apos;s digital universe.
+                  {/*
+                    max-w-4xl: the Container runs to 1248px, and at 24px this
+                    paragraph was setting 103 characters to the line, well past
+                    the ~80 that stays comfortable to track.
+                  */}
+                  <p className="text-lg md:text-xl lg:text-2xl text-gray-300 max-w-4xl mb-8 md:mb-12 leading-relaxed">
+                    Build lasting communities and brand loyalty across the user-generated content platforms where your audience creates and plays.
                   </p>
 
                   <Button onClick={scrollToContact} size="lg" className="text-lg px-10 py-5">
@@ -403,20 +425,22 @@ export default function Home() {
                   </Button>
                 </div>
               </Container>
-                </div>
             </SectionWrapper>
 
             {/* About & Value Propositions Section */}
             <SectionWrapper id="about" labelledBy="about-heading" className="py-16 bg-deeper-blue/60 relative">
               <div className="hex-overlay" aria-hidden="true"></div>
               <Container className="relative z-[10]">
-                {/* About Us Section */}
+                {/* About Us Section.
+
+                    max-w-3xl, down from 4xl: at 896px wide the body copy below
+                    was setting 96 characters to the line. */}
                 <div className="mb-20">
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-4xl mx-auto"
+                    className="text-center max-w-3xl mx-auto"
                   >
 
                     <div className="flex flex-col lg:flex-row items-start gap-8">
@@ -426,38 +450,38 @@ export default function Home() {
                           About Modulix
                         </h2>
 
-                        <motion.p
+                        <m.p
                           initial={{ opacity: 0, x: -20 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.8, delay: 0.3 }}
                           viewport={{ once: true }}
                           className="text-xl text-gray-300 mb-6 leading-relaxed"
                         >
-                          At Modulix, we&apos;re the pioneers revolutionizing how major corporations connect with vibrant gaming communities. For over a decade, we&apos;ve partnered with Fortune 500 giants, AAA game studios launching blockbuster titles, and innovative indie developers cultivating dedicated followings. From global brands entering the metaverse to underground creators just starting out, our expertise in Discord integrations, UEFN (Unreal Engine Fortnite Network), and UGC (User-Generated Content) games sets the standard—making outdated advertising methods feel archaic.
-                        </motion.p>
+                          At Modulix, we&apos;re the pioneers revolutionizing how major corporations connect with vibrant player communities. For over a decade, we&apos;ve partnered with Fortune 500 giants, AAA game studios launching blockbuster titles, and innovative indie developers cultivating dedicated followings. From global brands entering the metaverse to underground creators just starting out, our expertise covers the whole user-generated content space: the communities around the games, the creator economies inside them, and the platforms themselves ({PLATFORM_EXAMPLES.games}, and whatever launches next). That breadth is what makes outdated advertising methods feel archaic.
+                        </m.p>
 
-                        <motion.p
+                        <m.p
                           initial={{ opacity: 0, x: -20 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.8, delay: 0.5 }}
                           viewport={{ once: true }}
                           className="text-lg text-gray-300 mb-6 leading-relaxed"
                         >
-                          As confident, forward-thinking developers, we take community building to the next level. While competitors tinker with basic bots, we&apos;ve engineered comprehensive ecosystems that integrate seamlessly and feel inherently organic. Our modular framework allows us to scale from targeted server enhancements to full-scale enterprise community management, always delivering that precise mix of technical innovation and genuine human connection that drives real engagement and loyalty.
-                        </motion.p>
+                          As confident, forward-thinking developers, we take community building to the next level. While competitors tinker with basic bots, we&apos;ve engineered comprehensive ecosystems that integrate seamlessly and feel inherently organic. Our modular framework allows us to scale from a single targeted enhancement to full-scale enterprise community management, and to move with the space as new platforms arrive, always delivering that precise mix of technical innovation and genuine human connection that drives real engagement and loyalty.
+                        </m.p>
 
-                        <motion.p
+                        <m.p
                           initial={{ opacity: 0, x: -20 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.8, delay: 0.7 }}
                           viewport={{ once: true }}
                           className="text-lg text-gray-300 leading-relaxed"
                         >
-                          Whether you&apos;re a corporation aiming to market products through immersive Discord experiences or leverage UEFN/UGC for viral community growth, Modulix delivers results that not only meet but exceed expectations. Join the ranks of industry leaders who&apos;ve trusted us to turn communities into powerful marketing assets.
-                        </motion.p>
+                          Whether you&apos;re a corporation aiming to market products through immersive community experiences or leaning on user-generated content for viral growth, Modulix delivers results that not only meet but exceed expectations. Join the ranks of industry leaders who&apos;ve trusted us to turn communities into powerful marketing assets.
+                        </m.p>
                       </div>
                     </div>
-                  </motion.div>
+                  </m.div>
                 </div>
 
 
@@ -470,7 +494,7 @@ export default function Home() {
               <div className="pt-20 pb-20 relative">
                 <div className="absolute inset-0 bg-gradient-to-b from-cyber-blue/20 via-neon-purple/10 to-transparent"></div>
               <Container className="relative z-10">
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -478,14 +502,14 @@ export default function Home() {
                       className="text-center max-w-6xl mx-auto"
                 >
                       {/* Eye-catching icon with animation */}
-                  <motion.div
+                  <m.div
                     initial={{ scale: 0, rotate: -180 }}
                     whileInView={{ scale: 1, rotate: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 100 }}
                         className="mb-10 relative"
                       >
-                        <motion.div
+                        <m.div
                           className="w-32 h-32 mx-auto bg-gradient-to-br from-cyber-blue to-neon-purple rounded-full flex items-center justify-center shadow-2xl relative p-4"
                           animate={{
                             boxShadow: [
@@ -504,7 +528,7 @@ export default function Home() {
                             <path d="M368.1918,213.2234c0,0 0.3642,96.7817 0.3733,97.59c-0.0277,5.9999 -0.751,10.4051 -4.8459,15.0975c-4.8647,4.016 -88.5273,52.3125 -88.5273,52.3125c0,0 0,-71.94 0,-109c0.0473,-0.2123 -0.0287,-4.2123 4.4982,-7.2123c3,-2.5676 88.5018,-48.7877 88.5018,-48.7877zM320.1918,314.2234M335.1918,304.2234c0,-13.86 0,-42 0,-42c0,0 -12.5018,4.7877 -28.9389,13.8507c-4.9717,3.937 -5.4328,5.7724 -5.546,12.7897c-0.0806,4.9994 0.4849,35.3596 0.4849,35.3596c0,0 33.1999,-19.2123 34,-20z"/>
                             <path d="M0.1918,213.2234c0,0 76.8875,44.1738 82,47c9.4982,6.0904 10.2128,6.7877 11.0646,12.479c0.66,0 -0.0646,105.521 -0.0646,105.521c0,0 -67.8491,-39.074 -72.8125,-41.9375c-18.6893,-10.7905 -20.1145,-16.7673 -20.361,-27.2748c-0.0886,-1.4468 0.1735,-95.7877 0.1735,-95.7877zM33.1918,262.2234v42l34,20c0,0 1.0094,-35.3274 1.1153,-37.6574c0.5097,-3.5338 -1.9078,-7.0407 -6.5203,-9.944c-6.5068,-3.6126 -28.595,-14.3986 -28.595,-14.3986z"/>
                       </svg>
-                          <motion.div
+                          <m.div
                             className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-neon-purple to-pink-500 rounded-full flex items-center justify-center border-4 border-dark-navy"
                             animate={{ rotate: [0, 10, -10, 0] }}
                             transition={{ duration: 2, repeat: Infinity }}
@@ -512,40 +536,40 @@ export default function Home() {
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                               <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0789.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0789-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0067.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0408.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9758 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
                             </svg>
-                          </motion.div>
-                  </motion.div>
+                          </m.div>
+                  </m.div>
 
                         {/* Decorative rings */}
-                        <motion.div
+                        <m.div
                           className="absolute inset-0 w-32 h-32 mx-auto border-2 border-cyber-blue/30 rounded-full"
                           animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
                           transition={{ duration: 2, repeat: Infinity }}
                         />
-                        <motion.div
+                        <m.div
                           className="absolute inset-0 w-32 h-32 mx-auto border-2 border-neon-purple/30 rounded-full"
                           animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
                           transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
                         />
-                      </motion.div>
+                      </m.div>
 
                       {/* Main headline with better gradient */}
-                  <motion.h2
+                  <m.h2
                     id="modulix-bot-heading"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                        className="text-5xl md:text-7xl font-bold mb-6 text-white"
+                        className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white"
                   >
                         Introducing the <span className="text-cyber-blue">Modulix Bot</span>
-                  </motion.h2>
+                  </m.h2>
 
                       {/* Two Column Layout */}
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         {/* Left Column - Heading and Description */}
                         <div>
                   {/* Subheadline */}
-                  <motion.h3
+                  <m.h3
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -553,10 +577,10 @@ export default function Home() {
                             className="text-2xl md:text-3xl font-semibold mb-6 text-white text-left"
                   >
                             The Future is Nearly Here
-                  </motion.h3>
+                  </m.h3>
 
                           {/* Description */}
-                          <motion.div
+                          <m.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -571,14 +595,36 @@ export default function Home() {
                               <br /><br />
                               Prepare to <span className="text-cyber-blue font-semibold">redefine engagement</span>. Modulix is on the way.
                             </p>
-                          </motion.div>
+                          </m.div>
                         </div>
 
                         {/* Right Column - Cards */}
                         <div className="flex flex-col items-center justify-center gap-4">
-                          {/* Rotating Feature Tile */}
+                          {/*
+                            Rotating Feature Tile
+
+                            A grid whose slides all sit in cell 1/1, rather
+                            than a fixed-height box with absolutely positioned
+                            slides. The slides used to be taken out of flow so
+                            they could cross-fade on top of each other, which
+                            left the track contributing no height of its own
+                            and needing to be told one: a flat 380px. Ten cards
+                            of varying copy do not share a height, and at 360px
+                            the tallest ("Engaging Leveling System") rendered
+                            486px and overlapped the stepper row below it by
+                            36px.
+
+                            Stacking them in one grid cell keeps the crossfade,
+                            since they still overlap, but the row now sizes to
+                            the tallest slide at whatever the current width and
+                            font size work out to. That is a height no longer
+                            possible to get wrong, and it cannot drift when the
+                            copy is edited. It also holds steady while the
+                            rotation runs, because every slide is measured, not
+                            just the visible one.
+                          */}
                           <div
-                            className="relative h-[380px] flex items-center justify-center w-full max-w-lg"
+                            className="relative grid w-full max-w-lg"
                             role="group"
                             aria-roledescription="carousel"
                             aria-label="Modulix Bot features"
@@ -590,7 +636,7 @@ export default function Home() {
                               const isPrevious = currentBotFeature === (index + 1) % botFeatures.length;
 
                               return (
-                  <motion.div
+                  <m.div
                                   key={feature.title}
                                   role="group"
                                   aria-roledescription="slide"
@@ -601,7 +647,6 @@ export default function Home() {
                                     opacity: isVisible ? 1 : 0,
                                     x: isVisible ? 0 : isPrevious ? -100 : 100,
                                     scale: isVisible ? 1 : 0.95,
-                                    position: 'absolute' as const,
                                     pointerEvents: isVisible ? 'auto' as const : 'none' as const
                                   }}
                                   transition={{
@@ -609,17 +654,21 @@ export default function Home() {
                                     ease: "easeInOut",
                                     delay: isVisible ? 0.3 : 0
                                   }}
+                                  // Every slide shares one grid cell, so they
+                                  // stack for the crossfade while still being
+                                  // measured for the row's height.
+                                  style={{ gridArea: '1 / 1' }}
                                   className="w-full"
                                 >
                                   <Card
-                                    className={`text-center p-10 h-full transition-all duration-300 ${
+                                    className={`text-center p-5 sm:p-8 lg:p-10 h-full transition-all duration-300 ${
                                       feature.color === 'purple' ? 'hover:shadow-neon-purple-glow' : 'hover:shadow-neon-blue-glow'
                                     }`}
                                     glowColor={feature.color as 'blue' | 'purple'}
                                   >
-                                    <div className="flex justify-center mb-6">
+                                    <div className="flex justify-center mb-4 lg:mb-6">
                                       <div
-                                        className={`w-24 h-24 rounded-full flex items-center justify-center ${
+                                        className={`w-16 h-16 lg:w-24 lg:h-24 rounded-full flex items-center justify-center ${
                                           feature.color === 'purple'
                                             ? 'bg-gradient-to-br from-neon-purple to-cyber-blue'
                                             : 'bg-gradient-to-br from-cyber-blue to-neon-purple'
@@ -628,35 +677,35 @@ export default function Home() {
                                         {feature.icon}
                     </div>
                     </div>
-                                    <h4 className="text-2xl font-bold mb-4" style={{ color: feature.color === 'blue' ? '#00D4FF' : '#C084FC' }}>
+                                    <h4 className="text-xl lg:text-2xl font-bold mb-3 lg:mb-4" style={{ color: feature.color === 'blue' ? '#00D4FF' : '#C084FC' }}>
                                       {feature.title}
                                     </h4>
                                     <div
-                                      className="w-full h-1 mb-6 rounded-full"
+                                      className="w-full h-1 mb-4 lg:mb-6 rounded-full"
                                       style={{
                                         background: feature.color === 'blue'
                                           ? 'linear-gradient(90deg, #00D4FF, #C084FC)'
                                           : 'linear-gradient(90deg, #C084FC, #00D4FF)'
                                       }}
                                     />
-                                    <ul className="text-left space-y-4 max-w-xl mx-auto">
+                                    <ul className="text-left space-y-2 lg:space-y-4 max-w-xl mx-auto">
                                       {feature.bullets.map((bullet, bulletIndex) => (
                                         <li key={bulletIndex} className="flex items-start">
                                           <span
                                             aria-hidden="true"
-                                            className="text-2xl mr-3 flex-shrink-0 mt-[-2px]"
+                                            className="text-xl lg:text-2xl mr-2 lg:mr-3 flex-shrink-0 mt-[-2px]"
                                             style={{ color: feature.color === 'blue' ? '#00D4FF' : '#C084FC' }}
                                           >
                                             •
                                           </span>
-                                          <span className="text-gray-300 leading-relaxed text-lg">
+                                          <span className="text-gray-300 leading-relaxed text-base lg:text-lg">
                                             {bullet}
                                           </span>
                                         </li>
                                       ))}
                                     </ul>
                                   </Card>
-                  </motion.div>
+                  </m.div>
                               );
                             })}
                           </div>
@@ -668,10 +717,12 @@ export default function Home() {
                             reachable. Pause/Play only appears when there is
                             motion to pause.
 
-                            relative z-10: the slides are absolutely positioned,
-                            and a card taller than the 380px track spills over
-                            this row on narrow viewports, where it would
-                            otherwise swallow taps on these controls.
+                            relative z-10 is kept as a backstop. It was load
+                            bearing when the slides were absolutely positioned
+                            and a tall card could spill over this row and
+                            swallow its taps; the track now sizes to its
+                            tallest slide, so nothing overlaps, but a stacking
+                            order that puts the controls on top costs nothing.
                           */}
                           <div className="relative z-10 flex items-center gap-3">
                             <button
@@ -715,19 +766,28 @@ export default function Home() {
                       </div>
 
                       {/* Call to action badge - Centered below columns */}
-                  <motion.div
+                  <m.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 1 }}
                         className="flex justify-center mt-12"
                       >
-                        <div className="px-8 py-4 bg-gradient-to-r from-cyber-blue/30 to-neon-purple/30 border-2 border-cyber-blue rounded-full backdrop-blur-sm">
-                          <div className="flex items-center gap-3">
+                        {/*
+                          A pill with three pieces of text in a nowrap row does
+                          not survive 360px: "Coming Soon" broke across two
+                          lines mid-phrase and the dot separator was left
+                          stranded. Below `sm` the row is allowed to wrap
+                          instead, the separator (decoration either way) drops
+                          out, and the corner radius relaxes so a two-line
+                          badge does not read as a misshapen pill.
+                        */}
+                        <div className="px-5 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-cyber-blue/30 to-neon-purple/30 border-2 border-cyber-blue rounded-3xl sm:rounded-full backdrop-blur-sm">
+                          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
                             {/* Hexagonal Loading Symbol with Tumbling Inner Hexagon */}
                             <div className="relative w-6 h-6">
                               {/* Outer rotating hexagon */}
-                              <motion.svg
+                              <m.svg
                                 aria-hidden="true"
                                 width="24"
                                 height="24"
@@ -744,10 +804,10 @@ export default function Home() {
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
                                 />
-                              </motion.svg>
+                              </m.svg>
 
                               {/* Inner tumbling hexagon - passively moved by outer hexagon's rotation */}
-                              <motion.svg
+                              <m.svg
                                 aria-hidden="true"
                                 width="24"
                                 height="24"
@@ -770,15 +830,15 @@ export default function Home() {
                                   fill="currentColor"
                                   opacity="0.5"
                                 />
-                              </motion.svg>
+                              </m.svg>
                     </div>
-                            <span className="text-white font-bold text-lg">Coming Soon</span>
-                            <span className="text-gray-300">•</span>
+                            <span className="text-white font-bold text-lg whitespace-nowrap">Coming Soon</span>
+                            <span aria-hidden="true" className="hidden sm:inline text-gray-300">•</span>
                             <span className="text-gray-300">Stay tuned for the revolution</span>
                           </div>
                         </div>
-                  </motion.div>
-                </motion.div>
+                  </m.div>
+                </m.div>
               </Container>
                 </div>
             </SectionWrapper>
@@ -788,7 +848,7 @@ export default function Home() {
               <div className="hex-overlay" aria-hidden="true"></div>
               <div className="py-0">
                 <Container className="relative z-[10]">
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -800,12 +860,12 @@ export default function Home() {
                   <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                     From automated advertising to custom community builds, we deliver authentic engagement that drives results.
                   </p>
-                </motion.div>
+                </m.div>
 
                 <div className="space-y-16">
                   {/* Scalable Ad Services */}
                   <SectionContainer className="mb-12">
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -817,7 +877,7 @@ export default function Home() {
                       <p className="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
                         {serviceGroups.ads.description}
                       </p>
-                    </motion.div>
+                    </m.div>
                     <div className="service-brackets">
                       <RowContainer>
                         <Card className="flex-1 hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
@@ -839,7 +899,7 @@ export default function Home() {
                             </h4>
                           </div>
                           <p className="text-gray-300 leading-relaxed">
-                            Tap into curated Discord networks for targeted, incentive-aligned visibility; we handle placements, ensuring genuine interactions while sharing success with community owners.
+                            Tap into curated community networks ({PLATFORM_EXAMPLES.social}) for targeted, incentive-aligned visibility; we handle placements, ensuring genuine interactions while sharing success with community owners.
                           </p>
                         </Card>
                       </RowContainer>
@@ -848,7 +908,7 @@ export default function Home() {
 
                   {/* Managed Campaigns */}
                   <SectionContainer className="mb-12 border-neon-purple/30">
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -860,7 +920,7 @@ export default function Home() {
                       <p className="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
                         {serviceGroups.campaigns.description}
                       </p>
-                    </motion.div>
+                    </m.div>
                     <div className="service-brackets service-brackets-purple space-y-8">
                       <RowContainer>
                         <Card className="flex-1 hover:shadow-neon-purple-glow transition-all duration-300" glowColor="purple">
@@ -939,7 +999,7 @@ export default function Home() {
 
                   {/* Premium Builds */}
                   <SectionContainer className="mb-12">
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -951,7 +1011,7 @@ export default function Home() {
                       <p className="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
                         {serviceGroups.builds.description}
                       </p>
-                    </motion.div>
+                    </m.div>
                     <div className="service-brackets">
                       <RowContainer>
                         <Card className="flex-1 hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
@@ -962,7 +1022,7 @@ export default function Home() {
                             </h4>
                           </div>
                           <p className="text-gray-300 leading-relaxed">
-                            Design and launch branded servers as loyalty engines—modular channels, bots, and launch events; opt for full management or trained handover.
+                            Design and launch branded communities as loyalty engines: modular channels, bots, and launch events; opt for full management or trained handover.
                           </p>
                         </Card>
                         <Card className="flex-1 hover:shadow-neon-blue-glow transition-all duration-300" glowColor="blue">
@@ -973,32 +1033,32 @@ export default function Home() {
                             </h4>
                           </div>
                           <p className="text-gray-300 leading-relaxed">
-                            24/7 engagement fueling with events and content; specialize in UEFN tie-ins, weaving brands into interactive game worlds for immersive retention.
+                            24/7 engagement fueling with events and content; specialize in in-game tie-ins ({PLATFORM_EXAMPLES.games}), weaving brands into interactive game worlds for immersive retention.
                           </p>
                         </Card>
                       </RowContainer>
                     </div>
                   </SectionContainer>
 
-                  {/* Why Discord Drives Superior ROI */}
+                  {/* Why Owned Communities Drive Superior ROI */}
                   <SectionContainer className="mb-16">
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       className="text-center"
                     >
                       <h3 className="text-2xl font-bold mb-4 text-cyber-blue">
-                        Why Discord Drives Superior ROI
+                        Why Owned Communities Drive Superior ROI
                       </h3>
                       <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-                        Beyond fleeting impressions to owned universes—where your brand lives indefinitely, builds lasting relationships, and delivers measurable results that traditional platforms can&apos;t match
+                        Beyond fleeting impressions to owned universes, where your brand lives indefinitely, builds lasting relationships, and delivers measurable results that rented ad inventory can&apos;t match
                       </p>
                       <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-8"></div>
-                    </motion.div>
+                    </m.div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -1016,12 +1076,12 @@ export default function Home() {
                         </h3>
                         <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
                         <p className="text-gray-300 leading-relaxed text-sm">
-                          Ditch ephemeral views—build Discord hubs where your brand lives indefinitely, owning data, rules, and relationships for sustained growth.
+                          Ditch ephemeral views: build hubs where your brand lives indefinitely, owning data, rules, and relationships for sustained growth.
                         </p>
                       </Card>
-                    </motion.div>
+                    </m.div>
 
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -1042,9 +1102,9 @@ export default function Home() {
                           Engage in real-time dialogues that spark word-of-mouth magic; members linger for months, turning one ad into endless impressions.
                         </p>
                       </Card>
-                    </motion.div>
+                    </m.div>
 
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -1062,12 +1122,12 @@ export default function Home() {
                         </h3>
                         <div className="w-full h-0.5 bg-gradient-to-r from-cyber-blue to-neon-purple mb-4"></div>
                         <p className="text-gray-300 leading-relaxed text-sm">
-                          Where traditional platforms chase seconds of attention, Discord delivers loops of interaction—higher participation, deeper loyalty.
+                          Where ad platforms chase seconds of attention, an owned community delivers loops of interaction: higher participation, deeper loyalty.
                         </p>
                       </Card>
-                    </motion.div>
+                    </m.div>
 
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
@@ -1085,10 +1145,10 @@ export default function Home() {
                         </h3>
                         <div className="w-full h-0.5 bg-gradient-to-r from-neon-purple to-cyber-blue mb-4"></div>
                         <p className="text-gray-300 leading-relaxed text-sm">
-                          Tailored for studios: Integrate UEFN experiences seamlessly, making your brand a playable force in gaming communities.
+                          Tailored for studios: integrate playable experiences ({PLATFORM_EXAMPLES.games}) seamlessly, making your brand a playable force in gaming communities.
                         </p>
                       </Card>
-                    </motion.div>
+                    </m.div>
                     </div>
                   </SectionContainer>
                 </div>
@@ -1108,7 +1168,7 @@ export default function Home() {
                 {/* Removed: Coming Soon banner */}
 
                 {/* Companies Section - Part of Testimonials */}
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -1120,7 +1180,7 @@ export default function Home() {
                   <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                     Industry leaders and innovative startups across gaming, tech, and entertainment trust us for excellence in community engagement
                   </p>
-                </motion.div>
+                </m.div>
 
                 {/* Company Logo Carousel. With no companies the marquee is a
                     360px-tall empty strip animating a zero-width track, so the
@@ -1136,10 +1196,10 @@ export default function Home() {
                 ) : (
                 <div className="relative overflow-hidden py-8" style={{ height: '360px' }}>
                   {/* Fade masks on edges */}
-                  <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0A0B18] to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0A0B18] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute left-0 top-0 bottom-0 w-16 lg:w-32 bg-gradient-to-r from-[#0A0B18] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 bottom-0 w-16 lg:w-32 bg-gradient-to-l from-[#0A0B18] to-transparent z-10 pointer-events-none" />
 
-                  <motion.div
+                  <m.div
                     className="absolute inset-0 flex items-center gap-8 py-4"
                     animate={{ x: [0, -(220 + 32) * companies.length] }} // Move exactly one full set of companies
                     transition={{
@@ -1157,7 +1217,7 @@ export default function Home() {
                       const isClone = index >= companies.length;
                       
                       return (
-                      <motion.div
+                      <m.div
                         key={`${company.id}-${index}`}
                         className="flex-shrink-0"
                         style={{ width: '220px', height: '280px' }}
@@ -1192,10 +1252,10 @@ export default function Home() {
                         </div>
                       </Card>
                         </a>
-                      </motion.div>
+                      </m.div>
                       );
                     })}
-                  </motion.div>
+                  </m.div>
                 </div>
                 )}
               </Container>
@@ -1205,7 +1265,7 @@ export default function Home() {
             <SectionWrapper id="contact" labelledBy="contact-heading" className="py-20 relative">
               <div className="hex-overlay" aria-hidden="true"></div>
               <Container className="relative z-[10]">
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -1217,12 +1277,12 @@ export default function Home() {
                   <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                     Let&apos;s build something extraordinary together
                   </p>
-                </motion.div>
+                </m.div>
 
                 {/* 2-Panel Layout */}
                 <div className="grid md:grid-cols-2 gap-12 items-start">
                   {/* Left Panel - Invitation Copy */}
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -1234,7 +1294,7 @@ export default function Home() {
                         Brands Ready to Dominate
                       </h3>
                       <p className="text-gray-300 mb-6">
-                        Whether you&apos;re launching in Fortnite, building massive Discord communities, or creating the next viral gaming experience, we specialize in turning bold ideas into reality.
+                        Whether you&apos;re launching a playable experience, building a community that outlasts the campaign, or creating the next viral moment, we specialize in turning bold ideas into reality.
                       </p>
                     </div>
 
@@ -1245,7 +1305,7 @@ export default function Home() {
                       <ul className="space-y-2 text-gray-300">
                         <li className="flex items-center">
                           <span className="w-2 h-2 bg-cyber-blue rounded-full mr-3 flex-shrink-0"></span>
-                          Fortnite brands looking to launch epic events
+                          Brands launching in-game events ({PLATFORM_EXAMPLES.games})
                         </li>
                         <li className="flex items-center">
                           <span className="w-2 h-2 bg-cyber-blue rounded-full mr-3 flex-shrink-0"></span>
@@ -1253,7 +1313,7 @@ export default function Home() {
                         </li>
                         <li className="flex items-center">
                           <span className="w-2 h-2 bg-cyber-blue rounded-full mr-3 flex-shrink-0"></span>
-                          Startups ready to disrupt the gaming space
+                          Creators and startups ready to disrupt the UGC space
                         </li>
                         <li className="flex items-center">
                           <span className="w-2 h-2 bg-cyber-blue rounded-full mr-3 flex-shrink-0"></span>
@@ -1274,7 +1334,7 @@ export default function Home() {
                           href="https://discord.gg/modulix"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
                         >
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                             <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0789.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0789-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0067.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0408.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9758 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
@@ -1285,7 +1345,7 @@ export default function Home() {
                           href="https://x.com/ModulixSolution"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
                         >
                           <svg width="16" height="16" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" aria-hidden="true">
                             <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" fill="currentColor"/>
@@ -1296,7 +1356,7 @@ export default function Home() {
                           href="https://www.linkedin.com/company/modulixsolution"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
+                          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
                         >
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -1305,17 +1365,17 @@ export default function Home() {
                         </a>
                       </div>
                     </div>
-                  </motion.div>
+                  </m.div>
 
                   {/* Right Panel - Contact Form */}
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, x: 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.4 }}
                   >
                     <ContactForm />
-                  </motion.div>
+                  </m.div>
                 </div>
               </Container>
             </SectionWrapper>
@@ -1324,7 +1384,7 @@ export default function Home() {
             <SectionWrapper id="faq" labelledBy="faq-heading" className="py-20 bg-deeper-blue/60 relative">
               <div className="hex-overlay" aria-hidden="true"></div>
               <Container className="relative z-[10]">
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -1334,9 +1394,9 @@ export default function Home() {
                     Frequently Asked Questions
                   </h2>
                   <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Everything you need to know about transforming your Discord community
+                    Everything you need to know about growing your community wherever your audience already is
                   </p>
-                </motion.div>
+                </m.div>
 
                 <div className="max-w-3xl mx-auto space-y-4">
                   {faqs.length === 0 && (
@@ -1364,7 +1424,7 @@ export default function Home() {
                           <button
                             type="button"
                             id={`faq-question-${index}`}
-                            className="flex w-full items-center justify-between gap-4 text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
+                            className="flex min-h-11 w-full items-center justify-between gap-4 py-1 text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
                             aria-expanded={isOpen}
                             aria-controls={`faq-answer-${index}`}
                             onClick={() => {
@@ -1383,7 +1443,7 @@ export default function Home() {
                           >
                             {faq.question}
                           </span>
-                          <motion.span
+                          <m.span
                             aria-hidden="true"
                             animate={{ rotate: isOpen ? 180 : 0 }}
                             className="transition-colors duration-300"
@@ -1394,10 +1454,10 @@ export default function Home() {
                             }}
                           >
                             ▼
-                          </motion.span>
+                          </m.span>
                           </button>
                         </h3>
-                        <motion.div
+                        <m.div
                           id={`faq-answer-${index}`}
                           role="region"
                           aria-labelledby={`faq-question-${index}`}
@@ -1421,7 +1481,7 @@ export default function Home() {
                           <div className="mt-4 text-gray-300 leading-relaxed">
                             {faq.answer}
                           </div>
-                        </motion.div>
+                        </m.div>
                       </Card>
                     );
                   })}

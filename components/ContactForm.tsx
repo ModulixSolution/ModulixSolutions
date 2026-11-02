@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Check } from 'lucide-react';
 import Button from './Button';
 import Spinner from './states/Spinner';
 import StateMessage from './states/StateMessage';
+import { sitePath } from '../lib/site-path';
 
 type FormStatus =
   | { kind: 'idle' }
@@ -73,7 +74,7 @@ export default function ContactForm() {
     form.reset();
     setFieldValidity({ name: false, email: false, discord: false, message: false });
     setTimeout(() => {
-      window.location.href = '/contact-confirmed';
+      window.location.href = sitePath('/contact-confirmed/');
     }, REDIRECT_DELAY_MS);
   };
 
@@ -122,26 +123,23 @@ export default function ContactForm() {
       try {
         const data = await response.json();
 
-        if (data.success) {
+        if (data.success === true) {
           confirmSubmission(form);
         } else {
           showError(data.message || 'Failed to send message. Please try again.');
         }
       } catch {
-        // A 2xx with an unreadable body still means the submission landed.
-        confirmSubmission(form);
+        showError("We couldn't confirm delivery. Your message is still here; please try again or contact us directly.");
       }
-    } catch (error) {
-      // Web3Forms can reject the fetch on CORS while still delivering the mail,
-      // so this path stays optimistic on purpose: treating it as a failure
-      // would tell people their inquiry was lost when it was not.
-      console.warn('Contact form network error, assuming delivery:', error);
-      confirmSubmission(form);
+    } catch {
+      // A network or CORS error cannot establish delivery. Preserve the input
+      // and report uncertainty instead of erasing it and promising success.
+      showError("We couldn't confirm delivery. Your message is still here; please try again or contact us directly.");
     }
   };
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -165,11 +163,15 @@ export default function ContactForm() {
               Name <span aria-hidden="true">*</span>
             </label>
             <div className="relative">
+              {/* autoComplete is what lets a browser or assistive tool fill
+                  this from the visitor's own stored details, and the token has
+                  to come from the fixed list in WCAG 2.2 1.3.5. */}
               <input
                 type="text"
                 name="name"
                 id="name"
                 required
+                autoComplete="name"
                 aria-describedby="name-hint"
                 className="form-input w-full pr-10"
                 placeholder="Your name"
@@ -199,6 +201,8 @@ export default function ContactForm() {
                 type="text"
                 name="discord"
                 id="discord"
+                autoComplete="nickname"
+                aria-describedby="discord-hint"
                 className="form-input w-full pr-10"
                 placeholder="@username"
                 disabled={isSubmitting}
@@ -210,6 +214,14 @@ export default function ContactForm() {
                 </div>
               )}
             </div>
+            {/* Optional, but not unconstrained: a value this field rejects
+                blocks submission, and the message that comes back talks about
+                required fields, which is no help on a field labelled optional.
+                Stating the limit up front is the part that can be read before
+                tripping over it. */}
+            <p id="discord-hint" className="mt-2 text-sm text-gray-400">
+              Optional. Two to thirty-two characters if you provide one.
+            </p>
           </div>
         </div>
 
@@ -223,6 +235,7 @@ export default function ContactForm() {
               name="email"
               id="email"
               required
+              autoComplete="email"
               aria-describedby="email-hint"
               className="form-input w-full pr-10"
               placeholder="your.email@example.com"
@@ -293,7 +306,7 @@ export default function ContactForm() {
       )}
 
       </form>
-    </motion.div>
+    </m.div>
   );
 }
 

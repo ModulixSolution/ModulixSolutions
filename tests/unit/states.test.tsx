@@ -105,7 +105,7 @@ describe('ErrorBoundary', () => {
 
 describe('CompanyLogo', () => {
   test('a logo that fails to load degrades to exactly one monogram', () => {
-    const props = { displayName: 'CHARTIS', logoUrl: '/companies/chartis-logo.png' };
+    const props = { displayName: 'CHARTIS', logoUrl: '/companies/chartis-logo.webp' };
     const { container, rerender } = render(<CompanyLogo {...props} />);
 
     const img = container.querySelector('img');
@@ -230,10 +230,7 @@ describe('contact form status', () => {
     consoleError.mockRestore();
   });
 
-  // Both branches below deliberately report success without proof of delivery,
-  // because the provider can reject the fetch on CORS while still sending the
-  // mail. They are pinned so the behaviour cannot change by accident.
-  test('an unreadable body on a 2xx is still treated as delivered', async () => {
+  test('an unreadable body preserves the inquiry without claiming delivery', async () => {
     (fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => {
@@ -244,20 +241,20 @@ describe('contact form status', () => {
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: 'Send Message' }));
 
-    expect(await screen.findByText('Message sent successfully! Redirecting...')).toBeInTheDocument();
-    expect(screen.queryByRole('alert')).toBeNull();
+    expect(await screen.findByRole('alert')).toHaveTextContent("We couldn't confirm delivery");
+    expect(screen.getByLabelText('Name *')).toHaveValue('Test User');
+    expect(screen.queryByText('Message sent successfully! Redirecting...')).toBeNull();
   });
 
-  test('a rejected fetch is still treated as delivered', async () => {
+  test('a rejected fetch preserves the inquiry without claiming delivery', async () => {
     (fetch as jest.Mock).mockRejectedValue(new TypeError('Failed to fetch'));
-    const consoleWarn = jest.spyOn(console, 'warn').mockImplementation(() => {});
     render(<ContactForm />);
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: 'Send Message' }));
 
-    expect(await screen.findByText('Message sent successfully! Redirecting...')).toBeInTheDocument();
-    expect(screen.queryByRole('alert')).toBeNull();
-    consoleWarn.mockRestore();
+    expect(await screen.findByRole('alert')).toHaveTextContent("We couldn't confirm delivery");
+    expect(screen.getByLabelText('Name *')).toHaveValue('Test User');
+    expect(screen.queryByText('Message sent successfully! Redirecting...')).toBeNull();
   });
 
   test('a repeated identical failure gets its full five seconds', async () => {
