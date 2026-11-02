@@ -1,0 +1,332 @@
+# Tests
+
+Use Node 22 and `npm ci`.
+
+- `npm test`: isolated Jest/Testing Library component tests.
+- `npm run test:coverage`: the same suite, plus a coverage report and the
+  thresholds in `jest.config.js`. This is what CI runs.
+- `npm run type-check`: TypeScript validation.
+- `npx playwright install chromium`: install the smoke-test browser.
+- `npm run test:smoke`: build the static export and test it on localhost port
+  3100. This runs three projects: `desktop`, `mobile` and `responsive`. Add
+  `-- --project=responsive` to run only the viewport suite.
+
+Coverage is collected per file across `components`, `hooks` and `pages`, so a
+component nobody imports reports the 0% it is rather than disappearing into an
+average. `pages/_document.tsx` is excluded because it renders no DOM outside a
+Next build; `next build` in the smoke suite is what exercises it. The thresholds
+are a ratchet set just below the current numbers, to catch a drop rather than to
+be nudged up a point at a time.
+
+Unit tests also cover landmarks, named controls, image dimensions, FAQ buttons,
+and the absence of render-blocking font CSS. Smoke tests cover desktop and mobile Chromium viewports, homepage sections,
+contact submission with a synthetic response, confirmation, and the exported
+status pages (404, 500, confirmation): their headings, their `noindex` robots
+tag, and the links back into the site. They also cover the end-to-end journeys
+across those pieces: every primary nav target, fragment entry, the links out of
+a dead end, and the inquiry's failure, retry and double-submit paths. They assert
+the built HTML carries the route manifest's title and description and exactly
+one homepage JSON-LD block with the expected nodes. External requests are blocked
+and inquiries use synthetic responses. Tracing is disabled to avoid retaining form
+request data. The local static server does not emulate hosting-specific
+missing-route fallback, so 404 is requested at `/404.html` directly; that is
+also the only status page GitHub Pages serves for a missing route. These tests
+do not establish delivery by the form provider or device acceptance.
+
+`tests/unit/seo.test.tsx` covers the metadata layer in `lib/seo`: canonical URLs
+keeping their exported trailing slash, `og:url` matching the canonical, titles
+and descriptions matching their Open Graph and Twitter copies, card image size
+and alt text, the default indexable robots value against a utility page's
+`noindex`, and no tag being emitted twice. It also checks `public/sitemap.xml`
+is byte-identical to what the route manifest generates, that noindex routes stay
+out of it, that every listed route has a page behind it, and that `og-image.jpg`
+really is 1200x630. `next/head` renders nothing under jsdom, which is why the
+tag set is built by a pure function and asserted there rather than in the DOM.
+
+`tests/unit/security-headers.test.tsx` covers the policy in
+`lib/security-headers.ts`: `public/_headers` byte-compared against
+`buildHeadersFile()` the same way the sitemap is compared against its route
+manifest, the required headers being present, HSTS being long enough to
+preload, every permissions-policy feature being denied to everyone, and the
+CSP's own shape. The shape assertions are the ones with teeth: `default-src`
+falling back closed, the directives that do not inherit from it (`base-uri`,
+`form-action`, `frame-ancestors`, `object-src`) being pinned shut, no `eval`
+and no inline script, no wildcard or `http:` source, and the meta copy
+dropping only `frame-ancestors`, which markup cannot express. Two guards exist
+to catch drift rather than a bad value: `connect-src` is checked against the
+endpoint `components/ContactForm.tsx` actually fetches, because a policy of
+`'self'` alone blocks the inquiry and that is the state this work replaced, and
+every external origin in the policy must be that same endpoint, so an
+allowance outliving its caller fails. `pages/_document.tsx` is checked by
+source, not by render, because `next/head` renders nothing under jsdom.
+
+`tests/smoke/security-headers.spec.ts` is what proves the policy is survivable
+rather than merely configured. It loads the export in Chromium with the meta
+policy enforced, collecting `securitypolicyviolation` events from an init
+script so a violation raised during the initial parse is still caught, and
+asserts none occur on the homepage or any status page. The homepage case
+asserts the things a too-strict directive would break: a FAQ disclosure
+opening, which cannot happen unless the bundles executed and hydrated, so a
+blocked script fails here instead of passing against prerendered HTML; the
+stylesheet being applied rather than only fetched; `document.fonts` reporting a
+loaded face, since `next/font` self-hosts Inter and Lato; and both image source
+kinds decoding. The images are requested from script rather than asserted
+against the carousel's own `img` elements, which are `loading="lazy"` and
+render at 0x0 on the mobile project, where their `naturalWidth` stays 0 whatever
+the policy says. A synthetic inquiry covers `connect-src`, since a CSP block
+aborts the fetch before Playwright's route handler is reached. The last case is
+the inverse: an injected inline script must not run and must be reported, so a
+policy accidentally relaxed to `'unsafe-inline'` cannot pass the rest of the
+file. Both that case and the unit suite were confirmed to fail against a
+deliberately relaxed `script-src`.
+
+`tests/smoke/journeys.spec.ts` covers the ways a visitor reaches a section:
+every in-page item in the primary nav rather than one of them, a `Home` click
+from a scrolled page, a shared link that already carries the fragment, the two
+links off the 404, and the footer logo back to the homepage from a status page.
+The nav cases assert that the section comes to rest clear of the fixed bar,
+polling because the hand-written animation advances on `requestAnimationFrame`
+and a headless browser throttles it hard. The helper allows the same 24px that
+`keyboard.spec.ts` does, for the vertical transform a revealed section keeps,
+and has one escape hatch: the last section on the page cannot be pulled up to
+the bar because the document runs out of scroll first, so being at maximum
+scroll with the section on screen also counts as arrived. That hatch was
+checked against a deliberately zeroed header offset, which fails all five
+sections including `#faq` with the measured clearance in the message, so it is
+not quietly rescuing a real regression. `#modulix-bot` is the reason the nav
+cases are a loop: its id is the only one that does not match its label. The
+fragment cases assert only that the right section is in view, because the
+browser's native jump aligns it with the top of the viewport and leaves the bar
+overlapping its heading; that is current behaviour and is noted rather than
+asserted as clearance. `#hero` is excluded from the clearance invariant
+entirely, being full-bleed under the translucent bar by design.
+
+`tests/smoke/contact-flow.spec.ts` covers the inquiry past the happy path that
+`pages.spec.ts` owns. The status machine itself is unit-tested with a stubbed
+fetch and fake timers and is not repeated; what is left for a browser is a
+failure leaving the visitor on the page with every field still filled and a
+retry that then reaches the confirmation, a double-click producing one
+submission rather than two, an unusable optional Discord username stopping the
+inquiry before it is sent, and the whole path on a phone viewport from the
+drawer to the confirmation. The double-click case holds the response open so
+the second click lands while the first request is genuinely in flight, which is
+a race fake timers cannot present; its in-flight assertion is soft so that a
+regression reports both the enabled control and the duplicate request count,
+and removing `isSubmitting` from the button's disabled rule was confirmed to
+POST twice. The Discord case pins that nothing is sent and nothing typed is
+lost; it is the one place the form invites a submission it then refuses, since
+Discord is left out of the rule that disables Send, and the error it refuses
+with talks about required fields when the field is optional. That copy is worth
+tightening separately and the test deliberately does not assert it is right.
+The form's status region is addressed within `#contact` because Next's route
+announcer is also `role="alert"` and a page-wide query matches both.
+
+`tests/smoke/responsive.spec.ts` is the viewport suite, run as its own
+Playwright project because it drives the viewport itself: under the `desktop`
+or `mobile` projects every case would re-run at a width it was not written
+for, and `iPhone 13` would additionally impose `isMobile`. The two device
+projects exclude it in return. It checks 360, 768 and 1280, the three widths
+the layout actually changes at, and every case measures the built export in
+Chromium after walking the page so the `whileInView` reveals have settled.
+Measuring before that reads the pre-reveal geometry, where much of the page is
+still at `opacity: 0` and its own offset transform.
+
+It asserts no page scrolls sideways, no control resolves below 44px, no text
+renders under 12px, the hero fits a 360x640 phone with its call to action above
+the fold, no carousel slide outgrows its track or reaches the stepper row, the
+track does not resize when the slide changes, and no paragraph exceeds 90
+characters to the line at 1280.
+
+The tap-target assertion is the one that needed care. Controls carrying their
+reach in a `.tap-target` overlay paint smaller than they measure, and neither
+`getBoundingClientRect` nor `elementFromPoint` reports that overlay:
+`elementFromPoint` returns an ancestor, because a pseudo-element is not an
+element. Real clicks do land on it, which was confirmed before relying on it.
+So the geometry case reads the overlay's resolved size out of the engine and
+counts it only when it is absolutely positioned against a control that is
+itself positioned, since a 44px box anchored to some ancestor instead covers
+everything but its own control. A separate behavioural case clicks 21px above
+the centre of a 36px stepper, outside the painted box and inside the overlay,
+and fails if the control does not advance. Without it the geometry cases would
+be trusting a mechanism nothing proves still works.
+
+Each assertion was confirmed to fail against the bug it replaces: the fixed
+380px carousel track, the hero's nested `min-h-screen`, the uncapped hero
+paragraph, the `.tap-target` overlay removed outright, and the overlay left
+sized but unanchored.
+
+Because the manifest in `lib/seo/routes.ts` holds every route's title and
+description, the same file checks all of them at once: length (title at most 60,
+description 70 to 158), the brand present in the title, no stray or doubled
+whitespace, sentence-ending punctuation, and no duplicate title or description
+across routes. A new page is covered by all of that the moment it is listed.
+There is deliberately no test that the derived robots directive equals
+`indexable ? 'index, follow' : 'noindex, follow'`: that restates the function
+body and cannot fail. Indexability is held to what ships by the byte-exact
+sitemap diff and by the browser suite reading the robots tag per page.
+
+`tests/unit/structured-data.test.tsx` asserts on the JSON-LD the homepage
+actually ships, imported from the page rather than rebuilt from samples. The
+check that matters is that every single-key `{"@id": ...}` reference resolves to
+a node the graph declares: an unresolved one is valid JSON and valid
+schema.org, and silently drops the relationship. It also pins the set of
+published `@id` values, requires every FAQ question and answer in the graph to
+be present in the rendered DOM (a Google requirement, not just a staleness
+check) and every offer-catalog service to be described on the page, matches the
+logo `ImageObject` against the PNG header on disk, and covers `serializeJsonLd`
+escaping markup so a string containing `</script>` cannot end the element early.
+
+`tests/unit/aeo-files.test.tsx` reads `robots.txt`, `llms.txt` and
+`llms-full.txt`, which nothing else imports and nothing else noticed drifting.
+It holds them to the canonical origin (no `http://`, no `www` host), requires
+them to cite the same X profile and the same `sameAs` profiles as the structured
+data, checks every on-page anchor in `llms.txt` against a section the homepage
+renders and every other link against the route manifest or a real file in
+`public/`, and asserts `robots.txt` disallows nothing (utility pages are gated
+by a robots meta tag, which a crawler has to be allowed to fetch the page to
+read) and declares the sitemap exactly once.
+
+`tests/unit/states.test.tsx` covers the shared state components: which tones
+interrupt with `role="alert"` versus announce politely, the busy flag on the
+loading tone, error-boundary containment and recovery, the company logo
+fallback, and the contact form's status machine. The post-success redirect is
+asserted in the browser suite instead, because jsdom neither implements that
+navigation nor allows `window.location` to be replaced.
+
+`tests/unit/navigation.test.tsx` covers the header's hand-written smooth scroll
+and the drawer's keyboard handling. jsdom performs no layout, so the section
+boxes, the sticky bar's height, the viewport width and the scroll offset are all
+stubbed, and `requestAnimationFrame` is driven with explicit timestamps: the
+eased positions are not assertable if a clock decides how far each frame moved.
+It pins the zero-distance case, where clicking the section the page already
+rests on used to divide by a zero duration and scroll to `NaN`, which browsers
+normalise to the top of the page.
+
+That case is covered in jsdom only, deliberately. A browser run cannot reach it
+from a repeated nav click: the section's reveal leaves a 24px vertical
+transform, which `getBoundingClientRect` reports and the handler therefore
+measures, so the distance never comes out at exactly zero on the second click.
+A smoke test written against that sequence passes with the bug still present and
+would be a guard in name only. The browser suite checks the part it can check
+honestly, that a nav click lands the section clear of the sticky bar, and the
+unit test, whose stubbed geometry models a settled section, is what fails if the
+zero-duration guard is removed.
+
+`tests/unit/particles.test.tsx` drives the canvas field with a recording
+2D-context stub (`tests/setup.ts` returns null for the rest of the suite). It
+covers the per-frame draw, the smaller mobile particle budget, the
+reduced-motion and hidden-tab bail-outs, a `getContext` that returns null or
+throws, and the unmount path, since a leaked loop would keep drawing on a
+detached canvas for the life of the tab.
+
+`tests/unit/app-shell.test.tsx` renders `_app` around a stub page, including one
+that throws, to pin that the skip link's `#main` target survives a render error.
+`ErrorBoundary`'s reload handler is the one line left uncovered: jsdom makes
+`window.location` non-configurable and refuses to let `reload` be intercepted,
+so only the button's wiring is asserted.
+
+`tests/unit/reduced-motion-hook.test.tsx` covers `usePrefersReducedMotion`,
+including the deprecated `addListener` API that Safari below 14 is the only
+browser to expose. `tests/unit/layout.test.tsx` covers the presentational
+components and their variant branches, and `tests/unit/homepage.test.tsx` covers
+the hero call to action, hover-to-pause on the feature carousel, and the FAQ
+disclosures opening independently rather than as an accordion.
+
+## Accessibility
+
+WCAG 2.2 AA is pinned across three files, split by what each one can honestly
+prove rather than by subject matter.
+
+`tests/unit/axe.test.tsx` runs `jest-axe` over the homepage (at rest and with
+every FAQ expanded), the header closed and with the drawer open and modal, the
+simple header, the footer, all three status pages, the inquiry form at rest,
+validated and showing its error, and every tone and variant of the shared state
+message, button and card. The important caveat is what jsdom removes: with no
+layout engine and no canvas, axe silently drops every rule needing a rendered
+box or pixel, and `color-contrast` is the casualty. It is not reported there as
+a pass or a violation, it is never run, so a green unit suite says nothing about
+contrast. Each assertion therefore also requires that some rule applied, since
+"0 violations" is equally what a harness that ran nothing reports, and a final
+case feeds axe deliberately broken markup and asserts the exact three
+violations it must return. Without that, every other assertion in the file would
+still pass if `jest-axe` stopped reporting. The file also pins 1.3.5 Identify
+Input Purpose by asserting the `autocomplete` token on each field that collects
+the visitor's own details, because axe's `autocomplete-valid` rule only checks
+tokens that are present and treats a field with no attribute at all as
+inapplicable.
+
+`tests/unit/contrast.test.tsx` closes half of the contrast gap without a
+browser. Ratios are computed from `tailwind.config.js` and Tailwind's own
+palette, so editing a brand colour, or an upgrade that shifts `gray-400`, fails
+in milliseconds. Translucent surfaces are flattened onto what sits behind them
+first, because the colour text actually sits on inside a `bg-deeper-blue/50`
+card is the blend and not either token. Two assertions exist to stop the file
+drifting into a claim it does not check: the maths is held against the two
+ratios WCAG fixes by definition (21:1 and 1:1), and the token names are
+asserted to still resolve, since a rename would otherwise compare `undefined`
+against `undefined` and quietly stop testing anything. `neon-purple` is pinned
+as a large-text and non-text colour specifically, because at 4.31:1 on
+`deeper-blue` it is the one token that does not clear the 4.5:1 body-text floor
+everywhere, which is a deliberate choice only as long as something records it.
+The focus ring is a single hard-coded cyber-blue site-wide, which is safe only
+because every surface is dark (it is 1.77:1 on white), so the file asserts that
+premise directly: no unsuffixed light background utility may appear in
+`components`, `pages` or `styles`. Opacity-suffixed ones like `bg-white/5`
+composite onto the dark page and are allowed.
+
+`tests/smoke/a11y.spec.ts` is the only place the real `color-contrast` rule
+runs, against the compiled stylesheet in Chromium, and the only place the
+document-scoped rules a detached jsdom container cannot satisfy are checked:
+`html-has-lang`, `document-title`, `region`, `landmark-one-main`,
+`page-has-heading-one` and `skip-link`. It scans every route in the manifest,
+the expanded FAQ, the open mobile drawer, the form's error surface (red-300 on
+`red-950/50`, a pairing that appears nowhere on the page at rest) and the
+homepage under an emulated reduced-motion preference, which is a genuinely
+different tree because the pause controls drop out of it. It also asserts a
+visible outline survives `forced-colors`, where the ring utilities compile to
+`box-shadow` and are dropped wholesale.
+
+Two cases in that file are geometric and have no axe rule behind them, because
+neither is automatable from the DOM alone. The first is 2.4.11 Focus Not
+Obscured, which the fixed desktop header makes a live risk: it walks the tab
+order and hit-tests each stop. Comparing rectangles cannot answer this, as the
+skip link overlaps the header's box but paints above it at `z-index: 10000` and
+is perfectly visible, so only `elementFromPoint` knows what a user can see.
+
+The second is 2.2.2 Pause, Stop, Hide, and it is in the suite because it found a
+real failure. The hero's decorative tint is absolutely positioned while the hero
+content beside it is in normal flow, and a positioned element paints above a
+static sibling whatever its `z-index` says. That overlay covered the whole hero
+and swallowed every pointer event aimed at the tagline pause control, which was
+keyboard-operable but completely unclickable by mouse or touch. The axe scans
+pass with the bug present, and jsdom does no hit testing, so neither the unit
+suite nor the rule set could see it; the assertion that catches it checks that
+the control is the topmost element at its own centre and then clicks it without
+`force`. Both geometric cases were confirmed to fail against the unfixed
+overlay.
+
+`tests/unit/perf-budget.test.tsx` pins the front-end weight decisions that are
+visible in the source: that no file imports framer-motion's eager `motion`
+proxy, that `_app` registers `domAnimation` rather than `domMax` and wraps the
+tree in `LazyMotion`, that Inter carries no weight list while Lato still does,
+that every homepage `<img>` is sized, that the client marks are lazy,
+async-decoding WebP, and that the header wordmark is eager while the footer
+copy is lazy. These are asserted against the source text rather than the built
+output because `npm run perf` needs a build and so cannot gate every commit;
+the report is for reading a before/after, these are for catching a regression.
+Each case was checked by breaking the invariant and confirming the suite goes
+red, which is how the hover assertion originally written here was found to be
+measuring Tailwind's `hover:scale-105` rather than framer-motion, and dropped.
+
+`tests/smoke/motion-features.spec.ts` is the browser half of that, and the only
+test of any kind that can see a broken framer-motion feature set. `m` elements
+without a working provider still render, they just never animate, so the
+homepage goes blank below the hero while every unit test passes: jsdom has no
+layout and the `IntersectionObserver` in `tests/setup.ts` is a stub. It scrolls
+to each section that opens at `opacity: 0` and waits for the reveal, using the
+non-revealing `#hero` as a control so a CSS fault is distinguishable from a
+feature-set fault. One assertion covers all of `domAnimation`, because `inView`
+sits in the same `gestureAnimations` group as `hover`, `focus` and `tap`.
+
+The Tests workflow runs on PRs and main/test branch pushes with read-only repository
+permissions and no deployment steps. Existing deployment configuration is unchanged.

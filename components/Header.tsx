@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { sitePath } from '../lib/site-path';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import Container from './Container';
@@ -8,8 +8,14 @@ interface HeaderProps {
   simple?: boolean;
 }
 
+const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export default function Header({ simple = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const destinationRef = useRef<HTMLElement | null>(null);
+  const drawerRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
 
   const fullNavItems = [
     { name: 'Home', href: '#hero' },
@@ -26,23 +32,124 @@ export default function Header({ simple = false }: HeaderProps) {
 
   const navItems = simple ? simpleNavItems : fullNavItems;
 
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+
+  // The drawer, the overlay and both close affordances are all md:hidden, so a
+  // resize past the breakpoint would otherwise strand the menu open and leave
+  // the scroll lock applied with no way to release it (phone rotated to
+  // landscape, no Escape key).
+  useEffect(() => {
+    if (!isMenuOpen || typeof window.matchMedia !== 'function') return;
+
+    const query = window.matchMedia('(min-width: 768px)');
+    if (query.matches) {
+      setIsMenuOpen(false);
+      return;
+    }
+
+    const onChange = (event: MediaQueryListEvent) => {
+      if (event.matches) setIsMenuOpen(false);
+    };
+
+    if (typeof query.addEventListener === 'function') {
+      query.addEventListener('change', onChange);
+      return () => query.removeEventListener('change', onChange);
+    }
+
+    query.addListener(onChange);
+    return () => query.removeListener(onChange);
+  }, [isMenuOpen]);
+
+  // The drawer covers the page, so keyboard focus has to be moved into it,
+  // held there while it is open, and handed back to the toggle on close.
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const toggle = toggleRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    closeButtonRef.current?.focus();
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const drawer = drawerRef.current;
+      if (!drawer) return;
+
+      const focusable = Array.from(drawer.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && (active === first || !drawer.contains(active))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !drawer.contains(active))) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKey);
+
+    // Isolate every sibling along the drawer's ancestor chain, including the
+    // skip link, page and footer. Preserve any pre-existing inert state.
+    const isolated: Array<[Element, boolean]> = [];
+    let branch: Element | null = drawerRef.current;
+    while (branch?.parentElement) {
+      for (const sibling of Array.from(branch.parentElement.children)) {
+        if (sibling !== branch && !sibling.hasAttribute('data-menu-overlay')) {
+          isolated.push([sibling, sibling.hasAttribute('inert')]);
+          sibling.setAttribute('inert', '');
+        }
+      }
+      branch = branch.parentElement;
+      if (branch === document.body) break;
+    }
+
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = overflow;
+      for (const [element, wasInert] of isolated) {
+        if (!wasInert) element.removeAttribute('inert');
+      }
+      // Returning focus to the toggle keeps the tab order where the user left it.
+      const desktop = window.matchMedia?.('(min-width: 768px)').matches;
+      const target = destinationRef.current ?? (desktop
+        ? document.querySelector<HTMLElement>('.site-header a')
+        : toggle ?? previouslyFocused);
+      destinationRef.current = null;
+      target?.focus({ preventScroll: true });
+    };
+  }, [isMenuOpen]);
+
   const handleNavClick = (href: string) => {
     if (href.startsWith('#')) {
-      // Anchor link for same page scrolling
-      const element = document.querySelector(href);
+      const element = document.querySelector<HTMLElement>(href);
       if (element) {
-        // Calculate header offset for desktop (hidden on mobile)
-        const isDesktop = window.innerWidth >= 768; // md breakpoint
-        const headerElement = document.querySelector('header');
-        const headerOffset = isDesktop && headerElement ? headerElement.offsetHeight : 0; // Header height only
+        if (!element.hasAttribute('tabindex')) element.tabIndex = -1;
+        if (isMenuOpen) destinationRef.current = element;
+        else element.focus({ preventScroll: true });
+        const isDesktop = window.innerWidth >= 768;
+        const headerElement = document.querySelector('.site-header');
+        const headerOffset = isDesktop && headerElement instanceof HTMLElement ? headerElement.offsetHeight : 0;
 
         const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - headerOffset;
 
-        // Ultra-smooth scrolling with custom easing
         const startPosition = window.pageYOffset;
         const distance = offsetPosition - startPosition;
-        const duration = Math.min(Math.abs(distance) * 0.8, 1000); // Dynamic duration based on distance, max 1s
+        const duration = Math.min(Math.abs(distance) * 0.8, 1000);
         let startTime: number | null = null;
 
         const easeInOutCubic = (t: number): number => {
@@ -52,7 +159,11 @@ export default function Header({ simple = false }: HeaderProps) {
         const animation = (currentTime: number) => {
           if (startTime === null) startTime = currentTime;
           const timeElapsed = currentTime - startTime;
-          const progress = Math.min(timeElapsed / duration, 1);
+          // A click on the section the page already rests on gives a distance,
+          // and so a duration, of zero. Dividing by it yields NaN, which the
+          // browser normalises to a scroll offset of 0 and throws the reader
+          // back to the top of the page. Treat it as already arrived.
+          const progress = duration > 0 ? Math.min(timeElapsed / duration, 1) : 1;
 
           const easeProgress = easeInOutCubic(progress);
           const currentPosition = startPosition + (distance * easeProgress);
@@ -67,135 +178,146 @@ export default function Header({ simple = false }: HeaderProps) {
         requestAnimationFrame(animation);
       }
     }
-    // For regular links, let the browser handle navigation
     setIsMenuOpen(false);
   };
 
+  const linkClass = 'rounded-sm text-white hover:text-cyber-blue transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue';
+
+  // A bare nav link is only as tall as its line box, which measured 24px. The
+  // padding here takes it to 44px in both directions; "Bot", the shortest
+  // label, was 25px wide.
+  //
+  // The horizontal padding has to come out of the row's gap rather than on top
+  // of it. At 768px the bar had 67px of slack, and six links each gaining 24px
+  // would have overrun it, so `space-x-8` drops to `space-x-1`: the same dead
+  // space, now inside the targets instead of between them.
+  const navLinkClass = `${linkClass} inline-flex items-center px-3 py-2.5`;
+
+  // The drawer's links are text-xl, a 28px line box, and stretch the full
+  // column, so they only need height. `space-y-6` already separates them.
+  const drawerLinkClass = `${linkClass} flex items-center text-left text-xl py-2`;
+
   return (
-    <>
-      {/* Desktop Header */}
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-dark-navy/80 backdrop-blur-md border-b border-cyber-blue/30 hidden md:flex"
-      >
+    <header>
+      <div className="site-header fixed top-0 left-0 right-0 z-50 bg-dark-navy/80 backdrop-blur-md border-b border-cyber-blue/30 hidden md:block">
         <Container className="py-4">
           <div className="flex items-center justify-between">
-              <Link href="/">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center gap-3 cursor-pointer"
-                >
-                  <img src="/modulix-icon.png" alt="Modulix Icon" className="w-14 h-14 object-contain" />
+              <Link href="/" className={`${linkClass} flex items-center gap-3`}>
+                  {/* Deliberately eager: this is the only image above the fold
+                      on any route, and loading="lazy" on an in-viewport image
+                      holds it behind the lazy-load pass, which pushes out the
+                      first paint instead of helping it. decoding="async" keeps
+                      the decode off the critical path all the same. */}
+                  <img src={sitePath('/modulix-icon-128.png')} alt="" width={56} height={56} decoding="async" className="w-14 h-14 object-contain" />
                   <span className="text-4xl font-bold logo-font text-white">
                     MODULIX
                   </span>
-                </motion.div>
               </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-8">
+            <nav aria-label="Primary" className="flex items-center space-x-1">
               {navItems.map((item) => (
                 item.href.startsWith('#') ? (
-                  <motion.button
+                  <a
+                    href={item.href}
                     key={item.name}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleNavClick(item.href)}
-                    className={`text-white hover:text-cyber-blue transition-colors duration-300 ${item.name === 'Testimonials' ? 'hidden lg:block' : ''}`}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleNavClick(item.href);
+                    }}
+                    className={navLinkClass}
                   >
                     {item.name}
-                  </motion.button>
+                  </a>
                 ) : (
-                  <Link key={item.name} href={item.href}>
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="text-white hover:text-cyber-blue transition-colors duration-300 cursor-pointer"
-                    >
-                      {item.name}
-                    </motion.div>
+                  <Link key={item.name} href={item.href} className={navLinkClass}>
+                    {item.name}
                   </Link>
                 )
               ))}
             </nav>
           </div>
         </Container>
-      </motion.header>
+      </div>
 
-      {/* Floating Mobile Menu Button */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+      {/*
+        While the drawer is open it is modal and covers this toggle, so the
+        toggle leaves the accessibility tree rather than duplicating the
+        drawer's own "Close menu" control.
+      */}
+      <button
+        type="button"
+        ref={toggleRef}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="fixed top-4 right-4 z-40 md:hidden w-12 h-12 bg-dark-navy/90 backdrop-blur-md border border-cyber-blue/30 rounded-full flex items-center justify-center text-white hover:text-cyber-blue transition-colors duration-300 shadow-lg"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
+        aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={isMenuOpen}
+        aria-controls={isMenuOpen ? 'mobile-nav' : undefined}
+        aria-hidden={isMenuOpen || undefined}
+        tabIndex={isMenuOpen ? -1 : undefined}
+        className="fixed top-4 right-4 z-40 md:hidden w-12 h-12 bg-dark-navy/90 backdrop-blur-md border border-cyber-blue/30 rounded-full flex items-center justify-center text-white hover:text-cyber-blue transition-colors duration-300 shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
       >
-        {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-      </motion.button>
+        {isMenuOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+      </button>
 
-      {/* Mobile Navigation Overlay */}
       {isMenuOpen && (
         <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
+            data-menu-overlay=""
             className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden"
-            onClick={() => setIsMenuOpen(false)}
+            onClick={closeMenu}
+            aria-hidden="true"
           />
 
-          {/* Menu */}
-          <motion.nav
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+          <div
+            id="mobile-nav"
+            ref={drawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
             className="fixed top-0 right-0 bottom-0 w-80 max-w-[90vw] bg-dark-navy border-l border-cyber-blue/30 z-50 md:hidden flex flex-col"
           >
-            {/* Close button */}
             <div className="flex justify-end p-4">
+              {/* The glyph is 24px; the padding is what makes this a 44px
+                  target, and it is the first thing focus lands on. */}
               <button
-                onClick={() => setIsMenuOpen(false)}
-                className="text-white hover:text-cyber-blue transition-colors"
+                type="button"
+                ref={closeButtonRef}
+                onClick={closeMenu}
+                aria-label="Close menu"
+                className="flex items-center justify-center p-2.5 text-white hover:text-cyber-blue transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue rounded-sm"
               >
-                <X size={24} />
+                <X size={24} aria-hidden="true" />
               </button>
             </div>
 
-            {/* Navigation items */}
-            <div className="flex-1 flex flex-col justify-center px-8 space-y-6">
+            <nav aria-label="Mobile" className="flex-1 flex flex-col justify-center px-8 space-y-6">
               {navItems.map((item) => (
-                item.href.startsWith('#') && item.name !== 'Testimonials' ? (
-                  <motion.button
+                item.href.startsWith('#') ? (
+                  <a
+                    href={item.href}
                     key={item.name}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleNavClick(item.href)}
-                    className="text-left text-xl text-white hover:text-cyber-blue transition-colors duration-300"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleNavClick(item.href);
+                    }}
+                    className={drawerLinkClass}
                   >
                     {item.name}
-                  </motion.button>
+                  </a>
                 ) : (
-                  <Link key={item.name} href={item.href}>
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="text-left text-xl text-white hover:text-cyber-blue transition-colors duration-300 cursor-pointer"
-                    >
-                      {item.name}
-                    </motion.div>
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={closeMenu}
+                    className={drawerLinkClass}
+                  >
+                    {item.name}
                   </Link>
                 )
               ))}
-            </div>
-          </motion.nav>
+            </nav>
+          </div>
         </>
       )}
-    </>
+    </header>
   );
 }

@@ -1,39 +1,72 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html {
   scroll-behavior: smooth;
-  /* Enhanced smooth scrolling for butter-like experience */
-  scroll-padding-top: 20px;
-  /* Enhanced scrolling for WebKit browsers (Safari, Chrome) */
-  -webkit-overflow-scrolling: touch; /* Enable momentum scrolling on iOS */
-  /* Smooth scroll snap for section transitions */
-  scroll-snap-type: y proximity;
-  scroll-snap-stop: always;
 }
 
-/* Individual sections can opt into scroll snap */
-.section-snap {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+/* Anchor landings have to clear the sticky bar, but that bar is `hidden
+   md:block`, so below the breakpoint this padding was reserving 6rem of empty
+   space above every section the reader jumped to. */
+@media (min-width: 768px) {
+  html {
+    scroll-padding-top: 6rem;
+  }
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-inter), sans-serif;
   background-color: #0F0F23;
   color: #FFFFFF;
-  /* Ultra-smooth scrolling */
   scroll-behavior: smooth;
-  /* Additional momentum for smoother feel */
   overscroll-behavior-y: contain;
 }
 
-/* Logo font class */
 .logo-font {
-  font-family: 'Lato', sans-serif;
-  font-weight: 600;
+  font-family: var(--font-lato), sans-serif;
+  font-weight: 700;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 0;
+  z-index: 10000;
+  padding: 0.75rem 1rem;
+  background: #00D4FF;
+  color: #0A0A14;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  transform: translateY(-120%);
+}
+
+.skip-link:focus {
+  transform: translateY(0.5rem);
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+.hex-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='52' viewBox='0 0 60 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: 60px 52px;
+}
+
+@media (max-width: 767px) {
+  .hex-overlay {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    scroll-behavior: auto;
+  }
 }
 
 /* Hexagonal pattern overlay */
@@ -105,13 +138,75 @@ body {
   z-index: 0;
 }
 
-/* Form styles */
+/* Form styles.
+
+   The border sits at /60 rather than /30 for contrast: a control's boundary is
+   a non-text UI component, so WCAG 2.2 1.4.11 wants 3:1 against what surrounds
+   it. The border is #00D4FF composited over the #1A1A2E field; at /30 that
+   blend measures 2.21:1 against the #0F0F23 page and the field edge is
+   guesswork in bright light. /60 measures 4.71:1 against the page and 4.26:1
+   against the field fill, so it clears 3:1 on either reading. */
 .form-input {
-  @apply bg-deeper-blue border border-cyber-blue/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyber-blue/60 focus:border-cyber-blue;
+  @apply bg-deeper-blue border border-cyber-blue/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyber-blue/60 focus:border-cyber-blue;
 }
 
 .form-textarea {
-  @apply bg-deeper-blue border border-cyber-blue/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyber-blue/60 focus:border-cyber-blue resize-none;
+  @apply bg-deeper-blue border border-cyber-blue/60 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyber-blue/60 focus:border-cyber-blue resize-none;
+}
+
+/* Focus throughout the site is drawn with ring utilities, which compile to
+   box-shadow. Forced-colors modes drop box-shadow entirely, so without this
+   every focused control in Windows High Contrast has no visible focus at all
+   (WCAG 2.2 2.4.7). An outline is one of the few things that survives. */
+@media (forced-colors: active) {
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
+/* Expands a control's hit area to at least 44x44 without resizing what is
+   painted (WCAG 2.5.8 Target Size (Minimum), and the 44px floor both Apple and
+   Android publish).
+ *
+ * The icon controls this is applied to are 34-36px round buttons sitting in
+ * tight rows: the carousel's four steppers and the footer's eight social
+ * links. Growing the boxes themselves to 44px would push the footer row onto a
+ * second line at 360px and crowd the stepper row, so the overlay carries the
+ * extra reach instead and the layout does not move at any width.
+ *
+ * `position: relative` is set here rather than left to the call site, since
+ * without it the overlay would resolve against some ancestor and land
+ * somewhere else entirely. The overlay belongs to the control that generates
+ * it, so a pointer event anywhere on it is an event on that control; it stays
+ * transparent and is deliberately given no `z-index`, because pushing it
+ * behind the content risks it landing behind an opaque ancestor background
+ * instead, which would hand the tap to the ancestor.
+ *
+ * It does overhang its control by up to 5px, so it has to be applied only
+ * where that overhang falls in dead space. In both current rows it does: the
+ * steppers sit on a 12px gap and the footer links on an 8px one, so an overlay
+ * never reaches a neighbouring control's own box. */
+.tap-target {
+  position: relative;
+}
+
+.tap-target::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  transform: translate(-50%, -50%);
+  border-radius: inherit;
 }
 
 /* Button hover effects */
@@ -167,14 +262,16 @@ body {
 
 /* Gradient text and glow effects */
 .gradient-text {
-  background: linear-gradient(90deg, #00D4FF, #A855F7);
+  color: #00D4FF;
+  background: linear-gradient(90deg, #00D4FF, #C084FC);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .h3-gradient-text {
-  background: linear-gradient(135deg, #00D4FF 0%, #A855F7 100%);
+  color: #00D4FF;
+  background: linear-gradient(135deg, #00D4FF 0%, #C084FC 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -226,4 +323,41 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Reduced motion, deliberately the last block in this file.
+ *
+ * MotionConfig in _app handles framer-motion, but it has no reach into plain
+ * CSS, and the lift on .card-hover is a real translation that kept running.
+ * Order matters more than it looks: these selectors are no more specific than
+ * the rules they are neutralising, so placed any higher up the file they would
+ * lose on source order and silently do nothing.
+ *
+ * The blanket rule is the backstop for anything added later. 0.01ms rather
+ * than 0s is deliberate, because 0s suppresses transitionend and animationend
+ * altogether and that would strand any future code waiting on them.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .card-hover,
+  .card-hover:hover {
+    transition: none;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* An outline remains visible even on controls with decorative shadows. */
+a:focus-visible, button:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid #00D4FF;
+  outline-offset: 3px;
+}
+@media (forced-colors: active) {
+  :focus-visible { outline-color: Highlight !important; }
 }
