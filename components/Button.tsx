@@ -1,18 +1,18 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { cva, type VariantProps } from 'class-variance-authority';
 import Link from 'next/link';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none relative overflow-hidden',
+  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue focus-visible:ring-offset-2 focus-visible:ring-offset-dark-navy disabled:opacity-50 disabled:pointer-events-none relative overflow-hidden',
   {
     variants: {
       variant: {
-        primary: 'bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:shadow-neon-purple hover:scale-105 active:scale-95',
-        secondary: 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:shadow-neon-blue hover:scale-105 active:scale-95',
-        outline: 'border border-purple-500 text-purple-500 hover:bg-purple-500/10 hover:shadow-neon-purple',
+        primary: 'bg-blue-800 bg-gradient-to-r from-purple-800 to-blue-800 text-white hover:shadow-neon-purple hover:scale-105 active:scale-95',
+        secondary: 'bg-blue-800 bg-gradient-to-r from-blue-800 to-cyan-800 text-white hover:shadow-neon-blue hover:scale-105 active:scale-95',
+        outline: 'border border-purple-300 text-purple-300 hover:bg-purple-300/10 hover:shadow-neon-purple',
         ghost: 'text-gray-300 hover:text-white hover:bg-white/5',
       },
       size: {
@@ -59,7 +59,7 @@ const Button: React.FC<NeonButtonProps> = ({
   const buttonContent = (
     <>
       {/* Animated background gradient */}
-      <motion.div
+      <m.div
         className="absolute inset-0 opacity-0 bg-gradient-to-r from-purple-600 to-blue-600"
         whileHover={{ opacity: 0.2 }}
         transition={{ duration: 0.3 }}
@@ -81,7 +81,7 @@ const Button: React.FC<NeonButtonProps> = ({
       </span>
 
       {/* Shine effect */}
-      <motion.div
+      <m.div
         className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"
         whileHover={{
           translateX: '200%',
@@ -94,7 +94,7 @@ const Button: React.FC<NeonButtonProps> = ({
   if (href) {
     if (external) {
       return (
-        <motion.a
+        <m.a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
@@ -104,26 +104,26 @@ const Button: React.FC<NeonButtonProps> = ({
           {...props}
         >
           {buttonContent}
-        </motion.a>
+        </m.a>
       );
     }
 
     return (
       <Link href={href} passHref legacyBehavior>
-        <motion.a
+        <m.a
           className={buttonClasses}
           whileHover={{ scale: disabled ? 1 : 1.05 }}
           whileTap={{ scale: disabled ? 1 : 0.95 }}
           {...props}
         >
           {buttonContent}
-        </motion.a>
+        </m.a>
       </Link>
     );
   }
 
   return (
-    <motion.button
+    <m.button
       className={buttonClasses}
       onClick={onClick}
       disabled={disabled}
@@ -133,7 +133,7 @@ const Button: React.FC<NeonButtonProps> = ({
       {...props}
     >
       {buttonContent}
-    </motion.button>
+    </m.button>
   );
 };
 

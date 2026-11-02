@@ -1,12 +1,19 @@
 # Modulix (modulix.gg / modulixsolutions.com)
 
-> Modulix Solutions, LLC is an AI systems, gaming growth, and creator-economy infrastructure studio. Modulix builds deployed AI and agent systems for businesses, runs Discord community and gaming growth infrastructure, supports Fortnite/UEFN and Roblox studio operations, and owns the UGC Suite of products.
+> Modulix Solutions, LLC is a user-generated content (UGC) infrastructure studio: community systems, creator-economy products, brand activations, and the deployed AI and agent systems that run them. The work spans the UGC space rather than a single platform; Discord, Fortnite/UEFN and Roblox are the surfaces it most often runs on.
 
 ## Core areas
-1. Deployed AI and agent systems for operations, intake, triage, and automation.
-2. Discord community infrastructure, gaming growth systems, and brand activations.
-3. Fortnite/UEFN and Roblox studio operations, integrations, and live support.
-4. UGC creator-economy infrastructure led by VerifyUGC and UGC Market.
+1. UGC and creator-economy infrastructure, led by VerifyUGC and UGC Market.
+2. Community infrastructure, growth systems, and brand activations across UGC platforms.
+3. Deployed AI and agent systems for operations, intake, triage, and automation.
+4. Studio and creator-platform operations, including Fortnite/UEFN and Roblox.
+
+## Website sections
+- [About](https://modulixsolutions.com/#about): Company background.
+- [Modulix Bot](https://modulixsolutions.com/#modulix-bot): Discord bot offering.
+- [Services](https://modulixsolutions.com/#services): Community and gaming services.
+- [Contact](https://modulixsolutions.com/#contact): Inquiry form.
+- [FAQ](https://modulixsolutions.com/#faq): Answers to common campaign questions.
 
 ## Official links
 - Live site: https://modulixsolutions.com/
@@ -14,7 +21,7 @@
 - Founder: https://pinefruit.dev/
 - Discord: https://discord.gg/modulix
 - LinkedIn: https://www.linkedin.com/company/modulixsolution
-- X: https://twitter.com/modulixsolutions
+- X: https://x.com/ModulixSolution
 
 ## Owned UGC Suite
 - VerifyUGC: https://verifyugc.dev

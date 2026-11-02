@@ -1,13 +1,26 @@
 'use client';
 
+import { logEvent } from '../lib/logger';
+
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Check } from 'lucide-react';
 import Button from './Button';
+import Spinner from './states/Spinner';
+import StateMessage from './states/StateMessage';
+import { sitePath } from '../lib/site-path';
+
+type FormStatus =
+  | { kind: 'idle' }
+  | { kind: 'submitting' }
+  | { kind: 'error'; message: string }
+  | { kind: 'success'; message: string };
+
+const REDIRECT_DELAY_MS = 1500;
 
 export default function ContactForm() {
-  const [result, setResult] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<FormStatus>({ kind: 'idle' });
+  const isSubmitting = status.kind === 'submitting';
   const [fieldValidity, setFieldValidity] = useState({
     name: false,
     email: false,
@@ -43,6 +56,19 @@ export default function ContactForm() {
     }));
   };
 
+  const showError = (message: string) => {
+    setStatus({ kind: 'error', message });
+  };
+
+  const confirmSubmission = (form: HTMLFormElement) => {
+    setStatus({ kind: 'success', message: 'Message sent successfully! Redirecting...' });
+    form.reset();
+    setFieldValidity({ name: false, email: false, discord: false, message: false });
+    setTimeout(() => {
+      window.location.href = sitePath('/contact-confirmed/');
+    }, REDIRECT_DELAY_MS);
+  };
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -61,13 +87,11 @@ export default function ContactForm() {
     const isMessageValid = validateField('message', currentValues.message);
 
     if (!isNameValid || !isEmailValid || !isDiscordValid || !isMessageValid) {
-      setResult('Please fill out all required fields correctly.');
-      setTimeout(() => setResult(''), 5000);
+      showError('Please fill out all required fields correctly.');
       return;
     }
 
-    setIsSubmitting(true);
-    setResult('Sending...');
+    setStatus({ kind: 'submitting' });
 
     const formData = new FormData(form);
 
@@ -82,65 +106,34 @@ export default function ContactForm() {
         // Remove manual headers - let browser set them automatically for FormData
       });
 
-      // Check if response is ok before trying to parse
-      if (response.ok) {
-        try {
-          const data = await response.json();
-          console.log('Web3Forms Response:', data);
-
-          if (data.success) {
-            setResult('Message sent successfully! Redirecting...');
-            form.reset();
-            // Clear validation states on success
-            setFieldValidity({ name: false, email: false, discord: false, message: false });
-
-            // Redirect after showing success message briefly
-            setTimeout(() => {
-              window.location.href = '/contact-confirmed';
-            }, 1500);
-          } else {
-            console.log('Web3Forms Error:', data);
-            setResult(data.message || 'Failed to send message. Please try again.');
-          }
-        } catch (parseError) {
-          // If JSON parsing fails but response is ok, assume success
-          console.log('Parse error but response OK, assuming success:', parseError);
-          setResult('Message sent successfully! Redirecting...');
-          form.reset();
-          setFieldValidity({ name: false, email: false, discord: false, message: false });
-
-          setTimeout(() => {
-            window.location.href = '/contact-confirmed';
-          }, 1500);
-        }
-      } else {
-        // Response not ok
-        console.log('HTTP Error:', response.status, response.statusText);
-        setResult(`Failed to send message (${response.status}). Please try again.`);
+      if (!response.ok) {
+        logEvent('contact_http_error', response.status);
+        showError(`Failed to send message (${response.status}). Please try again.`);
+        return;
       }
-    } catch (error) {
-      console.log('Network Error:', error);
-      // Web3Forms may block fetch due to CORS, but form still submits successfully
-      // Since emails are being sent, assume success and redirect
-      setResult('Message sent successfully! Redirecting...');
-      form.reset();
-      setFieldValidity({ name: false, email: false, discord: false, message: false });
 
-      setTimeout(() => {
-        window.location.href = '/contact-confirmed';
-      }, 1500);
-    } finally {
-      setIsSubmitting(false);
-      setTimeout(() => {
-        if (!result.includes('successfully')) {
-          setResult('');
+      try {
+        const data = await response.json();
+
+        if (data?.success === true) {
+          confirmSubmission(form);
+        } else {
+          logEvent('contact_rejected');
+          showError('Failed to send message. Please review your details and try again.');
         }
-      }, 5000);
+      } catch {
+        logEvent('contact_invalid_response');
+        showError('We could not confirm delivery. Your details are preserved. Retrying may send a duplicate.');
+      }
+    } catch {
+      logEvent('contact_network_error');
+      showError('We could not confirm delivery. Your details are preserved. Retrying may send a duplicate.');
     }
+
   };
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -148,18 +141,32 @@ export default function ContactForm() {
       className="max-w-lg mx-auto"
     >
       <form onSubmit={onSubmit} className="space-y-6">
+        {/* Send stays disabled until the required fields validate, so the rules
+            have to be discoverable before you trip over them. The asterisk is
+            decoration; this sentence and the per-field hints below are what
+            assistive technology can actually read. */}
+        <p className="text-sm text-gray-400">
+          Fields marked <span aria-hidden="true">*</span>
+          <span className="sr-only">with an asterisk</span> are required.
+        </p>
+
         {/* Name and Discord side by side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-              Name *
+              Name <span aria-hidden="true">*</span>
             </label>
             <div className="relative">
+              {/* autoComplete is what lets a browser or assistive tool fill
+                  this from the visitor's own stored details, and the token has
+                  to come from the fixed list in WCAG 2.2 1.3.5. */}
               <input
                 type="text"
                 name="name"
                 id="name"
                 required
+                autoComplete="name"
+                aria-describedby="name-hint"
                 className="form-input w-full pr-10"
                 placeholder="Your name"
                 disabled={isSubmitting}
@@ -167,38 +174,54 @@ export default function ContactForm() {
               />
               {fieldValidity.name && (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                  <Check className="w-5 h-5 text-green-400" />
+                  <Check className="w-5 h-5 text-green-400" aria-hidden="true" />
                 </div>
               )}
             </div>
+            <p id="name-hint" className="mt-2 text-sm text-gray-400">
+              Two characters or more.
+            </p>
           </div>
 
           <div>
             <label htmlFor="discord" className="block text-sm font-medium text-gray-300 mb-2">
-              Discord Username
+              Discord Username <span className="text-gray-400">(optional)</span>
             </label>
             <div className="relative">
+              {/* Uses the shared .form-input rather than restating it inline:
+                  the local copy had drifted to a /30 border, which is below the
+                  3:1 that WCAG 1.4.11 asks of a control boundary. */}
               <input
                 type="text"
                 name="discord"
                 id="discord"
-                className="bg-deeper-blue border border-neon-purple/30 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-neon-purple/60 focus:border-neon-purple w-full pr-10"
+                autoComplete="nickname"
+                aria-describedby="discord-hint"
+                className="form-input w-full pr-10"
                 placeholder="@username"
                 disabled={isSubmitting}
                 onChange={(e) => handleFieldChange('discord', e.target.value)}
               />
               {fieldValidity.discord && (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                  <Check className="w-5 h-5 text-green-400" />
+                  <Check className="w-5 h-5 text-green-400" aria-hidden="true" />
                 </div>
               )}
             </div>
+            {/* Optional, but not unconstrained: a value this field rejects
+                blocks submission, and the message that comes back talks about
+                required fields, which is no help on a field labelled optional.
+                Stating the limit up front is the part that can be read before
+                tripping over it. */}
+            <p id="discord-hint" className="mt-2 text-sm text-gray-400">
+              Optional. Two to thirty-two characters if you provide one.
+            </p>
           </div>
         </div>
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-            Email *
+            Email <span aria-hidden="true">*</span>
           </label>
           <div className="relative">
             <input
@@ -206,6 +229,8 @@ export default function ContactForm() {
               name="email"
               id="email"
               required
+              autoComplete="email"
+              aria-describedby="email-hint"
               className="form-input w-full pr-10"
               placeholder="your.email@example.com"
               disabled={isSubmitting}
@@ -213,15 +238,18 @@ export default function ContactForm() {
             />
             {fieldValidity.email && (
               <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                <Check className="w-5 h-5 text-green-400" />
+                <Check className="w-5 h-5 text-green-400" aria-hidden="true" />
               </div>
             )}
           </div>
+          <p id="email-hint" className="mt-2 text-sm text-gray-400">
+            Where we will send our reply.
+          </p>
         </div>
 
       <div>
         <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-          Message *
+          Message <span aria-hidden="true">*</span>
         </label>
         <div className="relative">
           <textarea
@@ -229,6 +257,7 @@ export default function ContactForm() {
             id="message"
             rows={5}
             required
+            aria-describedby="message-hint"
             className="form-textarea w-full pr-10"
             placeholder="Tell us about your project..."
             disabled={isSubmitting}
@@ -236,10 +265,13 @@ export default function ContactForm() {
           />
           {fieldValidity.message && (
             <div className="absolute bottom-3 right-3">
-              <Check className="w-5 h-5 text-green-400" />
+              <Check className="w-5 h-5 text-green-400" aria-hidden="true" />
             </div>
           )}
         </div>
+        <p id="message-hint" className="mt-2 text-sm text-gray-400">
+          Ten characters or more. Tell us what you are building and what you need.
+        </p>
       </div>
 
       <div className="text-center">
@@ -247,25 +279,28 @@ export default function ContactForm() {
           type="submit"
           disabled={isSubmitting || !fieldValidity.name || !fieldValidity.email || !fieldValidity.message}
           className="w-full md:w-auto"
+          icon={isSubmitting ? <Spinner size="sm" /> : undefined}
         >
           {isSubmitting ? 'Sending...' : 'Send Message'}
         </Button>
       </div>
 
-      {result && (
-        <div className={`text-center mt-4 p-3 rounded-lg ${
-          result.includes('successfully')
-            ? 'bg-green-900/20 text-green-400 border border-green-500/30'
-            : result === 'Sending...'
-            ? 'bg-blue-900/20 text-blue-400 border border-blue-500/30'
-            : 'bg-red-900/20 text-red-400 border border-red-500/30'
-        }`}>
-          {result}
-        </div>
+      {status.kind !== 'idle' && (
+        <StateMessage
+          className="mt-4"
+          tone={
+            status.kind === 'submitting'
+              ? 'loading'
+              : status.kind === 'success'
+              ? 'success'
+              : 'error'
+          }
+          title={status.kind === 'submitting' ? 'Sending...' : status.message}
+        />
       )}
 
       </form>
-    </motion.div>
+    </m.div>
   );
 }
 

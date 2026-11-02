@@ -1,6 +1,6 @@
+import { sitePath } from '../lib/site-path';
 import React from 'react';
 import Link from 'next/link';
-import { MessageCircle, Twitter, Mail } from 'lucide-react';
 import Container from './Container';
 
 export default function Footer() {
@@ -15,23 +15,28 @@ export default function Footer() {
 
           {/* Logo - Center */}
           <div className="flex items-center justify-center order-2">
-            <Link href="/">
-              <div className="flex items-center gap-3 cursor-pointer hover:text-cyber-blue transition-colors duration-300">
-                <img src="/modulix-icon.png" alt="Modulix Icon" className="w-14 h-14 object-contain" />
-                <h3 className="text-4xl font-bold logo-font text-white">
+            <Link href="/" className="flex items-center gap-3 rounded-sm hover:text-cyber-blue transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue">
+                <img src={sitePath('/modulix-icon-128.png')} alt="" width={56} height={56} loading="lazy" decoding="async" className="w-14 h-14 object-contain" />
+                <span className="text-4xl font-bold logo-font text-white">
                   MODULIX
-                </h3>
-              </div>
+                </span>
             </Link>
           </div>
 
-          {/* Socials - Far Right */}
+          {/*
+            Socials - Far Right
+
+            These paint at 34px (38px from `sm`), and eight of them at a full
+            44px would not fit one row at 360px. `tap-target` keeps the painted
+            size and puts the missing reach in an overlay instead; the 8px gap
+            is wide enough that no overlay reaches a neighbour's own box.
+          */}
           <div className="flex items-center justify-center lg:justify-end gap-2 flex-wrap order-1 lg:order-3">
             <a
               href="https://discord.gg/modulix"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Join our Discord"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -42,7 +47,7 @@ export default function Footer() {
               href="https://x.com/ModulixSolution"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Follow us on X"
             >
               <svg width="20" height="20" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-5 h-5">
@@ -53,7 +58,7 @@ export default function Footer() {
               href="https://bsky.app/profile/modulixsolutions.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Follow us on Bluesky"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 600 530" fill="currentColor">
@@ -64,7 +69,7 @@ export default function Footer() {
               href="https://www.linkedin.com/company/modulixsolution"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Connect on LinkedIn"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -75,7 +80,7 @@ export default function Footer() {
               href="https://www.reddit.com/user/modulixsolution"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Follow us on Reddit"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="w-5 h-5" viewBox="0 0 16 16">
@@ -87,7 +92,7 @@ export default function Footer() {
               href="https://github.com/ModulixSolution"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Visit our GitHub"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -98,7 +103,7 @@ export default function Footer() {
               href="https://www.tiktok.com/@modulixsolution"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Follow us on TikTok"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -109,7 +114,7 @@ export default function Footer() {
               href="https://www.instagram.com/modulixsolution"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="tap-target flex items-center justify-center p-1.5 sm:p-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue"
               aria-label="Follow us on Instagram"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
