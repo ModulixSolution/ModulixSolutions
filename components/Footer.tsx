@@ -1,3 +1,4 @@
+import { sitePath } from '../lib/site-path';
 import React from 'react';
 import Link from 'next/link';
 import Container from './Container';
@@ -15,7 +16,7 @@ export default function Footer() {
           {/* Logo - Center */}
           <div className="flex items-center justify-center order-2">
             <Link href="/" className="flex items-center gap-3 rounded-sm hover:text-cyber-blue transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyber-blue">
-                <img src="/modulix-icon-128.png" alt="" width={56} height={56} loading="lazy" decoding="async" className="w-14 h-14 object-contain" />
+                <img src={sitePath('/modulix-icon-128.png')} alt="" width={56} height={56} loading="lazy" decoding="async" className="w-14 h-14 object-contain" />
                 <span className="text-4xl font-bold logo-font text-white">
                   MODULIX
                 </span>

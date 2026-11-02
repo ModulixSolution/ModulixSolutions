@@ -1,3 +1,4 @@
+import { sitePath } from '../lib/site-path';
 import React, { useState } from 'react';
 
 interface CompanyLogoProps {
@@ -36,7 +37,7 @@ export default function CompanyLogo({ logoUrl, displayName }: CompanyLogoProps) 
 
   return (
     <img
-      src={logoUrl}
+      src={sitePath(logoUrl)}
       alt=""
       width={256}
       height={256}

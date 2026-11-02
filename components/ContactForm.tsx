@@ -6,6 +6,7 @@ import { Check } from 'lucide-react';
 import Button from './Button';
 import Spinner from './states/Spinner';
 import StateMessage from './states/StateMessage';
+import { sitePath } from '../lib/site-path';
 
 type FormStatus =
   | { kind: 'idle' }
@@ -73,7 +74,7 @@ export default function ContactForm() {
     form.reset();
     setFieldValidity({ name: false, email: false, discord: false, message: false });
     setTimeout(() => {
-      window.location.href = '/contact-confirmed';
+      window.location.href = sitePath('/contact-confirmed/');
     }, REDIRECT_DELAY_MS);
   };
 

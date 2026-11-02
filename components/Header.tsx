@@ -1,3 +1,4 @@
+import { sitePath } from '../lib/site-path';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
@@ -207,7 +208,7 @@ export default function Header({ simple = false }: HeaderProps) {
                       holds it behind the lazy-load pass, which pushes out the
                       first paint instead of helping it. decoding="async" keeps
                       the decode off the critical path all the same. */}
-                  <img src="/modulix-icon-128.png" alt="" width={56} height={56} decoding="async" className="w-14 h-14 object-contain" />
+                  <img src={sitePath('/modulix-icon-128.png')} alt="" width={56} height={56} decoding="async" className="w-14 h-14 object-contain" />
                   <span className="text-4xl font-bold logo-font text-white">
                     MODULIX
                   </span>

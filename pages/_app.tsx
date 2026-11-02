@@ -1,3 +1,4 @@
+import { sitePath } from '../lib/site-path';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Inter, Lato } from 'next/font/google';
@@ -71,9 +72,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="theme-color" content="#0A0B18" />
-          <link rel="icon" href="/favicon.ico" sizes="any" />
-          <link rel="icon" type="image/png" sizes="128x128" href="/modulix-icon-128.png" />
-          <link rel="apple-touch-icon" href="/modulix-icon-128.png" />
+          <link rel="icon" href={sitePath('/favicon.ico')} sizes="any" />
+          <link rel="icon" type="image/png" sizes="128x128" href={sitePath('/modulix-icon-128.png')} />
+          <link rel="apple-touch-icon" href={sitePath('/modulix-icon-128.png')} />
         </Head>
 
       <div className={`${inter.variable} ${lato.variable} ${inter.className}`}>
