@@ -75,9 +75,7 @@ test('a failed inquiry keeps what was typed, and the retry reaches confirmation'
   // tell someone their inquiry arrived when it did not.
   await expect(page).toHaveURL(/127\.0\.0\.1:3100\/$/);
 
-  // Retrying from that state, without retyping, gets through. The error
-  // retires itself after five seconds, so this click is deliberately the next
-  // thing that happens.
+  // Retrying from that persistent error state, without retyping, gets through.
   await send(page).click();
   await expect(page).toHaveURL(/\/contact-confirmed\/?$/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText("We'll Contact You Soon");
@@ -124,7 +122,8 @@ for (const response of ['network failure', 'unreadable response'] as const) {
     await fillInquiry(page);
     await send(page).click();
 
-    await expect(formAlert(page)).toContainText("We couldn't confirm delivery");
+    await expect(formAlert(page)).toContainText('We could not confirm delivery');
+    await expect(formAlert(page)).toContainText('Retrying may send a duplicate');
     await expect(page.getByLabel('Message *', { exact: true })).toHaveValue(INQUIRY.message);
     await expect(send(page)).toBeEnabled();
     // The former optimistic success path redirected after 1.5 seconds.

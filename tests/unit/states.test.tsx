@@ -189,7 +189,7 @@ describe('contact form status', () => {
     });
   }
 
-  test('a transient error retires itself after five seconds', async () => {
+  test('an error remains available until the visitor retries', async () => {
     (fetch as jest.Mock).mockResolvedValue({ ok: false, status: 503, statusText: 'Unavailable' });
     render(<ContactForm />);
     fillForm();
@@ -202,7 +202,7 @@ describe('contact form status', () => {
     await act(async () => {
       jest.advanceTimersByTime(5000);
     });
-    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.getByRole('alert')).toHaveTextContent('Failed to send message (503)');
   });
 
   test('a success stays on screen through the redirect timer', async () => {
@@ -241,7 +241,7 @@ describe('contact form status', () => {
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: 'Send Message' }));
 
-    expect(await screen.findByRole('alert')).toHaveTextContent("We couldn't confirm delivery");
+    expect(await screen.findByRole('alert')).toHaveTextContent("We could not confirm delivery");
     expect(screen.getByLabelText('Name *')).toHaveValue('Test User');
     expect(screen.queryByText('Message sent successfully! Redirecting...')).toBeNull();
   });
@@ -252,12 +252,12 @@ describe('contact form status', () => {
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: 'Send Message' }));
 
-    expect(await screen.findByRole('alert')).toHaveTextContent("We couldn't confirm delivery");
+    expect(await screen.findByRole('alert')).toHaveTextContent("We could not confirm delivery");
     expect(screen.getByLabelText('Name *')).toHaveValue('Test User');
     expect(screen.queryByText('Message sent successfully! Redirecting...')).toBeNull();
   });
 
-  test('a repeated identical failure gets its full five seconds', async () => {
+  test('a repeated failure remains visible', async () => {
     (fetch as jest.Mock).mockResolvedValue({ ok: false, status: 503, statusText: 'Unavailable' });
     render(<ContactForm />);
     fillForm();
@@ -271,14 +271,14 @@ describe('contact form status', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Send Message' }));
     expect(await screen.findByRole('alert')).toBeInTheDocument();
 
-    // The first error's timer fires here and must not clear the second one.
+    // Error details remain available while the visitor decides how to recover.
     await act(async () => {
       jest.advanceTimersByTime(1000);
     });
     expect(screen.getByRole('alert')).toHaveTextContent('Failed to send message (503)');
   });
 
-  test('a rejected payload surfaces the provider message as an error', async () => {
+  test('a rejected payload uses stable recovery copy without exposing provider text', async () => {
     (fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => ({ success: false, message: 'Spam detected.' }),
@@ -287,7 +287,19 @@ describe('contact form status', () => {
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: 'Send Message' }));
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Spam detected.');
+    expect(await screen.findByRole('alert')).toHaveTextContent('Failed to send message. Please review your details and try again.');
+    expect(screen.queryByText('Spam detected.')).toBeNull();
+    expect(screen.getByLabelText('Message *')).toHaveValue('A synthetic project inquiry.');
     expect(screen.getByRole('button', { name: 'Send Message' })).toBeEnabled();
   });
+  test.each([null, { success: 'true' }])('only explicit success confirms delivery: %j', async payload => {
+    (fetch as jest.Mock).mockResolvedValue({ ok: true, json: async () => payload });
+    render(<ContactForm />);
+    fillForm();
+    fireEvent.click(screen.getByRole('button', { name: 'Send Message' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Failed to send message');
+    expect(screen.getByLabelText('Message *')).toHaveValue('A synthetic project inquiry.');
+    expect(screen.queryByText('Message sent successfully! Redirecting...')).toBeNull();
+  });
+
 });
