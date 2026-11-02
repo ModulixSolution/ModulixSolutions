@@ -49,6 +49,7 @@ Use Node.js 22 and npm, matching CI. Install with `npm ci`, then run
 | `npm test` | Unit tests |
 | `npm run test:coverage` | Unit tests and enforced coverage thresholds |
 | `npm run build` | Production static export into `out/` |
+| `npm run check:pages` | Built-page link/image checks and negative fixtures (Python 3.9+) |
 | `npm run test:smoke` | Production build and browser journeys |
 | `npm run test:visual` | Production build and visual comparisons; Linux CI owns the baselines |
 | `npm run perf:budgets` | Production build and enforced byte budgets |
@@ -162,6 +163,17 @@ form endpoint. `tests/unit/security-headers.test.tsx` byte-compares
 policy enforced and fails on any violation report.
 
 ---
+
+## Built-page link and image check
+
+After `npm run build`, run `npm run check:pages` (Python 3.9+). CI runs the
+same check after the smoke suite builds the export. It discovers every HTML
+file under `out/`, including error pages, and checks local destinations,
+same-site absolute URLs, fragment targets, image files and `alt` attributes.
+External destinations are skipped, and `alt=""` is allowed for decorative
+images. It checks static markup and attribute presence, not alt quality or
+content inserted later by JavaScript. Negative fixtures prove the gate fails
+on missing pages, images, fragments and alt attributes.
 
 ## 📄 License
 

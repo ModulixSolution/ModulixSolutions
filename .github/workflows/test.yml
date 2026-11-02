@@ -25,6 +25,7 @@ jobs:
       - run: npm run test:coverage
       - run: npx playwright install --with-deps chromium
       - run: npm run test:smoke
+      - run: npm run check:pages
 
   # Separate from `test` so the two run at once, and so a pixel diff is
   # reported as its own failed check rather than as the tail of the suite that

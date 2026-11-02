@@ -19,7 +19,8 @@
     "test:visual": "npm run build && playwright test --config=playwright.visual.config.ts",
     "test:visual:baselines": "bash scripts/update-visual-baselines.sh",
     "perf:budgets": "npm run build && node scripts/check-byte-budgets.cjs",
-    "perf:report": "node scripts/check-byte-budgets.cjs --report"
+    "perf:report": "node scripts/check-byte-budgets.cjs --report",
+    "check:pages": "python3 -B scripts/test-check-built-pages.py && python3 -B scripts/check-built-pages.py"
   },
   "keywords": [
     "ugc",
