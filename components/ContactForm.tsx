@@ -122,21 +122,18 @@ export default function ContactForm() {
       try {
         const data = await response.json();
 
-        if (data.success) {
+        if (data.success === true) {
           confirmSubmission(form);
         } else {
           showError(data.message || 'Failed to send message. Please try again.');
         }
       } catch {
-        // A 2xx with an unreadable body still means the submission landed.
-        confirmSubmission(form);
+        showError("We couldn't confirm delivery. Your message is still here; please try again or contact us directly.");
       }
-    } catch (error) {
-      // Web3Forms can reject the fetch on CORS while still delivering the mail,
-      // so this path stays optimistic on purpose: treating it as a failure
-      // would tell people their inquiry was lost when it was not.
-      console.warn('Contact form network error, assuming delivery:', error);
-      confirmSubmission(form);
+    } catch {
+      // A network or CORS error cannot establish delivery. Preserve the input
+      // and report uncertainty instead of erasing it and promising success.
+      showError("We couldn't confirm delivery. Your message is still here; please try again or contact us directly.");
     }
   };
 
