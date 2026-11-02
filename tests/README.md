@@ -22,8 +22,10 @@ contact submission with a synthetic response, confirmation, and the exported
 status pages (404, 500, confirmation): their headings, their `noindex` robots
 tag, and the links back into the site. They also cover the end-to-end journeys
 across those pieces: every primary nav target, fragment entry, the links out of
-a dead end, and the inquiry's failure, retry and double-submit paths. They block
-external requests by default and never submit a real inquiry. Tracing is disabled to avoid retaining form
+a dead end, and the inquiry's failure, retry and double-submit paths. They assert
+the built HTML carries the route manifest's title and description and exactly
+one homepage JSON-LD block with the expected nodes. External requests are blocked
+and inquiries use synthetic responses. Tracing is disabled to avoid retaining form
 request data. The local static server does not emulate hosting-specific
 missing-route fallback, so 404 is requested at `/404.html` directly; that is
 also the only status page GitHub Pages serves for a missing route. These tests
@@ -117,6 +119,37 @@ tightening separately and the test deliberately does not assert it is right.
 The form's status region is addressed within `#contact` because Next's route
 announcer is also `role="alert"` and a page-wide query matches both.
 
+Because the manifest in `lib/seo/routes.ts` holds every route's title and
+description, the same file checks all of them at once: length (title at most 60,
+description 70 to 158), the brand present in the title, no stray or doubled
+whitespace, sentence-ending punctuation, and no duplicate title or description
+across routes. A new page is covered by all of that the moment it is listed.
+There is deliberately no test that the derived robots directive equals
+`indexable ? 'index, follow' : 'noindex, follow'`: that restates the function
+body and cannot fail. Indexability is held to what ships by the byte-exact
+sitemap diff and by the browser suite reading the robots tag per page.
+
+`tests/unit/structured-data.test.tsx` asserts on the JSON-LD the homepage
+actually ships, imported from the page rather than rebuilt from samples. The
+check that matters is that every single-key `{"@id": ...}` reference resolves to
+a node the graph declares: an unresolved one is valid JSON and valid
+schema.org, and silently drops the relationship. It also pins the set of
+published `@id` values, requires every FAQ question and answer in the graph to
+be present in the rendered DOM (a Google requirement, not just a staleness
+check) and every offer-catalog service to be described on the page, matches the
+logo `ImageObject` against the PNG header on disk, and covers `serializeJsonLd`
+escaping markup so a string containing `</script>` cannot end the element early.
+
+`tests/unit/aeo-files.test.tsx` reads `robots.txt`, `llms.txt` and
+`llms-full.txt`, which nothing else imports and nothing else noticed drifting.
+It holds them to the canonical origin (no `http://`, no `www` host), requires
+them to cite the same X profile and the same `sameAs` profiles as the structured
+data, checks every on-page anchor in `llms.txt` against a section the homepage
+renders and every other link against the route manifest or a real file in
+`public/`, and asserts `robots.txt` disallows nothing (utility pages are gated
+by a robots meta tag, which a crawler has to be allowed to fetch the page to
+read) and declares the sitemap exactly once.
+
 `tests/unit/states.test.tsx` covers the shared state components: which tones
 interrupt with `role="alert"` versus announce politely, the busy flag on the
 loading tone, error-boundary containment and recovery, the company logo
@@ -162,11 +195,6 @@ browser to expose. `tests/unit/layout.test.tsx` covers the presentational
 components and their variant branches, and `tests/unit/homepage.test.tsx` covers
 the hero call to action, hover-to-pause on the feature carousel, and the FAQ
 disclosures opening independently rather than as an accordion.
-
-`components/TypingEffect.tsx` and `components/LoadingScreen.tsx` have no import
-site anywhere in the app and so sit at 0%. Tests against them would raise the
-coverage number without testing anything that ships; they are left reported as
-dead code instead.
 
 The Tests workflow runs on PRs and main/test branch pushes with read-only repository
 permissions and no deployment steps. Existing deployment configuration is unchanged.
