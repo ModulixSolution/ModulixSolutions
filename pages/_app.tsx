@@ -76,14 +76,20 @@ export default function App({ Component, pageProps }: AppProps) {
           <link rel="apple-touch-icon" href="/modulix-icon-128.png" />
         </Head>
 
-        <div className={`${inter.variable} ${lato.variable} ${inter.className}`}>
-          <a className="skip-link" href="#main">Skip to content</a>
-          {/* Inside the font wrapper so the fallback keeps the site's typography,
-              and inside the skip link so that target survives a render error. */}
-          <ErrorBoundary>
-            <Component {...pageProps} />
-          </ErrorBoundary>
-        </div>
+      <div className={`${inter.variable} ${lato.variable} ${inter.className}`}>
+        <a className="skip-link" href="#main" onClick={() => {
+          const main = document.getElementById('main');
+          if (main) {
+            main.tabIndex = -1;
+            main.focus({ preventScroll: true });
+          }
+        }}>Skip to content</a>
+        {/* Inside the font wrapper so the fallback keeps the site's typography,
+            and inside the skip link so that target survives a render error. */}
+        <ErrorBoundary>
+          <Component {...pageProps} />
+        </ErrorBoundary>
+      </div>
       </LazyMotion>
     </MotionConfig>
   );

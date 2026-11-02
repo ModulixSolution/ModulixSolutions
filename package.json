@@ -1,7 +1,7 @@
 {
   "name": "modulix-solutions",
   "version": "1.0.0",
-  "description": "Modulix Solutions LLC - Discord community solutions for brands with gaming/UEFN integrations",
+  "description": "Modulix Solutions LLC: community, creator and brand-activation infrastructure for the user-generated content space",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
@@ -15,13 +15,19 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --runInBand --coverage",
-    "test:smoke": "npm run build && playwright test"
+    "test:smoke": "npm run build && playwright test",
+    "test:visual": "npm run build && playwright test --config=playwright.visual.config.ts",
+    "test:visual:baselines": "bash scripts/update-visual-baselines.sh",
+    "perf:budgets": "npm run build && node scripts/check-byte-budgets.cjs",
+    "perf:report": "node scripts/check-byte-budgets.cjs --report"
   },
   "keywords": [
-    "discord",
-    "gaming",
+    "ugc",
+    "creator-economy",
     "community",
+    "gaming",
     "marketing",
+    "discord",
     "uefn",
     "pinefruit",
     "modulix"
@@ -53,5 +59,13 @@
     "postcss": "^8.5.32",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.32"
+    },
+    "@next/eslint-plugin-next": {
+      "glob": "^10.5.0"
+    }
   }
 }
