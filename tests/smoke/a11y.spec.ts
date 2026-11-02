@@ -69,6 +69,12 @@ test('the homepage still passes with every FAQ answer expanded', async ({ page }
   }
   await expect(page.locator('#faq button[aria-expanded="false"]')).toHaveCount(0);
 
+  // Expanded state changes before the fade finishes. Scan the final readable
+  // colors, not an intermediate animation frame with partially transparent text.
+  for (const answer of await page.locator('#faq [id^="faq-answer-"]').all()) {
+    await expect(answer).toHaveCSS('opacity', '1');
+  }
+
   const { violations } = await scan(page).analyze();
   expect(describeViolations(violations)).toBe('');
 });

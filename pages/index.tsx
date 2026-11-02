@@ -417,7 +417,7 @@ export default function Home() {
                     the ~80 that stays comfortable to track.
                   */}
                   <p className="text-lg md:text-xl lg:text-2xl text-gray-300 max-w-4xl mb-8 md:mb-12 leading-relaxed">
-                    Craft authentic, scalable engagements that transform fleeting interactions into enduring brand loyalty empowering studios, creators and brands to own the conversation across the user-generated content platforms their audiences already build and play in.
+                    Build lasting communities and brand loyalty across the user-generated content platforms where your audience creates and plays.
                   </p>
 
                   <Button onClick={scrollToContact} size="lg" className="text-lg px-10 py-5">

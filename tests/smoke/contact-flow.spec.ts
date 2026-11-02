@@ -115,6 +115,24 @@ test('double-clicking Send submits one inquiry, not two', async ({ page }) => {
   expect(posts).toBe(1);
 });
 
+for (const response of ['network failure', 'unreadable response'] as const) {
+  test(`${response} keeps the inquiry without a false confirmation`, async ({ page }) => {
+    await page.route(ENDPOINT, route => response === 'network failure'
+      ? route.abort('failed')
+      : route.fulfill({ status: 200, contentType: 'application/json', body: '{' }));
+    await page.goto('/');
+    await fillInquiry(page);
+    await send(page).click();
+
+    await expect(formAlert(page)).toContainText("We couldn't confirm delivery");
+    await expect(page.getByLabel('Message *', { exact: true })).toHaveValue(INQUIRY.message);
+    await expect(send(page)).toBeEnabled();
+    // The former optimistic success path redirected after 1.5 seconds.
+    await page.waitForTimeout(1700);
+    await expect(page).toHaveURL(/127\.0\.0\.1:3100\/$/);
+  });
+}
+
 test('an unusable Discord username stops the inquiry before it is sent', async ({ page }) => {
   let posts = 0;
   await page.route(ENDPOINT, async route => {
