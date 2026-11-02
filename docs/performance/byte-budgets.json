@@ -1,7 +1,6 @@
 {
   "exportDir": "out",
   "unbudgetedFileCeiling": 16384,
-
   "pages": {
     "index.html": 245760,
     "404.html": 212992,
@@ -9,7 +8,6 @@
     "500/index.html": 212992,
     "contact-confirmed/index.html": 212992
   },
-
   "rules": [
     {
       "label": "React and Next runtime",
@@ -82,10 +80,10 @@
     },
     {
       "label": "Client logos",
-      "pattern": "companies/*.png",
+      "pattern": "companies/*.webp",
       "mode": "sum",
       "minMatches": 11,
-      "budget": 435200,
+      "budget": 143360,
       "note": "Rendered by components/CompanyLogo.tsx. A sum rather than a per-file budget because the set grows as clients are added, and the total is what matters."
     }
   ]

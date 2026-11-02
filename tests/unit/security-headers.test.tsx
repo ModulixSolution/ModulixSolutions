@@ -61,6 +61,24 @@ describe('the headers file', () => {
       expect(file).toContain(`${pattern}\n  Cache-Control:`);
     }
   });
+
+  test('every image extension under public/ has a cache rule', () => {
+    // The client marks moved from PNG to WebP. A rule list naming only .png
+    // would leave every logo in the carousel uncached, which is the one place
+    // on the site where caching images is worth anything. Driven off the
+    // directory so adding a format without a rule fails here.
+    const file = buildHeadersFile();
+    const extensions = new Set(
+      fs
+        .readdirSync(path.join(process.cwd(), 'public'), { recursive: true, encoding: 'utf8' })
+        .map(entry => path.extname(entry).toLowerCase())
+        .filter(extension =>
+          ['.webp', '.png', '.jpg', '.jpeg', '.ico', '.svg', '.gif', '.avif'].includes(extension)
+        )
+    );
+    expect(extensions.size).toBeGreaterThan(0);
+    extensions.forEach(extension => expect(file).toContain(`/*${extension}\n  Cache-Control:`));
+  });
 });
 
 describe('the header set', () => {
