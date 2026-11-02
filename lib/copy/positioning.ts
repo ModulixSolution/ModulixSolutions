@@ -15,11 +15,8 @@
  * tests/unit/positioning.test.tsx enforces this against the rotating taglines
  * and every heading the pages render.
  *
- * Scope note: the page title and meta description are deliberately not here.
- * PR #13 moves page metadata into lib/seo/routes.ts and rewords the title in
- * the same pass, so owning those strings here too would be the same decision
- * made in two places. Once that lands, pointing the guard at the manifest's
- * titles and descriptions is a two-line follow-up.
+ * Page metadata lives separately in lib/seo/routes.ts; this module owns the
+ * visible copy.
  */
 
 /**
