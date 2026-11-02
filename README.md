@@ -35,7 +35,44 @@ This repository is **public only because GitHub Pages requires public repositori
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
-- **Forms**: React Hook Form + Yup
+- **Forms**: Native HTML validation and React state
+
+## Local setup and checks
+
+Use Node.js 22 and npm, matching CI. Install with `npm ci`, then run
+`npm run dev` for the local development server at http://localhost:3000.
+
+| Command | Purpose |
+| --- | --- |
+| `npm run lint` | ESLint checks |
+| `npm run type-check` | TypeScript checks |
+| `npm test` | Unit tests |
+| `npm run test:coverage` | Unit tests and enforced coverage thresholds |
+| `npm run build` | Production static export into `out/` |
+| `npm run test:smoke` | Production build and browser journeys |
+| `npm run test:visual` | Production build and visual comparisons; Linux CI owns the baselines |
+| `npm run perf:budgets` | Production build and enforced byte budgets |
+
+Install the Chromium test browser with `npx playwright install chromium` before
+local browser tests. The runbook in `docs/RUNBOOK.md` covers preview, recovery and
+verification. `npm start` expects a Next server and is unsuitable for this static
+export; the legacy `npm run export` is also unnecessary because build exports it.
+
+## Deployment
+
+The production repository is `ModulixSolution/ModulixSolutions`. Its existing
+[Pages workflow](.github/workflows/deploy.yml) deploys `out/` after a push to
+`main`, using the built-in `GITHUB_TOKEN` and the existing `github-pages`
+environment. The company site is https://modulixsolutions.com/.
+
+Pull requests run lint, type checking, coverage, browser journeys, visual checks,
+byte budgets and the dependency audit. Merge only after the candidate's checks
+pass. `npm run deploy` is a legacy `gh-pages` publisher and is not the production
+release path. No DNS, hosting settings or extra credentials are needed.
+
+The fork `PineFruitDev/ModulixSolutions` publishes to its own Pages subpath. The
+workflow supplies the correct base path for each Pages destination; do not copy
+a fork build into production.
 
 ### Project Structure
 ```
@@ -59,9 +96,9 @@ image weight split by eager versus lazy, images missing `width`/`height`, and
 any asset published but referenced by no built page. `npm run perf -- --json`
 emits the same data for a script to read.
 
-It reports; it does not gate. The command always exits 0 and CI does not run
-it, so a regression shows up when someone looks. Wiring a budget threshold
-into the Tests workflow would be the obvious next step and has not been done.
+The detailed `perf` report is informational. The separate Byte budgets workflow
+enforces `docs/performance/byte-budgets.json`; `npm run perf:budgets` runs the same
+build and budget gate locally.
 
 It is deliberately not a Lighthouse run. Lighthouse scores move by several
 points between runs on identical bytes, so they cannot tell a regression from
@@ -128,4 +165,4 @@ policy enforced and fails on any violation report.
 
 ## 📄 License
 
-© 2025 Modulix Solutions LLC. All rights reserved.
+© 2026 Modulix Solutions LLC. All rights reserved.

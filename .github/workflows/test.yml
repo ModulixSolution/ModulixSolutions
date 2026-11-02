@@ -18,6 +18,7 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - run: npm run lint
       - run: npm run type-check
       # Runs the same suite as `npm test` and additionally enforces the
       # coverage thresholds in jest.config.js.
