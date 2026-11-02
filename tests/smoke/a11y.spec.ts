@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, type Page } from '@playwright/test';
 
 import { SITE_ROUTES } from '../../lib/seo/routes';
+import { waitForAnimationsToFinish } from '../visual/stabilize';
 
 /**
  * The browser half of the accessibility gate.
@@ -28,7 +29,15 @@ test.beforeEach(async ({ page }) => {
 
 const WCAG_22_AA = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
-const scan = (page: Page) => new AxeBuilder({ page }).withTags(WCAG_22_AA);
+const scan = async (page: Page) => {
+  // Filling the form can scroll a neighboring section into view and start its
+  // reveal. All scans need settled finite animations, not just the FAQ case.
+  // Infinite decorative effects are intentionally left out of this wait.
+  await page.evaluate(() => new Promise<void>(resolve =>
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+  await waitForAnimationsToFinish(page);
+  return new AxeBuilder({ page }).withTags(WCAG_22_AA).analyze();
+};
 
 /** Readable failure output: axe's own object dump is unusable in a CI log. */
 const describeViolations = (violations: Awaited<ReturnType<AxeBuilder['analyze']>>['violations']) =>
@@ -48,7 +57,7 @@ for (const route of SITE_ROUTES) {
     await page.waitForLoadState('load');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
-    const { violations } = await scan(page).analyze();
+    const { violations } = await scan(page);
     expect(describeViolations(violations)).toBe('');
   });
 }
@@ -75,7 +84,7 @@ test('the homepage still passes with every FAQ answer expanded', async ({ page }
     await expect(answer).toHaveCSS('opacity', '1');
   }
 
-  const { violations } = await scan(page).analyze();
+  const { violations } = await scan(page);
   expect(describeViolations(violations)).toBe('');
 });
 
@@ -85,7 +94,7 @@ test('the mobile drawer passes while it is open and modal', async ({ page }) => 
   await page.getByRole('button', { name: 'Open menu' }).click();
   await expect(page.getByRole('dialog', { name: 'Site menu' })).toBeVisible();
 
-  const { violations } = await scan(page).analyze();
+  const { violations } = await scan(page);
   expect(describeViolations(violations)).toBe('');
 });
 
@@ -102,7 +111,7 @@ test('the inquiry form passes while showing its validation error', async ({ page
   // Scoped to the form because Next ships its own empty role="alert" route
   // announcer, which makes an unscoped alert lookup ambiguous.
   await expect(page.locator('form [role="alert"]')).toBeVisible();
-  const { violations } = await scan(page).analyze();
+  const { violations } = await scan(page);
   expect(describeViolations(violations)).toBe('');
 });
 
@@ -114,7 +123,7 @@ test('the homepage passes under a reduced-motion preference', async ({ page }) =
   await page.goto('/');
   await expect(page.getByRole('button', { name: /rotating taglines/ })).toHaveCount(0);
 
-  const { violations } = await scan(page).analyze();
+  const { violations } = await scan(page);
   expect(describeViolations(violations)).toBe('');
 });
 
